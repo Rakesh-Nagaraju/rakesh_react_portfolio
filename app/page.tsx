@@ -537,7 +537,7 @@ export default function Home() {
 
   // Parallax
   const { scrollY } = useScroll();
-  const rawY = useTransform(scrollY, [0, 300], [0, -150]);
+  //const rawY = useTransform(scrollY, [0, 300], [0, -150]);
   // const backgroundY = useSpring(rawY, { stiffness: 100, damping: 20 });
 
   const [bgImage, setBgImage] = useState("");
@@ -920,7 +920,7 @@ export default function Home() {
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <span className="text-4xl font-semibold">Hi👋, I'm <span className="text-[#ff6a13]">Rakesh</span>,</span><br />
+        <span className="text-4xl font-semibold">Hi👋, I am <span className="text-[#ff6a13]">Rakesh</span>,</span><br />
         <span className="text-xl font-medium leading-[50px]">AI Engineer based in the Bay Area.</span><br />
         <span className="text-[1.1rem] text-[#37415199] dark:text-[#8d8d8d] leading-[30px] tracking-[0.5px]">
           Specializing in <span >Vision AI, Language AI, Multimodal AI, and MLOps</span>,  
@@ -1173,7 +1173,7 @@ export default function Home() {
               
             "
           >
-            {currentProjects.map((proj, _) => (
+            {currentProjects.map((proj) => (
              
               <motion.div
                 key={proj.title}
