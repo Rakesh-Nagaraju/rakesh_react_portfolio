@@ -1,10 +1,9 @@
 "use client";
-
+import Image from 'next/image';
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import SkillsSection from "./SkillsSection"; // Adjust the path as necessary
 import Typewriter from "typewriter-effect";
-import Tilt from "react-parallax-tilt";
 
 /* ----- Icons (Phone, Location, Social, Sun/Moon) ----- */
 function PhoneIcon() {
@@ -16,9 +15,7 @@ function LocationIcon() {
 function LinkedInIcon() {
   return <span>LinkedIn</span>;
 }
-function TwitterIcon() {
-  return <span>Twitter</span>;
-}
+
 function GitHubIcon() {
   return <span>GitHub</span>;
 }
@@ -54,7 +51,7 @@ function ExperienceModal({ isOpen, onClose, experience }) {
 
         <div className="flex items-center gap-4 mb-4">
           {experience.logo && (
-            <img
+            <Image
               src={experience.logo}
               alt={`${experience.company || experience.role} logo`}
               className="w-12 h-12 object-cover rounded-full"
@@ -140,7 +137,7 @@ function ProjectModal({ isOpen, onClose, project }) {
 
         {/* Project Image */}
         {project.image && (
-          <img
+          <Image
             src={project.image}
             alt={`${project.title} image`}
             className="w-full h-48 object-cover rounded mb-4"
@@ -541,7 +538,7 @@ export default function Home() {
   // Parallax
   const { scrollY } = useScroll();
   const rawY = useTransform(scrollY, [0, 300], [0, -150]);
-  const backgroundY = useSpring(rawY, { stiffness: 100, damping: 20 });
+  // const backgroundY = useSpring(rawY, { stiffness: 100, damping: 20 });
 
   const [bgImage, setBgImage] = useState("");
 
@@ -1055,7 +1052,7 @@ export default function Home() {
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-xl font-semibold">{exp.title}</h3>
                   {exp.logo && (
-                    <img
+                    <Image
                       src={exp.logo}
                       alt={`${exp.company} logo`}
                       className="w-12 h-12 object-cover rounded-full"
@@ -1176,7 +1173,7 @@ export default function Home() {
               
             "
           >
-            {currentProjects.map((proj, i) => (
+            {currentProjects.map((proj, _) => (
              
               <motion.div
                 key={proj.title}
@@ -1198,7 +1195,7 @@ export default function Home() {
                 {/* Project Image */}
                 {proj.image && (
                   <div className="w-full h-40 rounded-t-xl overflow-hidden">
-                    <img
+                    <Image
                       loading="lazy"
                       src={proj.image}
                       alt={`${proj.title} image`}
