@@ -1213,14 +1213,18 @@ useEffect(() => {
               px-[25px] py-[25px] touch-pan-x 
               
             "
+            
           >
+            
+            
             {currentProjects.map((proj) => (
+              
              
               <motion.div
                 key={proj.title}
                 onClick={() => openProjectModal(proj)}
                 className={`
-                  ${currentTabObj.color}
+                  ${currentTabObj?.color ?? ""}
                   w-[250px] flex-shrink-0 snap-center
                   pb-6 rounded-lg shadow
                   cursor-pointer 
