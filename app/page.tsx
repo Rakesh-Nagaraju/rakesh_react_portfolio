@@ -1,6 +1,6 @@
 "use client";
 import Image from 'next/image';
-import { useState, useEffect, SetStateAction, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from "react";
+import { useState, useEffect, SetStateAction} from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import SkillsSection from "./SkillsSection"; // Adjust the path as necessary
 import Typewriter from "typewriter-effect";
