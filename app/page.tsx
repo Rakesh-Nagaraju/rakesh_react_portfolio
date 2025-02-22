@@ -86,7 +86,7 @@ function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) 
           {experience.logo && (
             <Image
               src={experience.logo}
-              alt={`${experience.company || experience.role} logo`}
+              alt={`${experience.company} logo`}
               className="w-12 h-12 object-cover rounded-full"
             />
           )}
