@@ -1,6 +1,6 @@
 "use client";
 import Image from 'next/image';
-import { useState, useEffect, SetStateAction} from "react";
+import { useState, useEffect} from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import SkillsSection from "./SkillsSection"; // Adjust the path as necessary
 import Typewriter from "typewriter-effect";
@@ -264,27 +264,28 @@ export default function Home() {
   const sections = ["hero", "about", "experience", "projects", "footer-contact"];
   const [activeSection, setActiveSection] = useState("hero");
 
-  useEffect(() => {
-    const options = { root: null, rootMargin: "0px", threshold: 0.5 };
-    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    };
-    const observer = new IntersectionObserver(handleIntersect, options);
+  
+useEffect(() => {
+  const options = { root: null, rootMargin: "0px", threshold: 0.5 };
+  const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setActiveSection(entry.target.id);
+      }
+    });
+  };
+  const observer = new IntersectionObserver(handleIntersect, options);
+  sections.forEach((secId) => {
+    const secEl = document.getElementById(secId);
+    if (secEl) observer.observe(secEl);
+  });
+  return () => {
     sections.forEach((secId) => {
       const secEl = document.getElementById(secId);
-      if (secEl) observer.observe(secEl);
+      if (secEl) observer.unobserve(secEl);
     });
-    return () => {
-      sections.forEach((secId) => {
-        const secEl = document.getElementById(secId);
-        if (secEl) observer.unobserve(secEl);
-      });
-    };
-  }, []);
+  };
+}, [sections]); 
 
   /* Experience Data */
   const experiences = [
