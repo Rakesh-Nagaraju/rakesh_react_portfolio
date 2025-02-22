@@ -3,19 +3,95 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #f5f5f5; /* or #ffffff if you truly want white */
   --foreground: #171717;
 }
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
-
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Sleek scrollbar styling (for WebKit browsers). Adjust to suit your brand. */
+::-webkit-scrollbar {
+  width: 8px;   /* scrollbar width */
+  height: 6px; /* horizontal scrollbar height */
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05); /* track color */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4); /* thumb color */
+  border-radius: 9999px; /* round corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.6); /* slightly darker on hover */
+}
+
+/* For WebKit browsers (Chrome, Safari, Edge w/Chromium) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* hides the scrollbar */
+}
+
+/* For Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE/Edge needs this */
+  scrollbar-width: none;     /* Firefox hides the scrollbar */
+}
+ 
+@keyframes hueRotateAnimation {
+  0% {
+    filter: hue-rotate(0deg) drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));
+  }
+  100% {
+    filter: hue-rotate(0deg) drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));
+  }
+}
+
+.hue-rotate-animation {
+  animation: hueRotateAnimation 60s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes borderGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient-border {
+  /* This background will only be visible in the padded area */
+  border: 5px solid #d3eddf42; /* #def0e2*/
+  backdrop-filter: blur(15px);
+  background-size: 600% 600%;
+  animation: borderGradient 5s ease infinite;
+}
+
+/* Dark mode override */
+.dark .animated-gradient-border {
+  border-color: #9daaa042; /* Dark mode color */
+}
+
+@media (max-width: 768px) { 
+  .bg-light {
+    background-position: center !important;
+  }
+  .bg-dark {
+    background-position: center !important;
+  }
 }
