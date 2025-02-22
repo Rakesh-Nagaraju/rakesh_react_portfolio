@@ -1,6 +1,6 @@
 "use client";
 import Image from 'next/image';
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import SkillsSection from "./SkillsSection"; // Adjust the path as necessary
 import Typewriter from "typewriter-effect";
@@ -29,10 +29,16 @@ function MoonIcon() {
 }
 
 
+interface ExperienceModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  experience?: any; // or replace 'any' with a specific type if you have one
+}
+
 /* --------------------- */
 /*   EXPERIENCE MODAL    */
 /* --------------------- */
-function ExperienceModal({ isOpen, onClose, experience }) {
+function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) {
   if (!isOpen || !experience) return null;
 
   return (
@@ -100,7 +106,7 @@ function ExperienceModal({ isOpen, onClose, experience }) {
         {/* Technologies */}
         {experience.technologies && experience.technologies.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
-            {experience.technologies.map((tech, index) => (
+            {experience.technologies.map((tech: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, index: Key | null | undefined) => (
               <span
                 key={index}
                 className="px-3 py-1 text-sm font-medium bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full"
@@ -115,10 +121,17 @@ function ExperienceModal({ isOpen, onClose, experience }) {
   );
 }
 
+
+interface ProjectModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  project?: any; // or replace 'any' with a specific type if you have one
+}
+
 /* --------------------- */
 /*    PROJECTS MODAL     */
 /* --------------------- */
-function ProjectModal({ isOpen, onClose, project }) {
+function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
   if (!isOpen || !project) return null;
 
   return (
@@ -153,7 +166,7 @@ function ProjectModal({ isOpen, onClose, project }) {
         {project.longDescription && project.longDescription.length > 0 ? (
           <div className="text-sm text-gray-600 dark:text-gray-400 space-y-4 mb-4">
             <ul className="list-disc list-inside space-y-2">
-              {project.longDescription.map((point, idx) => (
+              {project.longDescription.map((point: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, idx: Key | null | undefined) => (
                 <li key={idx}>{point}</li>
               ))}
             </ul>
@@ -167,7 +180,7 @@ function ProjectModal({ isOpen, onClose, project }) {
         {/* Technologies */}
         {project.technologies && project.technologies.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
-            {project.technologies.map((tech, index) => (
+            {project.technologies.map((tech: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, index: Key | null | undefined) => (
               <span
                 key={index}
                 className="px-3 py-1 text-sm font-medium bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full"
@@ -228,7 +241,7 @@ export default function Home() {
 
   useEffect(() => {
     const options = { root: null, rootMargin: "0px", threshold: 0.5 };
-    const handleIntersect = (entries) => {
+    const handleIntersect = (entries: any[]) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setActiveSection(entry.target.id);
@@ -513,7 +526,7 @@ export default function Home() {
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [isExperienceModalOpen, setIsExperienceModalOpen] = useState(false);
 
-  const openExperienceModal = (exp) => {
+  const openExperienceModal = (exp: SetStateAction<null>) => {
     setSelectedExperience(exp);
     setIsExperienceModalOpen(true);
   };
@@ -527,7 +540,7 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
 
-  const openProjectModal = (proj) => {
+  const openProjectModal = (proj: SetStateAction<null>) => {
     setSelectedProject(proj);
     setIsProjectModalOpen(true);
   };
