@@ -57,7 +57,7 @@ export interface Project {
 interface ExperienceModalProps {
   isOpen: boolean;
   onClose: () => void;
-  experience?: Experience; // or replace 'any' with a specific type if you have one
+  experience?: Experience | null; // or replace 'any' with a specific type if you have one
 }
 
 /* --------------------- */
@@ -150,7 +150,7 @@ function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) 
 interface ProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
-  project?: Project; // or replace 'any' with a specific type if you have one
+  project?: Project | null; // or replace 'any' with a specific type if you have one
 }
 
 /* --------------------- */
@@ -540,7 +540,7 @@ useEffect(() => {
           ],
           demoLink: "#",
           githubLink: "#",
-          image: "https://via.placeholder.com/300x200?text=ML+Project+2",
+          image: "https://via.placeholder.com/interface ExperienceModalProps300x200?text=ML+Project+2",
           technologies: ["Python", "TensorFlow", "Prophet"],
           role: "Data Scientist",
         },
