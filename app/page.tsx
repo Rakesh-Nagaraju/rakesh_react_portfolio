@@ -5,6 +5,8 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import SkillsSection from "./SkillsSection"; // Adjust the path as necessary
 import Typewriter from "typewriter-effect";
 
+
+
 /* ----- Icons (Phone, Location, Social, Sun/Moon) ----- */
 function PhoneIcon() {
   return <span>📞</span>;
