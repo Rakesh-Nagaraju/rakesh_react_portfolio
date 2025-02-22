@@ -548,10 +548,10 @@ export default function Home() {
   ];
 
   // For Experience Modal
-  const [selectedExperience, setSelectedExperience] = useState(null);
-  const [isExperienceModalOpen, setIsExperienceModalOpen] = useState(false);
+  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+  const [isExperienceModalOpen, setIsExperienceModalOpen] = useState<boolean>(false);
 
-  const openExperienceModal = (exp: SetStateAction<null>) => {
+  const openExperienceModal = (exp: Experience) => {
     setSelectedExperience(exp);
     setIsExperienceModalOpen(true);
   };
@@ -562,10 +562,10 @@ export default function Home() {
   };
 
   // For Project Modal
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false);
 
-  const openProjectModal = (proj: SetStateAction<null>) => {
+  const openProjectModal = (proj: Project) => {
     setSelectedProject(proj);
     setIsProjectModalOpen(true);
   };
