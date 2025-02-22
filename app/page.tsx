@@ -131,7 +131,7 @@ function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) 
         {/* Technologies */}
         {experience.technologies && experience.technologies.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
-            {experience.technologies.map((tech: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, index: Key | null | undefined) => (
+            {experience.technologies.map((tech: string, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 text-sm font-medium bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full"
@@ -191,7 +191,7 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
         {project.longDescription && project.longDescription.length > 0 ? (
           <div className="text-sm text-gray-600 dark:text-gray-400 space-y-4 mb-4">
             <ul className="list-disc list-inside space-y-2">
-              {project.longDescription.map((point: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, idx: Key | null | undefined) => (
+              {project.longDescription.map((point: string, idx: number) => (
                 <li key={idx}>{point}</li>
               ))}
             </ul>
@@ -205,7 +205,7 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
         {/* Technologies */}
         {project.technologies && project.technologies.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
-            {project.technologies.map((tech: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, index: Key | null | undefined) => (
+            {project.technologies.map((tech: string, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 text-sm font-medium bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full"
