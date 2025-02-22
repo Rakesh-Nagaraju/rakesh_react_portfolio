@@ -27,12 +27,37 @@ function SunIcon() {
 function MoonIcon() {
   return <span>🌙</span>;
 }
+// types.ts (or at top of page.tsx, but a separate file is cleaner)
+
+export interface Experience {
+  title: string;
+  company?: string;
+  logo?: string;
+  timeframe?: string;
+  shortDescription: string[];
+  description?: {
+    [section: string]: string[] | string; 
+    // e.g. { "Neural Networks": ["...", "..."], "Other": "..." }
+  };
+  technologies?: string[];
+}
+
+export interface Project {
+  title: string;
+  shortDescription: string[];
+  longDescription?: string[];
+  image?: string;
+  demoLink?: string;
+  githubLink?: string;
+  technologies?: string[];
+  role?: string;
+}
 
 
 interface ExperienceModalProps {
   isOpen: boolean;
   onClose: () => void;
-  experience?: any; // or replace 'any' with a specific type if you have one
+  experience?: Experience; // or replace 'any' with a specific type if you have one
 }
 
 /* --------------------- */
@@ -125,7 +150,7 @@ function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) 
 interface ProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
-  project?: any; // or replace 'any' with a specific type if you have one
+  project?: Project; // or replace 'any' with a specific type if you have one
 }
 
 /* --------------------- */
@@ -241,7 +266,7 @@ export default function Home() {
 
   useEffect(() => {
     const options = { root: null, rootMargin: "0px", threshold: 0.5 };
-    const handleIntersect = (entries: any[]) => {
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           setActiveSection(entry.target.id);
