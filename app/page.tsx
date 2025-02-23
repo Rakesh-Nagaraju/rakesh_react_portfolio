@@ -848,7 +848,7 @@ useEffect(() => {
 
         {/* Title */}
         <motion.h1
-          className="backdrop-blur-[5px] text-5xl md:text-6xl font-semibold mb-6 tracking-tight relative z-10"
+          className="backdrop-blur-[5px] text-5xl md:text-6xl font-semibold tracking-tight relative z-10"
           initial={{ opacity: 0, y: -25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -879,7 +879,7 @@ useEffect(() => {
           }}
         >
           <span>
-            <span className="text-[#ff6a13]  font-bold">Engineering AI that scales, adapts, and delivers.<br></br></span>{" "}
+            <span className="text-[#ff6a13]  font-bold mb-6">Engineering AI that scales, adapts, and delivers.<br></br></span>{" "}
             experience in software development and
             With a proven track record of building high-performance end-to-end AI applications, 
             
