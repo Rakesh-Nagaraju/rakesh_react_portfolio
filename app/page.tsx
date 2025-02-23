@@ -864,7 +864,7 @@ useEffect(() => {
 
         {/* Subtitle (Typing Effect) */}
         <motion.div
-          className="backdrop-blur-[5px] text-[1.1rem] max-w-2xl mb-8 text-gray-400 opacity-90 relative z-10"
+          className="backdrop-blur-[5px] text-[1rem] max-w-2xl mb-8 text-gray-400 opacity-90 relative z-10"
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -879,11 +879,7 @@ useEffect(() => {
           }}
         >
           <span>
-            Engineer with{" "}
-            <span className="text-[#ff6a13]  font-bold">6+ years</span>{" "}
-            experience in software development and{" "}
-            <span className="text-[#ff6a13] font-bold ">3+ years</span> in
-            building end-to-end AI solutions.
+            Engineer transforming complex problems into scalable solutions. With a track record of building high-performance systems and deploying intelligent automation, I specialize in crafting adaptive, efficient, and real-world AI applications.
           </span>{" "}
           Specializing in
           <span className=" text-black dark:text-white text-[1.2rem]  ">
