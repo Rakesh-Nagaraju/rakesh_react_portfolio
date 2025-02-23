@@ -848,7 +848,7 @@ useEffect(() => {
 
         {/* Title */}
         <motion.h1
-          className="backdrop-blur-[5px] text-5xl md:text-6xl font-semibold tracking-tight relative z-10"
+          className="backdrop-blur-[5px] text-5xl md:text-6xl mb-[7px] font-semibold tracking-tight relative z-10"
           initial={{ opacity: 0, y: -25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -864,7 +864,7 @@ useEffect(() => {
 
         {/* Subtitle (Typing Effect) */}
         <motion.div
-          className="backdrop-blur-[5px] text-[1.1rem] max-w-2xl mb-8 text-gray-400 opacity-90 relative z-10"
+          className="backdrop-blur-[5px] text-[1.2rem] max-w-2xl mb-8 text-gray-400 opacity-90 relative z-10"
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -880,7 +880,7 @@ useEffect(() => {
         >
           <span>
             <span className="text-[#ff6a13]  font-bold mb-6">Engineering AI that scales, adapts, and delivers.</span>{" "}
-            <br></br>With a proven track record of building high-performance end-to-end AI applications,
+            <br></br><br></br>With a proven track record of building high-performance end-to-end AI applications,
           </span>{" "}
           I specialize in
           <span className=" text-black dark:text-white text-[1.2rem]  ">
