@@ -87,6 +87,7 @@ function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) 
             <Image
               src={experience.logo}
               alt={`${experience.company} logo`}
+             
               className="w-12 h-12 object-cover rounded-full"
             />
           )}
@@ -180,6 +181,7 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
           <Image
             src={project.image}
             alt={`${project.title} image`}
+            
             className="w-full h-48 object-cover rounded mb-4"
           />
         )}
@@ -464,7 +466,7 @@ useEffect(() => {
           ],
           demoLink: "#",
           githubLink: "#",
-          image: "https://via.placeholder.com/300x200?text=NLP+Project+1",
+          image: "/images/placeholder.jpg",
           technologies: ["Python", "Transformers", "Elasticsearch"],
           role: "AI Engineer",
         },
@@ -480,7 +482,7 @@ useEffect(() => {
           ],
           demoLink: "#",
           githubLink: "#",
-          image: "https://via.placeholder.com/300x200?text=NLP+Project+2",
+          image: "/images/placeholder.jpg",
           technologies: ["Python", "NLTK", "React"],
           role: "Full Stack Developer",
         },
@@ -502,7 +504,7 @@ useEffect(() => {
           ],
           demoLink: "#",
           githubLink: "#",
-          image: "https://via.placeholder.com/300x200?text=Multimodal+Project",
+          image: "/images/placeholder.jpg",
           technologies: ["Python", "PyTorch", "GPT-3", "CLIP"],
           role: "AI Researcher",
         },
@@ -524,7 +526,7 @@ useEffect(() => {
           ],
           demoLink: "#",
           githubLink: "#",
-          image: "https://via.placeholder.com/300x200?text=ML+Project+1",
+          image: "/images/placeholder.jpg",
           technologies: ["Scikit-learn", "Python", "Pandas"],
           role: "Machine Learning Engineer",
         },
@@ -540,7 +542,7 @@ useEffect(() => {
           ],
           demoLink: "#",
           githubLink: "#",
-          image: "https://via.placeholder.com/interface ExperienceModalProps300x200?text=ML+Project+2",
+          image: "/images/placeholder.jpg",
           technologies: ["Python", "TensorFlow", "Prophet"],
           role: "Data Scientist",
         },
@@ -1071,7 +1073,7 @@ useEffect(() => {
 
         <div className="max-w-5xl mx-auto ">
           {/* Experience Cards */}
-          <div className="flex flex-row gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory px-6 py-6 touch-pan-x border-r-4 border-[#dce0e2] dark:border-[#4a4a4a]">
+          <div className="flex flex-row gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory px-6 py-6 border-r-4 border-[#dce0e2] dark:border-[#4a4a4a]">
             {experiences.map((exp, i) => (
               <motion.div
                 key={i}
@@ -1096,6 +1098,7 @@ useEffect(() => {
                     <Image
                       src={exp.logo}
                       alt={`${exp.company} logo`}
+                      
                       className="w-12 h-12 object-cover rounded-full"
                     />
                   )}
@@ -1165,14 +1168,14 @@ useEffect(() => {
         </div>
 
         <div className="max-w-5xl mx-auto">
-          {/* Tab buttons container */}
+          {/* Tab buttons container -- in classname (can also be added ofr exaperience and projects 2nd row cards) touch-pan-x */}
           <div className="mb-8 flex justify-center">
             <div
               className="
                 no-scrollbar
                 inline-flex gap-6
                 px-4 pb-2 pt-[3px]
-                overflow-x-auto touch-pan-x
+                overflow-x-auto 
                 backdrop-blur-md
                 rounded-[50px]
                 bg-[#eef2f6] dark:bg-[#1c242b]
@@ -1210,7 +1213,7 @@ useEffect(() => {
               no-scrollbar
               grid grid-flow-col grid-rows-2 gap-6
               overflow-x-auto snap-x snap-mandatory
-              px-[25px] py-[25px] touch-pan-x 
+              px-[25px] py-[25px] 
               
             "
             
@@ -1244,6 +1247,7 @@ useEffect(() => {
                       loading="lazy"
                       src={proj.image}
                       alt={`${proj.title} image`}
+                      
                       className="w-full h-full object-cover rounded mb-4"
                     />
                   </div>
