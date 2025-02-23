@@ -880,8 +880,10 @@ useEffect(() => {
         >
           <span>
             <span className="text-[#ff6a13]  font-bold mb-6">Engineering AI that scales, adapts, and delivers.</span>{" "}
-            <br></br><br></br>With a proven track record of building high-performance end-to-end AI applications,
-          </span>{" "}
+            <br></br>
+          </span>
+          <span>With a proven track record of building high-performance end-to-end AI applications,</span>
+          {" "}
           I specialize in
           <span className=" text-black dark:text-white text-[1.2rem]  ">
             <Typewriter
