@@ -879,9 +879,10 @@ useEffect(() => {
           }}
         >
           <span>
-            Engineer transforming complex problems into scalable solutions. With a track record of building high-performance systems and deploying intelligent automation, I specialize in crafting adaptive, efficient, and real-world AI applications.
+            Engineering AI that scales, adapts, and delivers.<br></br>
+            With a proven track record of building high-performance end-to-end AI applications, 
+            I specialize in 
           </span>{" "}
-          Specializing in
           <span className=" text-black dark:text-white text-[1.2rem]  ">
             <Typewriter
               options={{
