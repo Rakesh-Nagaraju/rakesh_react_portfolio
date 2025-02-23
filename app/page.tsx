@@ -864,7 +864,7 @@ useEffect(() => {
 
         {/* Subtitle (Typing Effect) */}
         <motion.div
-          className="backdrop-blur-[5px] text-[1rem] max-w-2xl mb-8 text-gray-400 opacity-90 relative z-10"
+          className="backdrop-blur-[5px] text-[1.1rem] max-w-2xl mb-8 text-gray-400 opacity-90 relative z-10"
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -879,9 +879,9 @@ useEffect(() => {
           }}
         >
           <span>
-            Engineering AI that scales, adapts, and delivers.<br></br>
+            <span className="text-[#ff6a13]  font-bold">Engineering AI that scales, adapts, and delivers.<br></br></span>{" "}
             With a proven track record of building high-performance end-to-end AI applications, 
-            I specialize in 
+            I specialize in
           </span>{" "}
           <span className=" text-black dark:text-white text-[1.2rem]  ">
             <Typewriter
