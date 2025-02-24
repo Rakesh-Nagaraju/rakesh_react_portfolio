@@ -1,10 +1,10 @@
 "use client";
 import Image from 'next/image';
-import { useState, useEffect} from "react";
+import { useState, useMemo, useEffect} from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import SkillsSection from "./SkillsSection"; // Adjust the path as necessary
 import Typewriter from "typewriter-effect";
-import { FaLinkedin, FaTwitter} from 'react-icons/fa';
+import { FaLinkedin} from 'react-icons/fa';
 
 import { SiHuggingface } from 'react-icons/si';
 import { FiFileText } from 'react-icons/fi';
@@ -289,7 +289,7 @@ export default function Home() {
   const closeMenu = () => setIsMenuOpen(false);
 
   /* Scroll Spy Setup */
-  const sections = ["hero", "about", "experience", "projects", "footer-contact"];
+  const sections = useMemo(() => ["hero", "about", "experience", "projects", "footer-contact"], []);
   const [activeSection, setActiveSection] = useState("hero");
 
   
@@ -992,7 +992,7 @@ useEffect(() => {
           >
               {/* Introduction */}
               <span className="text-4xl text-[#1f2937] dark:text-white font-semibold">
-                Hi 👋, I'm <span className="text-[#ff6a13]">Rakesh</span>,
+                Hi 👋, I&apos;m <span className="text-[#ff6a13]">Rakesh</span>,
               </span>
               <span className="block text-md text-[#374151] dark:text-gray-400 mt-1">
                 an AI Engineer based in the Bay Area.
@@ -1070,9 +1070,13 @@ useEffect(() => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <img
+              
+              <Image
                 src="/images/about-me.png"
-                alt="About Me Illustration"
+                alt="Rakesh Nagaraju"
+                width={150}
+                height={150}
+                
                 className="w-[90%] max-w-md rounded-2xl shadow-lg"
               />
             </motion.div>
