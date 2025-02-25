@@ -62,7 +62,7 @@ const techStack = [
     message: `• Implemented event-driven architectures for real-time AI pipelines
 • Used Kafka and RabbitMQ for fault-tolerant message streaming
 • Managed consumer groups for distributed processing`,
-    color: "#231F20",
+    color: "#d9768a",
   },
   {
     name: "PostgreSQL / MongoDB",
@@ -482,7 +482,7 @@ export default function SkillsSection() {
                   }}
                   className="text-gray-600 dark:text-gray-300"
                 >
-                  Close
+                  ✕
                 </button>
               </div>
               <div className="text-gray-600 dark:text-gray-300 whitespace-pre-line">

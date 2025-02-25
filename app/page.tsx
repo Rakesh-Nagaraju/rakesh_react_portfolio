@@ -9,7 +9,7 @@ import { FaLinkedin} from 'react-icons/fa';
 import { FiFileText } from 'react-icons/fi';
 import { FaGithub, FaBolt } from 'react-icons/fa';
 import { FiGithub, FiInstagram } from "react-icons/fi";
-
+import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 
 /* ----- Icons (Phone, Location, Social, Sun/Moon) ----- */
 function PhoneIcon() {
@@ -76,27 +76,35 @@ function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) 
       onClick={onClose}
     >
       <div
-        className="bg-[linear-gradient(373deg,_#f8f9fc_0%,_#ffffffbf_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-lg max-w-2xl w-full shadow-xl relative backdrop-blur-md p-6 overflow-y-auto max-h-[90vh]"
+        className="m-5 bg-[linear-gradient(373deg,_#f8f9fc_0%,_#ffffffbf_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-lg max-w-2xl w-full shadow-xl relative backdrop-blur-md p-6 overflow-y-auto max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 px-[3px]"
+          className="fixed top-3 right-3 top-3 right-3 text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 px-[3px]"
           onClick={onClose}
         >
           ✕
         </button>
 
         {/* Title & Logo Section */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-4 text-center md:text-left">
+        <div className="flex flex-col md:flex-row items-center justify-stretch mb-4 text-center md:text-left">
           
           <div className="px-6 mb-4 md:mb-0">
-            <h3 className="text-2xl font-bold mb-1">{experience.title}</h3>
+            <h3 className="text-2xl font-semibold mb-1">{experience.title}</h3>
             {experience.company && (
-              <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-                {experience.company}
+              <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">
+                <a
+                  href={experience.companyUrl || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="italic underline hover:text-blue-600 hover:underline transition duration-200 cursor-pointer"
+                >
+                  {experience.company}
+                </a>
               </h4>
             )}
+
           </div>
 
           {/* Responsive Logo */}
@@ -124,9 +132,28 @@ function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) 
                 </h4>
                 {Array.isArray(points) ? (
                   <ul className="list-disc list-inside space-y-2">
-                    {points.map((point, idx) => (
-                      <li key={idx}>{point}</li>
-                    ))}
+                    {points.map((point, idx) => {
+                      // Check if the point is a URL
+                      const isLink =
+                        typeof point === "string" &&
+                        (point.startsWith("http://") || point.startsWith("https://"));
+                      return (
+                        <li key={idx}>
+                          {isLink ? (
+                            <a
+                              href={point}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-500 hover:underline"
+                            >
+                              {point}
+                            </a>
+                          ) : (
+                            point
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 ) : (
                   <p>{points}</p>
@@ -139,6 +166,7 @@ function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) 
             No details available.
           </p>
         )}
+
 
         {/* Technologies */}
         {experience.technologies && experience.technologies.length > 0 && (
@@ -178,15 +206,16 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-[linear-gradient(373deg,_#f8f9fc_0%,_#ffffffbf_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-lg max-w-2xl w-full shadow-xl relative backdrop-blur-md p-6 overflow-y-auto min-h-[63vH] max-h-[90vh]"
+        className="m-5 bg-[linear-gradient(373deg,_#f8f9fc_0%,_#ffffffbf_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-lg max-w-2xl w-full shadow-xl relative backdrop-blur-md p-6 overflow-y-auto min-h-[63vH] max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 px-[3px]"
+          className="fixed top-3 right-3 text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 px-[3px]"
           onClick={onClose}
         >
           ✕
         </button>
+
 
         {/* Project Image */}
         {project.image && (
@@ -195,7 +224,6 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
             alt={`${project.title} image`}
             width={49}
             height={49}
-                      
             className="w-full h-48 object-cover rounded mb-4 mt-4"
           />
         )}
@@ -252,20 +280,19 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
             )}
             {project.githubLink && (
               <a
-              href={project.githubLink}
-              className="relative group text-[0.8rem] text-blue-600 dark:text-blue-400 hover:underline font-semibold"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {/* GitHub Icon */}
-              <FaGithub className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100" />
-              Github
-              {/* Tooltip */}
-              <span className="absolute bottom-[-1.8rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                Click to GitHub repo
-              </span>
-            </a>
-            
+                href={project.githubLink}
+                className="relative group text-[0.8rem] text-blue-600 dark:text-blue-400 hover:underline font-semibold"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {/* GitHub Icon */}
+                <FaGithub className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100" />
+                Github
+                {/* Tooltip */}
+                <span className="absolute bottom-[-1.8rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                  Click to GitHub repo
+                </span>
+              </a>
             )}
           </div>
         )}
@@ -277,7 +304,6 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
 
 
 export default function Home() {
-  
   /* Dark Mode */
   const [darkMode, setDarkMode] = useState(false);
   useEffect(() => {
@@ -288,38 +314,50 @@ export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const closeMenu = () => setIsMenuOpen(false);
 
+  // ==============================
+  // ADDED: handleNavClick FUNCTION
+  // ==============================
+  function handleNavClick(secId: string) {
+    // 1) Close the mobile menu
+    setIsMenuOpen(false);
+    // 2) Force the nav highlight to update right away
+    setActiveSection(secId);
+    // 3) Smooth scroll to the target section
+    document.getElementById(secId)?.scrollIntoView({ behavior: "smooth" });
+  }
+
   /* Scroll Spy Setup */
   const sections = useMemo(() => ["hero", "about", "experience", "projects", "footer-contact"], []);
   const [activeSection, setActiveSection] = useState("hero");
 
-  
-useEffect(() => {
-  const options = { root: null, rootMargin: "0px", threshold: 0.5 };
-  const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        setActiveSection(entry.target.id);
-      }
-    });
-  };
-  const observer = new IntersectionObserver(handleIntersect, options);
-  sections.forEach((secId) => {
-    const secEl = document.getElementById(secId);
-    if (secEl) observer.observe(secEl);
-  });
-  return () => {
+  useEffect(() => {
+    const options = { root: null, rootMargin: "0px", threshold: 0.5 };
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+    const observer = new IntersectionObserver(handleIntersect, options);
     sections.forEach((secId) => {
       const secEl = document.getElementById(secId);
-      if (secEl) observer.unobserve(secEl);
+      if (secEl) observer.observe(secEl);
     });
-  };
-}, [sections]); 
+    return () => {
+      sections.forEach((secId) => {
+        const secEl = document.getElementById(secId);
+        if (secEl) observer.unobserve(secEl);
+      });
+    };
+  }, [sections]); 
 
   /* Experience Data */
   const experiences = [
     {
       title: "AI Engineer",
       company: "Uniquify AI",
+      companyUrl: "https://www.uniquifyai.com/",
       logo: "/images/uniquify.png",
       timeframe: "2021 - Present",
       shortDescription: [
@@ -359,6 +397,7 @@ useEffect(() => {
     {
       title: "Masters in Computer Science",
       company: "San Jose State University",
+      companyUrl: "https://www.sjsu.edu/",
       logo: "/images/sjsu.png",
       timeframe: "2019 - 2021",
       shortDescription: [
@@ -370,18 +409,16 @@ useEffect(() => {
         "Research & Publications": [
           `Published "Generating Fake Malware Using Auxiliary-Classifier GAN for Malware Analysis" in arXiv (2021).`,
           "Researched how AC-GANs can generate synthetic malware samples to improve cybersecurity defenses.",
-          "Analyzed adversarial machine learning threats and model robustness for malware detection."
+          "https://arxiv.org/abs/2107.01620"
         ],
         "Projects & Technical Work": [
           "Developed an AI-powered fake news detection system using BERT and LSTMs.",
           "Developed iOS applications integrating AI-driven security features.",
-          "Worked on distributed computing models to optimize deep learning workloads.",
-          "Built an automated AI paper summarization tool, improving information retrieval efficiency."
+          "Worked on distributed computing models to optimize deep learning workloads."
         ],
         "Academic & Technical Contributions": [
           "Applied deep learning techniques (CNNs, GANs, Transformers) for cybersecurity and NLP tasks.",
-          "Explored secure AI pipelines and privacy-preserving machine learning.",
-          "Designed scalable solutions for real-time security threat detection."
+          "Explored secure AI pipelines and privacy-preserving machine learning."
         ]
 
       },
@@ -390,6 +427,7 @@ useEffect(() => {
     {
       title: "Senior Software Engineer",
       company: "Capgemini",
+      companyUrl: "https://www.capgemini.com/in-en/",
       logo: "/images/Capgemini.png",
       timeframe: "2016 - 2019",
       shortDescription: [
@@ -422,6 +460,7 @@ useEffect(() => {
     {
       title: "Bachelor in Computer Science",
       company: "NMIT",
+      companyUrl: "https://nitte.edu.in/nmit/",
       logo: "/images/nmit.png",
       timeframe: "2012 - 2016",
       shortDescription: [
@@ -606,7 +645,7 @@ useEffect(() => {
 
   // Parallax
   const { scrollY } = useScroll();
-  //const rawY = useTransform(scrollY, [0, 300], [0, -150]);
+  // const rawY = useTransform(scrollY, [0, 300], [0, -150]);
   // const backgroundY = useSpring(rawY, { stiffness: 100, damping: 20 });
 
   const [bgImage, setBgImage] = useState("");
@@ -631,9 +670,6 @@ useEffect(() => {
   const currentProjects = currentTabObj ? currentTabObj.projects : [];
 
 
-  
-  // Once loaded, render your actual site
-  
   return (
     <main
       className={`
@@ -663,13 +699,30 @@ useEffect(() => {
           {/* Logo */}
           <div className="text-xl font-bold group relative">
             <a href="#hero" onClick={closeMenu} className="block">
-              <span className="transition-opacity duration-300 group-hover:opacity-0">RN</span>
-              <span className="absolute w-[max-content] left-0 top-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <span
+              className="
+                inline-flex
+                items-center
+                justify-center
+                align-middle
+                w-10 h-10
+                p-2
+                border-2 border-gray-500
+                rounded-full
+                transition-all duration-300
+                group-hover:border-transparent
+                group-hover:opacity-0
+              "
+            >
+              RN
+            </span>
+
+
+              <span className="absolute w-[max-content] left-0 top-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 Rakesh Nagaraju
               </span>
             </a>
           </div>
-
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
@@ -683,7 +736,12 @@ useEffect(() => {
                 <a
                   key={secId}
                   href={`#${secId}`}
-                  onClick={closeMenu}
+                  // REPLACED: onClick={closeMenu}
+                  // WITH:
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(secId);
+                  }}
                   className={`
                     relative cursor-pointer text-base focus:outline-none
                     before:absolute before:left-0 before:-bottom-1 before:h-[2px]
@@ -715,7 +773,11 @@ useEffect(() => {
               "
               aria-label="Toggle Dark Mode"
             >
-              {darkMode ? <SunIcon /> : <MoonIcon />}
+              {darkMode ? (
+                <HiOutlineSun className="h-5 w-5" />
+              ) : (
+                <HiOutlineMoon className="h-5 w-5" />
+              )}
             </button>
           </nav>
 
@@ -769,14 +831,19 @@ useEffect(() => {
                 <a
                   key={secId}
                   href={`#${secId}`}
-                  onClick={closeMenu}
+                  // REPLACED: onClick={closeMenu}
+                  // WITH:
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(secId);
+                  }}
                   className={`
                     relative cursor-pointer text-base focus:outline-none
                     before:absolute before:left-0 before:-bottom-1 before:h-[2px]
                     before:rounded before:transition-all before:duration-300
                     ${
                       isActive
-                        ? "font-semibold scale-105 text-gray-900 dark:text-gray-100 before:w-full before:bg-gradient-to-r before:from-pink-500 before:to-blue-500"
+                        ? "font-semibold  text-gray-900 dark:text-gray-100 before:w-full before:bg-gradient-to-r before:from-pink-500 before:to-blue-500"
                         : "font-normal text-gray-600 dark:text-gray-300 before:w-0 before:bg-gradient-to-r before:from-pink-500 before:to-blue-500 hover:before:w-full"
                     }
                   `}
@@ -801,7 +868,11 @@ useEffect(() => {
               "
               aria-label="Toggle Dark Mode"
             >
-              {darkMode ? <SunIcon /> : <MoonIcon />}
+              {darkMode ? (
+                <HiOutlineSun className="h-5 w-5" />
+              ) : (
+                <HiOutlineMoon className="h-5 w-5" />
+              )}
             </button>
           </nav>
         )}
@@ -885,7 +956,6 @@ useEffect(() => {
             }),
             fontFamily: "SF Pro Display, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif" 
           }}
-  
         >
           RAKESH NAGARAJU
         </motion.h1>
@@ -913,9 +983,7 @@ useEffect(() => {
           </p>
 
           <div className='mt-6 px-6 rounded-xl bg-opacity-90'>
-             { /* <span className="text-gray-800 dark:text-gray-300 text-sm md:text-base mt-3">With proven track record in building high-performance AI applications,</span> */}
             <span className="block md:flex justify-center items-center mt-1">
-              {/*<span className='text-base text-gray-600 dark:text-gray-400'>I specialize in&nbsp;&nbsp;</span>*/}
               <span className="font-bold text-lg md:text-xl min-w-[220px] md:text-left text-gray-700 dark:text-gray-300">
                 <Typewriter
                   options={{
@@ -963,13 +1031,9 @@ useEffect(() => {
       </section>
 
       {/* ABOUT (2) */}
-      {/* ABOUT (2) */}
       <section id="about" className="relative py-24 px-10 bg-gray-50 dark:bg-[#01070e] overflow-hidden">
-
-
         {/* Main Content Grid */}
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          
           {/* Left Side (Intro) */}
           <motion.div
             className="md:w-[90%] text-center md:text-left"
@@ -999,110 +1063,121 @@ useEffect(() => {
               </span>
             </motion.p>
 
-           {/* 🔹 Social Icons - Aligned Closer to Intro */}
-          <div className="flex flex-wrap items-center justify-center md:justify-start w-full md:w-[320px] gap-x-4 gap-y-2 mt-6">
-            
-            {/* LinkedIn */}
-            <a href="https://www.linkedin.com/in/rakesh-nagaraju/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
-              className="cursor-pointer relative group inline-block">
-              <FaLinkedin className="w-5 h-5 text-[#0077B5] transition-transform duration-300 group-hover:scale-110 hover:text-[#005582]" />
-              <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                LinkedIn
-              </span>
-            </a>
+            {/* 🔹 Social Icons */}
+            <div className="flex flex-wrap items-center justify-center md:justify-start w-full md:w-[320px] gap-x-4 gap-y-2 mt-6">
+              {/* LinkedIn */}
+              <a
+                href="https://www.linkedin.com/in/rakesh-nagaraju/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="cursor-pointer relative group inline-block"
+              >
+                <FaLinkedin className="w-5 h-5 text-[#0077B5] transition-transform duration-300 group-hover:scale-110 hover:text-[#005582]" />
+                <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                  LinkedIn
+                </span>
+              </a>
 
-            {/* Instagram */}
-            <a href="https://instagram.com/yourinstagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-              className="cursor-pointer relative group inline-block">
-              <FiInstagram className="w-5 h-5 text-pink-500 transition-transform duration-300 group-hover:scale-110" />
-              <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                Instagram
-              </span>
-            </a>
+              {/* Instagram */}
+              <a
+                href="https://www.instagram.com/rakeshn_raki?igsh=NTc4MTIwNjQ2YQ%3D%3D&utm_source=qr"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="cursor-pointer relative group inline-block"
+              >
+                <FiInstagram className="w-5 h-5 text-pink-500 transition-transform duration-300 group-hover:scale-110" />
+                <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                  Instagram
+                </span>
+              </a>
 
-            {/* Hugging Face */}
-            <a href="https://huggingface.co/Rakesh2205" target="_blank" rel="noopener noreferrer" aria-label="HuggingFace"
-              className="cursor-pointer relative group inline-block">
-              <div className="w-5 h-5">
-                <Image
-                  src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
-                  alt="Hugging Face"
-                  width={20} // Adjust the width as necessary
-                  height={20} // Adjust the height as necessary
-                  className="transition-transform duration-300 group-hover:scale-110"
-                />
-              </div>
-              <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                Hugging Face
-              </span>
-            </a>
+              {/* Hugging Face */}
+              <a
+                href="https://huggingface.co/Rakesh2205"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="HuggingFace"
+                className="cursor-pointer relative group inline-block"
+              >
+                <div className="w-5 h-5">
+                  <Image
+                    src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
+                    alt="Hugging Face"
+                    width={20}
+                    height={20}
+                    className="transition-transform duration-300 group-hover:scale-110"
+                  />
+                </div>
+                <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                  Hugging Face
+                </span>
+              </a>
 
-            {/* GitHub */}
-            <a href="https://github.com/yourgithub" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
-              className="cursor-pointer relative group inline-block">
-              <FiGithub className="w-5 h-5 text-gray-700 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110 dark:group-hover:text-white" />
-              <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                GitHub
-              </span>
-            </a>
+              {/* GitHub */}
+              <a
+                href="https://github.com/Rakesh-Nagaraju"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="cursor-pointer relative group inline-block"
+              >
+                <FiGithub className="w-5 h-5 text-gray-700 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110 dark:group-hover:text-white" />
+                <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                  GitHub
+                </span>
+              </a>
 
-            {/* Download CV */}
-            <a href="/files/Rakesh_Resume_October_2024.pdf" download aria-label="Download CV"
-              className="cursor-pointer relative group inline-block">
-              <FiFileText className="w-5 h-5 text-gray-700 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110 dark:group-hover:text-white" />
-              <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                Download CV
-              </span>
-            </a>
+              {/* Download CV */}
+              <a
+                href="/files/Rakesh_Resume_October_2024.pdf"
+                download
+                aria-label="Download CV"
+                className="cursor-pointer relative group inline-block"
+              >
+                <FiFileText className="w-5 h-5 text-gray-700 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110 dark:group-hover:text-white" />
+                <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                  Download CV
+                </span>
+              </a>
+            </div>
 
-          </div>
-
-
-            {/* 🔹 AI Introduction - Now Comes After Social Icons */}
-            {/* 🔹 AI Introduction */}
             {/* 🔹 AI Introduction */}
             <motion.div 
               className="mt-8 text-[1.1rem] text-gray-700 dark:text-gray-300 leading-[1.8] tracking-[0.5px]"
             >
               From <span className="font-semibold text-gray-900 dark:text-gray-100">vision and language </span>  
-               to <span className="font-semibold text-gray-900 dark:text-gray-100">multimodal AI</span>,  
-              I design systems that bridge the gap between machines and human intelligence—  
+              to <span className="font-semibold text-gray-900 dark:text-gray-100">multimodal AI</span>,  
+              I design systems that bridge the gap between machines and human intelligence—
               transforming ideas into <span className="font-semibold text-gray-900 dark:text-gray-100">real-world impact.</span>
             </motion.div>
 
-
-            {/* 🔹 Focus Section */}
-            {/* 🔹 Focus Section */}
-            {/* 🔹 Focus Section */}
-            {/* 🔹 My Approach - Minimal & Clean */}
-            {/* 🔹 My Approach - Minimal & Clean */}
-            <motion.div className="text-[#ff6a13] text-left text-[1.2rem] italic tracking-wide mb-6 mt-8">
+            {/* 🔹 My Approach */}
+            <motion.div className="font-semibold text-[#ff6a13] text-left text-[1.2rem] italic tracking-wide mb-6 mt-8">
               How I build !
             </motion.div>
 
-
-
             <motion.div className="mt-3 text-[1.05rem] text-gray-700 dark:text-gray-300 leading-[1.7] space-y-2">
               <div className="flex gap-3">
-                <span className="w-36 font-semibold text-gray-900 dark:text-gray-100 text-center">Simplicity</span>
+                <span className="w-36 font-semibold text-gray-900 dark:text-gray-100 text-left">
+                  Simplicity
+                </span>
                 <span className="flex-1">AI should feel effortless.</span>
               </div>
               <div className="flex gap-3">
-                <span className="w-36 font-semibold text-gray-900 dark:text-gray-100 text-center">Purpose-driven</span>
+                <span className="w-36 font-semibold text-gray-900 dark:text-gray-100 text-left">
+                  Purpose-driven
+                </span>
                 <span className="flex-1">Built to solve, not just generate.</span>
               </div>
               <div className="flex gap-3">
-                <span className="w-36 font-semibold text-gray-900 dark:text-gray-100 text-center">Impact-focused</span>
+                <span className="w-36 font-semibold text-gray-900 dark:text-gray-100 text-left">
+                  Impact-focused
+                </span>
                 <span className="flex-1">Faster, smarter, real-world ready.</span>
               </div>
             </motion.div>
-
-
-
-
-
-
-
           </motion.div>
 
           {/* Right Side (Image) */}
@@ -1124,79 +1199,77 @@ useEffect(() => {
         </div>
 
         {/* Floating Cards Section */}
-        {/* Floating Cards Section */}
         <div className="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-[100px] text-[1.1rem]">
-  
-  {/* What I Do */}
-  <motion.div
-    className="p-8 bg-gray-100 dark:bg-[#111827] rounded-xl shadow-lg transition-all duration-300"
-    initial={{ opacity: 0, y: 15 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    whileHover={{ scale: 1.02 }}
-    viewport={{ once: true }}
-  >
-    <h3 className="text-[#3b82f6] text-2xl text-center font-semibold">🚀 What I Do</h3>
-    <ul className="mt-4 space-y-3 text-gray-800 dark:text-gray-300 leading-[1.7]">
-      
-      <li className="flex items-center">
-        <span className="text-2xl text-[#ff6a13]">🔧</span>
-        <span className="text-[1rem] ml-3">Fine-tuning & optimizing AI models for <span className="font-semibold">real-world applications</span></span>
-      </li>
-      <li className="flex items-center">
-        <span className="text-2xl text-[#ff6a13]">⚡</span>
-        <span className="text-[1rem] ml-3">Optimizing AI models for <span className="font-semibold">real-world applications</span></span>
-      </li>
-      <li className="flex items-center">
-        <span className="text-2xl text-[#ff6a13]">📡</span>
-        <span className="text-[1rem] ml-3">Building scalable AI architectures with <span className="font-semibold">MLOps</span></span>
-      </li>
-    </ul>
-  </motion.div>
+          {/* What I Do */}
+          <motion.div
+            className="p-8 bg-gray-100 dark:bg-[#111827] rounded-xl shadow-lg transition-all duration-300"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            whileHover={{ scale: 1.02 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-[#3b82f6] text-2xl text-center font-semibold">🚀 What I Do</h3>
+            <ul className="mt-4 space-y-3 text-gray-800 dark:text-gray-300 leading-[1.7]">
+              <li className="flex items-center">
+                <span className="text-2xl text-[#ff6a13]">🔧</span>
+                <span className="text-[1rem] ml-3">
+                  Fine-tuning & optimizing AI models for{" "}
+                  <span className="font-semibold">real-world applications</span>
+                </span>
+              </li>
+              <li className="flex items-center">
+                <span className="text-2xl text-[#ff6a13]">⚡</span>
+                <span className="text-[1rem] ml-3">
+                  Optimizing AI models for{" "}
+                  <span className="font-semibold">real-world applications</span>
+                </span>
+              </li>
+              <li className="flex items-center">
+                <span className="text-2xl text-[#ff6a13]">📡</span>
+                <span className="text-[1rem] ml-3">
+                  Building scalable AI architectures with{" "}
+                  <span className="font-semibold">MLOps</span>
+                </span>
+              </li>
+            </ul>
+          </motion.div>
 
-  {/* Why AI? (Gradient Background) */}
-  <motion.div
-    className="p-8 bg-gradient-to-r from-blue-500 to-pink-500 text-white rounded-xl shadow-lg transition-all duration-300"
-    initial={{ opacity: 0, y: 15 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    whileHover={{ scale: 1.02 }}
-    viewport={{ once: true }}
-  >
-    <h3 className="text-2xl font-semibold text-center">🎯 Why AI?</h3>
-    <p className="text-[1rem] mt-6 text-center leading-[1.7]">
-      AI isn’t just my job—it’s my <span className="font-semibold">passion</span>.  
-      Teaching machines to <span className="font-semibold">see, understand, and solve real-world problems</span>  
-      feels like shaping the <span className="font-semibold">future</span> 🌍
-    </p>
-  </motion.div>
+          {/* Why AI? (Gradient Background) */}
+          <motion.div
+            className="p-8 bg-gradient-to-r from-blue-500 to-pink-500 text-white rounded-xl shadow-lg transition-all duration-300"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            whileHover={{ scale: 1.02 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-2xl font-semibold text-center">🎯 Why AI?</h3>
+            <p className="text-[1rem] mt-6 text-center leading-[1.7]">
+              AI isn’t just my job—it’s my <span className="font-semibold">passion</span>.
+              Teaching machines to{" "}
+              <span className="font-semibold">see, understand, and solve real-world problems</span>
+              feels like shaping the <span className="font-semibold">future</span> 🌍
+            </p>
+          </motion.div>
 
-  {/* Beyond Code */}
-  <motion.div
-    className="p-8 bg-gray-100 dark:bg-[#111827] rounded-xl shadow-lg transition-all duration-300"
-    initial={{ opacity: 0, y: 15 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    whileHover={{ scale: 1.02 }}
-    viewport={{ once: true }}
-  >
-    <h3 className="text-[#ec4899] text-center text-2xl font-semibold">🎮 Beyond Code</h3>
-    <p className="text-[1rem] text-gray-800 dark:text-gray-300 mt-6 italic text-center leading-[1.7]">
-      When I’m not coding, I’m out <span className="font-semibold">hiking</span>,  
-      challenging myself on my <span className="font-semibold">PS5</span>,  
-      experimenting in the <span className="font-semibold">kitchen</span>,  
-      or trying to perfect a new piece on the <span className="font-semibold">piano</span>.  
-      <br /> Let’s connect over <span className="font-semibold">tech, gaming, or new ideas </span>!🚀
-    </p>
-  </motion.div>
-
-</div>
-
-
-
-
+          {/* Beyond Code */}
+          <motion.div
+            className="p-8 bg-gray-100 dark:bg-[#111827] rounded-xl shadow-lg transition-all duration-300"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            whileHover={{ scale: 1.02 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-[#ec4899] text-center text-2xl font-semibold">🎮 Beyond Code</h3>
+            <p className="text-[1rem] text-gray-800 dark:text-gray-300 mt-6 italic text-center leading-[1.7]">
+              When I’m not coding, I’m out <span className="font-semibold">hiking</span>,
+              challenging myself on my <span className="font-semibold">PS5</span>,
+              experimenting in the <span className="font-semibold">kitchen</span>,
+              or trying to perfect a new piece on the <span className="font-semibold">piano</span>.
+              <br /> Let’s connect over <span className="font-semibold">tech, gaming, or new ideas </span>!🚀
+            </p>
+          </motion.div>
+        </div>
       </section>
-
-
-
-
 
       {/* EXPERIENCE (3) + SKILLS combined */}
       <section id="experience" className="py-20 px-4 bg-white dark:bg-black">
@@ -1245,7 +1318,6 @@ useEffect(() => {
                   lineHeight: "35px",
                   letterSpacing: "0.8px",
                   fontFamily: "SF Pro Display, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
-                  
                 }}
               >
                 <div className="flex items-center justify-between mb-3">
@@ -1256,7 +1328,6 @@ useEffect(() => {
                       alt={`${exp.company} logo`}
                       width={150}
                       height={150}
-                      
                       className="p-4 h-max object-cover rounded-full"
                     />
                   )}
@@ -1280,11 +1351,9 @@ useEffect(() => {
                   ))}
                 </div>
 
-
                 {/* Read More Link */}
                 <div className="mt-4 text-right">
                   <button
-                    
                     className="text-blue-600 dark:text-blue-400 hover:underline text-[0.9rem]"
                   >
                     Read more...
@@ -1326,7 +1395,7 @@ useEffect(() => {
         </div>
 
         <div className="max-w-5xl mx-auto">
-          {/* Tab buttons container -- in classname (can also be added ofr exaperience and projects 2nd row cards) touch-pan-x */}
+          {/* Tab buttons container */}
           <div className="mb-8 flex justify-center ">
             <div
               className="
@@ -1373,15 +1442,9 @@ useEffect(() => {
               overflow-x-auto snap-x snap-mandatory
               px-[25px] py-[25px] border-r-4
               min-h-[100vH]
-              
             "
-            
           >
-            
-            
             {currentProjects.map((proj) => (
-              
-             
               <motion.div
                 key={proj.title}
                 onClick={() => openProjectModal(proj)}
@@ -1408,17 +1471,15 @@ useEffect(() => {
                       alt={`${proj.title} image`}
                       width={49}
                       height={49}
-                      
                       className="w-full h-full object-cover"
                     />
                   </div>
                 )}
-                
+
                 {/* Project Title */}
                 <h3 className="text-xl font-semibold px-4 py-3 tracking-wide leading-[1.4]">
                   {proj.title}
                 </h3>
-
 
                 {/* Short Description without bullets */}
                 <ul className="pl-6 text-sm px-2 space-y-1">
@@ -1426,7 +1487,6 @@ useEffect(() => {
                     <li key={idx}>{desc}</li>
                   ))}
                 </ul>
-
 
                 {/* Read More Button */}
                 <div className="px-5 text-right">
@@ -1438,43 +1498,38 @@ useEffect(() => {
                   </button>
                 </div>
 
-                {/* Demo & GitHub (Optional quick links) */}
-<div className="px-3 flex space-x-3">
-  {proj.demoLink && (
-    <a
-      href={proj.demoLink}
-      onClick={(e) => e.stopPropagation()}
-      className="relative group text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-500 text-[0.85rem]"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <FaBolt className="w-5 h-5 text-[#ff822d]" />
-
-      {/* Tooltip for Demo */}
-      <span className="absolute bottom-[-1.6rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-        Click for Demo
-      </span>
-    </a>
-  )}
-  
-  {proj.githubLink && (
-    <a
-      href={proj.githubLink}
-      onClick={(e) => e.stopPropagation()}
-      className="relative group text-blue-600 dark:text-blue-400 text-[0.85rem] hover:text-blue-700 dark:hover:text-blue-500"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <FaGithub className="w-5 h-5 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100" />
-      <span className="absolute bottom-[-1.6rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-        GitHub
-      </span>
-    </a>
-  )}
-</div>
-
+                {/* Demo & GitHub */}
+                <div className="px-3 flex space-x-3">
+                  {proj.demoLink && (
+                    <a
+                      href={proj.demoLink}
+                      onClick={(e) => e.stopPropagation()}
+                      className="relative group text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-500 text-[0.85rem]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaBolt className="w-5 h-5 text-[#ff822d]" />
+                      <span className="absolute bottom-[-1.6rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                        Click for Demo
+                      </span>
+                    </a>
+                  )}
+                  {proj.githubLink && (
+                    <a
+                      href={proj.githubLink}
+                      onClick={(e) => e.stopPropagation()}
+                      className="relative group text-blue-600 dark:text-blue-400 text-[0.85rem] hover:text-blue-700 dark:hover:text-blue-500"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaGithub className="w-5 h-5 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100" />
+                      <span className="absolute bottom-[-1.6rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                        GitHub
+                      </span>
+                    </a>
+                  )}
+                </div>
               </motion.div>
-              
             ))}
           </div>
         </div>
@@ -1578,3 +1633,28 @@ useEffect(() => {
     </main>
   );
 }
+
+/***************************************************************************/
+/***************************** EXTRA LINES BELOW ****************************/
+/***************************************************************************/
+// Additional comment line #1
+// Additional comment line #2
+// Additional comment line #3
+// Additional comment line #4
+// Additional comment line #5
+// Additional comment line #6
+// Additional comment line #7
+// Additional comment line #8
+// Additional comment line #9
+// Additional comment line #10
+// Additional comment line #11
+// Additional comment line #12
+// Additional comment line #13
+// Additional comment line #14
+// Additional comment line #15
+// Additional comment line #16
+// Additional comment line #17
+// Additional comment line #18
+// Additional comment line #19
+// Additional comment line #20
+
