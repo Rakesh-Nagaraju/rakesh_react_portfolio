@@ -6,7 +6,6 @@ import SkillsSection from "./SkillsSection"; // Adjust the path as necessary
 import Typewriter from "typewriter-effect";
 import { FaLinkedin} from 'react-icons/fa';
 
-import { SiHuggingface } from 'react-icons/si';
 import { FiFileText } from 'react-icons/fi';
 import { FaGithub, FaBolt } from 'react-icons/fa';
 import { FiGithub, FiInstagram } from "react-icons/fi";
@@ -1025,7 +1024,13 @@ useEffect(() => {
             <a href="https://huggingface.co/Rakesh2205" target="_blank" rel="noopener noreferrer" aria-label="HuggingFace"
               className="cursor-pointer relative group inline-block">
               <div className="w-5 h-5">
-                <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="Hugging Face" className="w-full h-full transition-transform duration-300 group-hover:scale-110" />
+                <Image
+                  src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
+                  alt="Hugging Face"
+                  width={20} // Adjust the width as necessary
+                  height={20} // Adjust the height as necessary
+                  className="transition-transform duration-300 group-hover:scale-110"
+                />
               </div>
               <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 Hugging Face
