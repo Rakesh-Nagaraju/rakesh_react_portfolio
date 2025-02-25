@@ -129,9 +129,10 @@ function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) 
                   <Image
                     src={experience.logo}
                     alt={`${experience.company} logo`}
+                    width={150}
+                    height={150}
                     className="mt-3 object-contain"
-                    width={49}
-                    height={49}
+                    
                   />
                 </div>
               )}
@@ -1333,6 +1334,8 @@ export default function Home() {
                     <Image
                       src={exp.logo}
                       alt={`${exp.company} logo`}
+                      width={150}
+                      height={150}
                       className="p-4 h-max object-cover rounded-full"
                     />
                   )}
