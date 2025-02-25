@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Rakesh AI",
+  title: "Rakesh AI- portfolio",
   description: "Showcase of an my skillset and projects",
 };
 
