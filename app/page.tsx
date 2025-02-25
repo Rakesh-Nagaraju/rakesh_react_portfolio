@@ -9,6 +9,7 @@ import { FaLinkedin} from 'react-icons/fa';
 import { FiFileText } from 'react-icons/fi';
 import { FaGithub, FaBolt } from 'react-icons/fa';
 import { FiGithub, FiInstagram } from "react-icons/fi";
+import { AnimatePresence } from 'framer-motion';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 
 /* ----- Icons (Phone, Location, Social, Sun/Moon) ----- */
@@ -31,6 +32,7 @@ function GitHubIcon() {
 export interface Experience {
   title: string;
   company?: string;
+  companyUrl?: string;
   logo?: string;
   timeframe?: string;
   shortDescription: string[];
@@ -62,124 +64,143 @@ interface ExperienceModalProps {
 /* --------------------- */
 /*   EXPERIENCE MODAL    */
 /* --------------------- */
+
+
+
 function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) {
-  if (!isOpen || !experience) return null;
+  if (!experience) return null;
 
   return (
-    <div
-      className="fixed inset-0 flex items-center justify-center z-50 bg-[#0000002b] backdrop-blur-sm bg-opacity-50 overflow-auto"
-      onClick={onClose}
-    >
-      <div
-        className="m-5 bg-[linear-gradient(373deg,_#f8f9fc_0%,_#ffffffbf_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-lg max-w-2xl w-full shadow-xl relative backdrop-blur-md p-6 overflow-y-auto max-h-[90vh]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close Button */}
-        <button
-          className="fixed top-3 right-3 top-3 right-3 text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 px-[3px]"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
           onClick={onClose}
         >
-          ✕
-        </button>
+          <motion.div
+            className="relative bg-[linear-gradient(210deg,_#f4f6fbbd_0%,_#fff_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-xl shadow-2xl max-w-3xl w-full mx-4 overflow-hidden"
+            initial={{ scale: 0.8, opacity: 0, y: 50 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.8, opacity: 0, y: 50 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              className="absolute top-4 right-4 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white focus:outline-none"
+              onClick={onClose}
+              aria-label="Close modal"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
 
-        {/* Title & Logo Section */}
-        <div className="flex flex-col md:flex-row items-center justify-stretch mb-4 text-center md:text-left">
-          
-          <div className="px-6 mb-4 md:mb-0">
-            <h3 className="text-2xl font-semibold mb-1">{experience.title}</h3>
-            {experience.company && (
-              <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">
-                <a
-                  href={experience.companyUrl || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="italic underline hover:text-blue-600 hover:underline transition duration-200 cursor-pointer"
-                >
-                  {experience.company}
-                </a>
-              </h4>
-            )}
-
-          </div>
-
-          {/* Responsive Logo */}
-          {experience.logo && (
-            <Image
-              src={experience.logo}
-              alt={`${experience.company} logo`}
-              width={100}
-              height={100}
-              className="w-full mt-2 max-w-[100px] mx-auto md:mx-0 h-auto object-contain"
-            />
-          )}
-          
-        </div>
-
-        {/* Experience description (object with sections) */}
-        {experience.description &&
-        typeof experience.description === "object" &&
-        Object.keys(experience.description).length > 0 ? (
-          <div className="text-sm text-gray-600 dark:text-gray-400 space-y-4 mb-4 px-6">
-            {Object.entries(experience.description).map(([section, points], index) => (
-              <div key={index}>
-                <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                  {section}
-                </h4>
-                {Array.isArray(points) ? (
-                  <ul className="list-disc list-inside space-y-2">
-                    {points.map((point, idx) => {
-                      // Check if the point is a URL
-                      const isLink =
-                        typeof point === "string" &&
-                        (point.startsWith("http://") || point.startsWith("https://"));
-                      return (
-                        <li key={idx}>
-                          {isLink ? (
-                            <a
-                              href={point}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-500 hover:underline"
-                            >
-                              {point}
-                            </a>
-                          ) : (
-                            point
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <p>{points}</p>
+            {/* Header Section */}
+            <div className="flex flex-col md:flex-row items-center border-b border-gray-200 dark:border-gray-700 p-6">
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {experience.title}
+                </h3>
+                {experience.company && (
+                  <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
+                    <a
+                      href={experience.companyUrl || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-blue-600 transition-colors duration-200"
+                    >
+                      {experience.company}
+                    </a>
+                  </p>
                 )}
               </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-            No details available.
-          </p>
-        )}
+              {experience.logo && (
+                <div>
+                  <Image
+                    src={experience.logo}
+                    alt={`${experience.company} logo`}
+                    className="mt-3 object-contain"
+                  />
+                </div>
+              )}
+            </div>
 
+            {/* Content Section */}
+            <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
+              {experience.description &&
+              typeof experience.description === "object" &&
+              Object.keys(experience.description).length > 0 ? (
+                Object.entries(experience.description).map(([section, points], index) => (
+                  <div key={index}>
+                    <h4 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">
+                      {section}
+                    </h4>
+                    {Array.isArray(points) ? (
+                      <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+                        {points.map((point, idx) => {
+                          const isLink =
+                            typeof point === "string" &&
+                            (point.startsWith("http://") || point.startsWith("https://"));
+                          return (
+                            <li key={idx}>
+                              {isLink ? (
+                                <a
+                                  href={point}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-500 hover:underline"
+                                >
+                                  {point}
+                                </a>
+                              ) : (
+                                point
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    ) : (
+                      <p className="text-gray-700 dark:text-gray-300">{points}</p>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-600 dark:text-gray-400">No details available.</p>
+              )}
 
-        {/* Technologies */}
-        {experience.technologies && experience.technologies.length > 0 && (
-          <div className="mb-4 flex flex-wrap gap-2">
-            {experience.technologies.map((tech: string, index: number) => (
-              <span
-                key={index}
-                className="px-3 py-1 text-sm font-medium bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+              {/* Technologies Section */}
+              {experience.technologies && experience.technologies.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {experience.technologies.map((tech: string, index: number) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
+
+
+
 
 
 
@@ -197,38 +218,36 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-50 bg-[#0000002b] backdrop-blur-sm bg-opacity-50 overflow-auto"
+      className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60 backdrop-blur-sm overflow-auto"
       onClick={onClose}
     >
       <div
-        className="m-5 bg-[linear-gradient(373deg,_#f8f9fc_0%,_#ffffffbf_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-lg max-w-2xl w-full shadow-xl relative backdrop-blur-md p-6 overflow-y-auto min-h-[63vH] max-h-[90vh]"
+        className="m-5 bg-[linear-gradient(373deg,_#f8f9fc_0%,_#ffffffbf_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-lg max-w-2xl w-full shadow-xl relative backdrop-blur-md overflow-y-auto min-h-[63vh] max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="fixed top-3 right-3 text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 px-[3px]"
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-900 dark:hover:text-gray-300 px-[3px]"
           onClick={onClose}
+          aria-label="Close modal"
         >
           ✕
         </button>
-
 
         {/* Project Image */}
         {project.image && (
           <Image
             src={project.image}
             alt={`${project.title} image`}
-            width={49}
-            height={49}
-            className="w-full h-48 object-cover rounded mb-4 mt-4"
+            className="w-full h-48 object-cover rounded mb-4 mt-10  pb-6 "
           />
         )}
 
         {/* Project Title */}
-        <h3 className="text-2xl font-bold mb-2">{project.title}</h3>
+        <h3 className=" px-6 text-2xl font-bold mb-2">{project.title}</h3>
 
         {/* Long description as bullet points */}
         {project.longDescription && project.longDescription.length > 0 ? (
-          <div className="text-sm text-gray-600 dark:text-gray-400 space-y-4 mb-4">
+          <div className=" px-6 text-sm text-gray-600 dark:text-gray-400 space-y-4 mb-4">
             <ul className="list-disc list-inside space-y-2">
               {project.longDescription.map((point: string, idx: number) => (
                 <li key={idx}>{point}</li>
@@ -243,7 +262,7 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
 
         {/* Technologies */}
         {project.technologies && project.technologies.length > 0 && (
-          <div className="mb-4 flex flex-wrap gap-2">
+          <div className="px-6 mb-4 flex flex-wrap gap-2">
             {project.technologies.map((tech: string, index: number) => (
               <span
                 key={index}
@@ -257,7 +276,7 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
 
         {/* GitHub and Demo Links */}
         {(project.demoLink || project.githubLink) && (
-          <div className="mt-4 flex gap-3 space-x-4 p-4">
+          <div className="px-6 mt-4 flex gap-3 space-x-4 p-4">
             {project.demoLink && (
               <a
                 href={project.demoLink}
@@ -266,8 +285,6 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
                 rel="noopener noreferrer"
               >
                 <FaBolt className="w-6 h-6 text-[#ff822d]" /> Demo
-    
-                {/* Tooltip for Demo */}
                 <span className="absolute bottom-[-1.8rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                   Click for Demo
                 </span>
@@ -280,10 +297,7 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {/* GitHub Icon */}
-                <FaGithub className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100" />
-                Github
-                {/* Tooltip */}
+                <FaGithub className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100" /> Github
                 <span className="absolute bottom-[-1.8rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                   Click to GitHub repo
                 </span>
@@ -1100,8 +1114,6 @@ export default function Home() {
                   <Image
                     src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
                     alt="Hugging Face"
-                    width={20}
-                    height={20}
                     className="transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
@@ -1186,8 +1198,6 @@ export default function Home() {
             <Image
               src="/images/hero_image_body_upscaled.png"
               alt="Rakesh Nagaraju"
-              width={150}
-              height={150}
               className="w-[70%]  rounded-2xl"
             />
           </motion.div>
@@ -1321,8 +1331,6 @@ export default function Home() {
                     <Image
                       src={exp.logo}
                       alt={`${exp.company} logo`}
-                      width={150}
-                      height={150}
                       className="p-4 h-max object-cover rounded-full"
                     />
                   )}
@@ -1464,8 +1472,6 @@ export default function Home() {
                       loading="lazy"
                       src={proj.image}
                       alt={`${proj.title} image`}
-                      width={49}
-                      height={49}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -1494,7 +1500,7 @@ export default function Home() {
                 </div>
 
                 {/* Demo & GitHub */}
-                <div className="px-3 flex space-x-3">
+                <div className="px-3 flex space-x-3 ml-2">
                   {proj.demoLink && (
                     <a
                       href={proj.demoLink}
