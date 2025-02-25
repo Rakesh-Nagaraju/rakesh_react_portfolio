@@ -1571,23 +1571,35 @@ export default function Home() {
         </div>
 
         <div className="max-w-xxl mx-auto">
-          <div className="flex flex-col items-center justify-center gap-6 mt-[75px] mb-[45px] sm:flex-row sm:gap-20">
-            {/* Phone */}
-            <div className="flex items-center gap-2">
-              <PhoneIcon />
-              <span>+1 (669) 288-4508</span>
-            </div>
-            {/* Email */}
-            <div className="flex items-center gap-2">
-              <span>✉️</span>
-              <span>rakenju@gmail.com</span>
-            </div>
-            {/* Location */}
-            <div className="flex items-center gap-2">
-              <LocationIcon />
-              <span>Santa Clara, CA</span>
-            </div>
-          </div>
+        <div className="flex flex-col items-center justify-center gap-6 mt-[75px] mb-[45px] sm:flex-row sm:gap-20">
+          {/* Phone */}
+          <a
+            href="tel:+16692884508"
+            className="flex items-center gap-2 hover:underline"
+          >
+            <PhoneIcon />
+            <span>+1 (669) 288-4508</span>
+          </a>
+          {/* Email */}
+          <a
+            href="mailto:rakenju@gmail.com"
+            className="flex items-center gap-2 hover:underline"
+          >
+            <span>✉️</span>
+            <span>rakenju@gmail.com</span>
+          </a>
+          {/* Location */}
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=Santa+Clara,+CA"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:underline"
+          >
+            <LocationIcon />
+            <span>Santa Clara, CA</span>
+          </a>
+        </div>
+
 
           {/* Social icons row */}
           <div className="flex justify-center gap-4 mb-[75px]">
