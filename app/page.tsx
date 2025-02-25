@@ -9,6 +9,7 @@ import { FaLinkedin} from 'react-icons/fa';
 import { SiHuggingface } from 'react-icons/si';
 import { FiFileText } from 'react-icons/fi';
 import { FaGithub, FaBolt } from 'react-icons/fa';
+import { FiGithub, FiInstagram } from "react-icons/fi";
 
 
 /* ----- Icons (Phone, Location, Social, Sun/Moon) ----- */
@@ -969,6 +970,7 @@ useEffect(() => {
 
         {/* Main Content Grid */}
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          
           {/* Left Side (Intro) */}
           <motion.div
             className="md:w-[90%] text-center md:text-left"
@@ -977,202 +979,212 @@ useEffect(() => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
+            {/* Introduction */}
             <motion.p
-            className="text-[1rem] md:text-xl text-[#374151] dark:text-gray-400 leading-[1.8] tracking-[0.5px]"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            style={{
-              lineHeight: "35px",
-              letterSpacing: "0.8px",
-              fontFamily: "SF Pro Display, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
-              
-            }}
-          >
-              {/* Introduction */}
+              className="text-[1rem] md:text-xl text-[#374151] dark:text-gray-400 leading-[1.8] tracking-[0.5px]"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              style={{
+                lineHeight: "35px",
+                letterSpacing: "0.8px",
+                fontFamily: "SF Pro Display, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+              }}
+            >
               <span className="text-4xl text-[#1f2937] dark:text-white font-semibold">
-                Hi 👋, I&apos;m <span className="text-[#ff6a13]">Rakesh</span>,
+                Hi👋 I&apos;m <span className="text-[#ff6a13]">Rakesh</span>
               </span>
               <span className="block text-md text-[#374151] dark:text-gray-400 mt-1">
                 an AI Engineer based in the Bay Area.
               </span>
-
-              <span className="block text-[1.1rem] text-gray-700 dark:text-gray-300 mt-6">
-                Passionate about <span className="font-semibold text-gray-900 dark:text-gray-100"> vision, language, and multimodal AI</span>, I build systems that
-                <span className="font-semibold text-gray-900 dark:text-gray-100"> see, understand, and generate </span> 
-                human-like intelligence.
-              </span>
-
-              {/* Focus Area */}
-              <span className="block text-[#ff6a13] font-bold text-[1.2rem] mt-6">
-                My focus?
-              </span>
-
-              <span className="block text-[1.1rem] text-gray-800 dark:text-gray-300 mt-2">
-                Delivering AI solutions that are
-                <span className="font-semibold"> scalable</span>,
-                <span className="font-semibold"> efficient</span>, and
-                <span className="font-semibold"> production-ready</span>.
-              </span>
             </motion.p>
-            {/* Social Icons Section */}
-            <div className="flex items-center mt-8 space-x-4 justify-center md:justify-around w-full md:w-[200px]">
 
-              <a
+           {/* 🔹 Social Icons - Aligned Closer to Intro */}
+          <div className="flex flex-wrap items-center justify-center md:justify-start w-full md:w-[320px] gap-x-4 gap-y-2 mt-6">
+            
+            {/* LinkedIn */}
+            <a href="https://www.linkedin.com/in/rakesh-nagaraju/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+              className="cursor-pointer relative group inline-block">
+              <FaLinkedin className="w-6 h-6 text-[#0077B5] transition-transform duration-300 group-hover:scale-110 hover:text-[#005582]" />
+              <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                LinkedIn
+              </span>
+            </a>
 
-                href="https://www.linkedin.com/in/rakesh-nagaraju/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="cursor-pointer relative group inline-block"
-              >
-                <FaLinkedin className="w-6 h-6 text-[#0077B5] hover:text-[#005582]" />
-                <span className="absolute bottom-[-1.5rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                  LinkedIn
-                </span>
-              </a>
-              <a
-                href="https://huggingface.co/Rakesh2205"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="HuggingFace"
-                className="cursor-pointer relative group inline-block"
-              >
-                <SiHuggingface className="w-6 h-6 text-[#ffd21e] hover:text-[#ffb208]" />
-                <span className="absolute bottom-[-1.5rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                  HuggingFace
-                </span>
-              </a>
-              <a
-                href="/files/Rakesh_Resume_October_2024.pdf"
-                download
-                aria-label="Download CV"
-                className="cursor-pointer relative group inline-block"
-              >
-                <FiFileText className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100" />
-                <span className="absolute bottom-[-1.5rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                  Download CV
-                </span>
-              </a>
-            </div>
+            {/* Instagram */}
+            <a href="https://instagram.com/yourinstagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+              className="cursor-pointer relative group inline-block">
+              <FiInstagram className="w-6 h-6 text-pink-500 transition-transform duration-300 group-hover:scale-110" />
+              <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                Instagram
+              </span>
+            </a>
+
+            {/* Hugging Face */}
+            <a href="https://huggingface.co/Rakesh2205" target="_blank" rel="noopener noreferrer" aria-label="HuggingFace"
+              className="cursor-pointer relative group inline-block">
+              <div className="w-6 h-6">
+                <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="Hugging Face" className="w-full h-full transition-transform duration-300 group-hover:scale-110" />
+              </div>
+              <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                Hugging Face
+              </span>
+            </a>
+
+            {/* GitHub */}
+            <a href="https://github.com/yourgithub" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+              className="cursor-pointer relative group inline-block">
+              <FiGithub className="w-6 h-6 text-gray-700 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110 dark:group-hover:text-white" />
+              <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                GitHub
+              </span>
+            </a>
+
+            {/* Download CV */}
+            <a href="/files/Rakesh_Resume_October_2024.pdf" download aria-label="Download CV"
+              className="cursor-pointer relative group inline-block">
+              <FiFileText className="w-6 h-6 text-gray-700 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110 dark:group-hover:text-white" />
+              <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                Download CV
+              </span>
+            </a>
+
+          </div>
+
+
+            {/* 🔹 AI Introduction - Now Comes After Social Icons */}
+            {/* 🔹 AI Introduction */}
+            {/* 🔹 AI Introduction */}
+            <motion.div 
+              className="mt-8 text-[1.1rem] text-gray-700 dark:text-gray-300 leading-[1.8] tracking-[0.5px]"
+            >
+              From <span className="font-semibold text-gray-900 dark:text-gray-100">vision and language </span>  
+               to <span className="font-semibold text-gray-900 dark:text-gray-100">multimodal AI</span>,  
+              I design systems that bridge the gap between machines and human intelligence—  
+              transforming ideas into <span className="font-semibold text-gray-900 dark:text-gray-100">real-world impact.</span>
+            </motion.div>
+
+
+            {/* 🔹 Focus Section */}
+            {/* 🔹 Focus Section */}
+            {/* 🔹 Focus Section */}
+            {/* 🔹 My Approach - Minimal & Clean */}
+            {/* 🔹 My Approach - Minimal & Clean */}
+            <motion.div className="text-[#ff6a13] text-left text-[1.2rem] italic tracking-wide mb-6 mt-8">
+              How I build !
+            </motion.div>
+
+
+
+            <motion.div className="mt-3 text-[1.05rem] text-gray-700 dark:text-gray-300 leading-[1.7] space-y-2">
+              <div className="flex gap-3">
+                <span className="w-36 font-semibold text-gray-900 dark:text-gray-100 text-center">Simplicity</span>
+                <span className="flex-1">AI should feel effortless.</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="w-36 font-semibold text-gray-900 dark:text-gray-100 text-center">Purpose-driven</span>
+                <span className="flex-1">Built to solve, not just generate.</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="w-36 font-semibold text-gray-900 dark:text-gray-100 text-center">Impact-focused</span>
+                <span className="flex-1">Faster, smarter, real-world ready.</span>
+              </div>
+            </motion.div>
+
+
+
 
 
 
 
           </motion.div>
 
-            {/* Right Side (Image) */}
-            <motion.div
-              className="flex justify-center"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              
-              <Image
-                src="/images/about-me.png"
-                alt="Rakesh Nagaraju"
-                width={150}
-                height={150}
-                
-                className="w-[90%] max-w-md rounded-2xl shadow-lg"
-              />
-            </motion.div>
+          {/* Right Side (Image) */}
+          <motion.div
+            className="flex justify-center"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <Image
+              src="/images/about-me.png"
+              alt="Rakesh Nagaraju"
+              width={150}
+              height={150}
+              className="w-[90%] max-w-md rounded-2xl shadow-lg"
+            />
+          </motion.div>
         </div>
 
         {/* Floating Cards Section */}
         {/* Floating Cards Section */}
         <div className="relative max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mt-[100px] text-[1.1rem]">
-          
-          {/* What I Do */}
-          <motion.div
-            className="p-8 bg-[linear-gradient(210deg,_#f4f6fbbd_0%,_#fff_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-xl shadow-lg transition-all duration-300"
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.05 }}
-            viewport={{ once: true }}
-            style={{
-              lineHeight: "30px",
-              letterSpacing: "1px",
-              fontFamily: "SF Pro Display, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
-              scale: useSpring(useTransform(scrollY, [0, 300], [1, 1.05]), {
-                stiffness: 100,
-                damping: 20,
-              }),
-            }}
-          >
-            <h3 className="text-[#3b82f6] text-2xl text-center font-semibold">🚀 What I Do</h3>
-            <ul className="mt-4 space-y-3 text-gray-800 dark:text-gray-300">
-              <li className="flex items-center">
-                <span className="text-2xl text-[#ff6a13]">⚡</span>
-                <span className="text-[1rem] ml-3">Developing <span className="font-semibold">cutting-edge AI models</span></span>
-              </li>
-              <li className="flex items-center">
-                <span className="text-2xl text-[#ff6a13]">🔧</span>
-                <span className="text-[1rem] ml-3">Fine-tuning & optimizing AI models for <span className="font-semibold">real-world applications</span></span>
-              </li>
-              <li className="flex items-center">
-                <span className="text-2xl text-[#ff6a13]">📡</span>
-                <span className="text-[1rem] ml-3">Building scalable AI architectures with <span className="font-semibold">MLOps</span></span>
-              </li>
-            </ul>
-          </motion.div>
+  
+  {/* What I Do */}
+  <motion.div
+    className="p-8 bg-gray-100 dark:bg-[#111827] rounded-xl shadow-lg transition-all duration-300"
+    initial={{ opacity: 0, y: 15 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    whileHover={{ scale: 1.02 }}
+    viewport={{ once: true }}
+  >
+    <h3 className="text-[#3b82f6] text-2xl text-center font-semibold">🚀 What I Do</h3>
+    <ul className="mt-4 space-y-3 text-gray-800 dark:text-gray-300 leading-[1.7]">
+      
+      <li className="flex items-center">
+        <span className="text-2xl text-[#ff6a13]">🔧</span>
+        <span className="text-[1rem] ml-3">Fine-tuning & optimizing AI models for <span className="font-semibold">real-world applications</span></span>
+      </li>
+      <li className="flex items-center">
+        <span className="text-2xl text-[#ff6a13]">⚡</span>
+        <span className="text-[1rem] ml-3">Optimizing AI models for <span className="font-semibold">real-world applications</span></span>
+      </li>
+      <li className="flex items-center">
+        <span className="text-2xl text-[#ff6a13]">📡</span>
+        <span className="text-[1rem] ml-3">Building scalable AI architectures with <span className="font-semibold">MLOps</span></span>
+      </li>
+    </ul>
+  </motion.div>
 
-          {/* Why AI? */}
-          <motion.div
-            className="p-8 bg-gradient-to-r from-blue-500 to-pink-500 text-white rounded-xl shadow-lg transition-all duration-300"
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.05 }}
-            viewport={{ once: true }}
-            style={{
-              
-              letterSpacing: "1px",
-              fontFamily: "SF Pro Display, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
-              scale: useSpring(useTransform(scrollY, [0, 300], [1, 1.05]), {
-                stiffness: 100,
-                damping: 20,
-              }),
-            }}
-          >
-            <h3 className="text-2xl font-semibold text-center">🎯 Why AI?</h3>
-            <p className="text-[1rem] mt-6 text-center leading-[1.8]">
-              AI isn’t just my job—it’s my <span className="font-semibold">passion</span>.  
-              Teaching machines to <span className="font-semibold">see, understand, and solve real-world problems</span>  
-              feels like shaping the <span className="font-semibold">future</span>. 🌍
-            </p>
-          </motion.div>
+  {/* Why AI? (Gradient Background) */}
+  <motion.div
+    className="p-8 bg-gradient-to-r from-blue-500 to-pink-500 text-white rounded-xl shadow-lg transition-all duration-300"
+    initial={{ opacity: 0, y: 15 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    whileHover={{ scale: 1.02 }}
+    viewport={{ once: true }}
+  >
+    <h3 className="text-2xl font-semibold text-center">🎯 Why AI?</h3>
+    <p className="text-[1rem] mt-6 text-center leading-[1.7]">
+      AI isn’t just my job—it’s my <span className="font-semibold">passion</span>.  
+      Teaching machines to <span className="font-semibold">see, understand, and solve real-world problems</span>  
+      feels like shaping the <span className="font-semibold">future</span> 🌍
+    </p>
+  </motion.div>
 
-          {/* Beyond Code */}
-          <motion.div
-            className="p-8 bg-[linear-gradient(210deg,_#f4f6fbbd_0%,_#fff_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-xl shadow-lg transition-all duration-300"
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.05 }}
-            viewport={{ once: true }}
-            style={{
-              lineHeight: "35px",
-              letterSpacing: "1px",
-              fontFamily: "SF Pro Display, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
-              scale: useSpring(useTransform(scrollY, [0, 300], [1, 1.05]), {
-                stiffness: 100,
-                damping: 20,
-              }),
-            }}
-          >
-            <h3 className="text-[#ec4899] text-center text-2xl font-semibold">🎮 Beyond Code</h3>
-            <p className="text-[1rem] text-gray-700 dark:text-gray-300 mt-6 italic text-center leading-[1.8]">
-              When I’m not coding, I’m out <span className="font-semibold">hiking</span>,  
-              challenging myself on my <span className="font-semibold">PS5</span>,  
-              experimenting in the <span className="font-semibold">kitchen</span>,  
-              or trying to perfect a new piece on the <span className="font-semibold">piano</span>.  
-              <br /> I love connecting over <span className="font-semibold">tech, gaming, or new ideas</span>—let’s chat! 🚀
-            </p>
-          </motion.div>
+  {/* Beyond Code */}
+  <motion.div
+    className="p-8 bg-gray-100 dark:bg-[#111827] rounded-xl shadow-lg transition-all duration-300"
+    initial={{ opacity: 0, y: 15 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    whileHover={{ scale: 1.02 }}
+    viewport={{ once: true }}
+  >
+    <h3 className="text-[#ec4899] text-center text-2xl font-semibold">🎮 Beyond Code</h3>
+    <p className="text-[1rem] text-gray-800 dark:text-gray-300 mt-6 italic text-center leading-[1.7]">
+      When I’m not coding, I’m out <span className="font-semibold">hiking</span>,  
+      challenging myself on my <span className="font-semibold">PS5</span>,  
+      experimenting in the <span className="font-semibold">kitchen</span>,  
+      or trying to perfect a new piece on the <span className="font-semibold">piano</span>.  
+      <br /> Let’s connect over <span className="font-semibold">tech, gaming, or new ideas </span>!🚀
+    </p>
+  </motion.div>
 
-        </div>
+</div>
+
+
 
 
       </section>
@@ -1370,7 +1382,7 @@ useEffect(() => {
                 onClick={() => openProjectModal(proj)}
                 className={`
                   ${currentTabObj?.color ?? ""}
-                  w-[300px] h-[300px] flex-shrink-0 snap-center
+                  w-[310px] h-[310px] flex-shrink-0 snap-center
                   pb-6 rounded-lg 
                   cursor-pointer 
                   relative
@@ -1398,14 +1410,18 @@ useEffect(() => {
                 )}
                 
                 {/* Project Title */}
-                <h3 className="text-xl px-3 font-semibold py-2">{proj.title}</h3>
+                <h3 className="text-xl font-semibold px-4 py-3 tracking-wide leading-[1.4]">
+                  {proj.title}
+                </h3>
 
-                {/* Short Description as bullet points */}
-                <ul className="list-disc pl-6 text-sm px-2">
+
+                {/* Short Description without bullets */}
+                <ul className="pl-6 text-sm px-2 space-y-1">
                   {proj.shortDescription.map((desc, idx) => (
                     <li key={idx}>{desc}</li>
                   ))}
                 </ul>
+
 
                 {/* Read More Button */}
                 <div className="px-5 text-right">
@@ -1418,47 +1434,40 @@ useEffect(() => {
                 </div>
 
                 {/* Demo & GitHub (Optional quick links) */}
-                <div className="px-3 flex space-x-4">
-                  {proj.demoLink && (
-                    <a
-                      href={proj.demoLink}
-                      onClick={(e) => e.stopPropagation()}
-                      className="relative group text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-500 text-[0.9rem]"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <FaBolt className="w-6 h-6 text-[#ff822d]" />
+<div className="px-3 flex space-x-3">
+  {proj.demoLink && (
+    <a
+      href={proj.demoLink}
+      onClick={(e) => e.stopPropagation()}
+      className="relative group text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-500 text-[0.85rem]"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <FaBolt className="w-5 h-5 text-[#ff822d]" />
 
-                      {/* Tooltip for Demo */}
-                      <span className="absolute bottom-[-1.8rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                        Click for Demo
-                      </span>
-                    </a>
+      {/* Tooltip for Demo */}
+      <span className="absolute bottom-[-1.6rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+        Click for Demo
+      </span>
+    </a>
+  )}
+  
+  {proj.githubLink && (
+    <a
+      href={proj.githubLink}
+      onClick={(e) => e.stopPropagation()}
+      className="relative group text-blue-600 dark:text-blue-400 text-[0.85rem] hover:text-blue-700 dark:hover:text-blue-500"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <FaGithub className="w-5 h-5 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100" />
+      <span className="absolute bottom-[-1.6rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+        GitHub
+      </span>
+    </a>
+  )}
+</div>
 
-                  
-
-
-
-                  )}
-                  {proj.githubLink && (
-                    <a
-                      href={proj.githubLink}
-                      onClick={(e) => e.stopPropagation()}
-                      className="relative group text-blue-600 dark:text-blue-400 text-[0.9rem] hover:text-blue-700 dark:hover:text-blue-500"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <FaGithub className="w-6 h-6 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100" />
-                      <span className="absolute bottom-[-1.8rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                       GitHub
-                      </span>
-                    </a>
-
-                   
-
-
-                  )}
-                </div>
               </motion.div>
               
             ))}
