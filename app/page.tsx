@@ -129,8 +129,8 @@ function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) 
                   <Image
                     src={experience.logo}
                     alt={`${experience.company} logo`}
-                    width={150}
-                    height={150}
+                    width={100}
+                    height={100}
                     className="mt-3 object-contain"
                     
                   />
