@@ -235,15 +235,15 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
 
         {/* GitHub and Demo Links */}
         {(project.demoLink || project.githubLink) && (
-          <div className="mt-4 flex space-x-4 p-4">
+          <div className="mt-4 flex gap-3 space-x-4 p-4">
             {project.demoLink && (
               <a
                 href={project.demoLink}
-                className="relative group text-green-600 dark:text-green-400 hover:underline font-semibold"
+                className="relative group text-[0.8rem] text-green-600 dark:text-green-400 hover:underline font-semibold"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FaBolt className="w-6 h-6 text-[#ff822d]" />
+                <FaBolt className="w-6 h-6 text-[#ff822d]" /> Demo
     
                 {/* Tooltip for Demo */}
                 <span className="absolute bottom-[-1.8rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
@@ -254,13 +254,13 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
             {project.githubLink && (
               <a
               href={project.githubLink}
-              className="relative group text-blue-600 dark:text-blue-400 hover:underline font-semibold"
+              className="relative group text-[0.8rem] text-blue-600 dark:text-blue-400 hover:underline font-semibold"
               target="_blank"
               rel="noopener noreferrer"
             >
               {/* GitHub Icon */}
               <FaGithub className="w-6 h-6 text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100" />
-              
+              Github
               {/* Tooltip */}
               <span className="absolute bottom-[-1.8rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 Click to GitHub repo
@@ -914,9 +914,9 @@ useEffect(() => {
           </p>
 
           <div className='mt-6 px-6 rounded-xl bg-opacity-90'>
-            <span className="text-gray-800 dark:text-gray-300 text-sm md:text-base mt-3">With proven track record in building high-performance AI applications,</span>
+             { /* <span className="text-gray-800 dark:text-gray-300 text-sm md:text-base mt-3">With proven track record in building high-performance AI applications,</span> */}
             <span className="block md:flex justify-center items-center mt-1">
-              <span className='text-base text-gray-600 dark:text-gray-400'>I specialize in&nbsp;&nbsp;</span>
+              {/*<span className='text-base text-gray-600 dark:text-gray-400'>I specialize in&nbsp;&nbsp;</span>*/}
               <span className="font-bold text-lg md:text-xl min-w-[220px] md:text-left text-gray-700 dark:text-gray-300">
                 <Typewriter
                   options={{
@@ -1006,7 +1006,7 @@ useEffect(() => {
             {/* LinkedIn */}
             <a href="https://www.linkedin.com/in/rakesh-nagaraju/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
               className="cursor-pointer relative group inline-block">
-              <FaLinkedin className="w-6 h-6 text-[#0077B5] transition-transform duration-300 group-hover:scale-110 hover:text-[#005582]" />
+              <FaLinkedin className="w-5 h-5 text-[#0077B5] transition-transform duration-300 group-hover:scale-110 hover:text-[#005582]" />
               <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 LinkedIn
               </span>
@@ -1015,7 +1015,7 @@ useEffect(() => {
             {/* Instagram */}
             <a href="https://instagram.com/yourinstagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
               className="cursor-pointer relative group inline-block">
-              <FiInstagram className="w-6 h-6 text-pink-500 transition-transform duration-300 group-hover:scale-110" />
+              <FiInstagram className="w-5 h-5 text-pink-500 transition-transform duration-300 group-hover:scale-110" />
               <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 Instagram
               </span>
@@ -1024,7 +1024,7 @@ useEffect(() => {
             {/* Hugging Face */}
             <a href="https://huggingface.co/Rakesh2205" target="_blank" rel="noopener noreferrer" aria-label="HuggingFace"
               className="cursor-pointer relative group inline-block">
-              <div className="w-6 h-6">
+              <div className="w-5 h-5">
                 <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" alt="Hugging Face" className="w-full h-full transition-transform duration-300 group-hover:scale-110" />
               </div>
               <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
@@ -1035,7 +1035,7 @@ useEffect(() => {
             {/* GitHub */}
             <a href="https://github.com/yourgithub" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
               className="cursor-pointer relative group inline-block">
-              <FiGithub className="w-6 h-6 text-gray-700 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110 dark:group-hover:text-white" />
+              <FiGithub className="w-5 h-5 text-gray-700 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110 dark:group-hover:text-white" />
               <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 GitHub
               </span>
@@ -1044,7 +1044,7 @@ useEffect(() => {
             {/* Download CV */}
             <a href="/files/Rakesh_Resume_October_2024.pdf" download aria-label="Download CV"
               className="cursor-pointer relative group inline-block">
-              <FiFileText className="w-6 h-6 text-gray-700 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110 dark:group-hover:text-white" />
+              <FiFileText className="w-5 h-5 text-gray-700 dark:text-gray-300 transition-transform duration-300 group-hover:scale-110 dark:group-hover:text-white" />
               <span className="absolute bottom-[-1.75rem] left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 Download CV
               </span>
@@ -1109,11 +1109,11 @@ useEffect(() => {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <Image
-              src="/images/about-me.png"
+              src="/images/hero_image_body_upscaled.png"
               alt="Rakesh Nagaraju"
               width={150}
               height={150}
-              className="w-[90%] max-w-md rounded-2xl shadow-lg"
+              className="w-[70%]  rounded-2xl"
             />
           </motion.div>
         </div>
