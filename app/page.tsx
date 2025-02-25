@@ -25,12 +25,7 @@ function LinkedInIcon() {
 function GitHubIcon() {
   return <span>GitHub</span>;
 }
-function SunIcon() {
-  return <span>☀️</span>;
-}
-function MoonIcon() {
-  return <span>🌙</span>;
-}
+
 // types.ts (or at top of page.tsx, but a separate file is cleaner)
 
 export interface Experience {
