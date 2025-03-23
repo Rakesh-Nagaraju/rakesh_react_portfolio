@@ -279,8 +279,6 @@ const additionalSkills = [
   },
 ];
 
-
-
 // ===============
 // MAIN COMPONENT
 // ===============
@@ -289,6 +287,16 @@ export default function SkillsSection() {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [popoverPosition, setPopoverPosition] = useState<{
+    position?: 'fixed' | 'absolute' | 'relative' | 'static' | 'sticky';
+    top?: string;
+    bottom?: string;
+    left?: string;
+    right?: string;
+    transform?: string;
+    maxHeight?: string;
+    overflow?: string;
+  }>({});
 
   let currentSkills: Skill[];
   if (activeTab === 0) currentSkills = techStack;
@@ -312,9 +320,92 @@ export default function SkillsSection() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [selectedSkill]);
+  
+  // Define a type for the popover position to avoid TypeScript errors
+  type PopoverPosition = {
+    position?: 'fixed' | 'absolute' | 'relative' | 'static' | 'sticky';
+    top?: string;
+    bottom?: string;
+    left?: string;
+    right?: string;
+    transform?: string;
+    maxHeight?: string;
+    overflow?: string;
+  };
+
+  // Calculate popover position to keep it in viewport
+  const calculatePopoverPosition = (event: React.MouseEvent, elementRect: DOMRect): PopoverPosition => {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // For mobile screens (under 768px), center in the viewport
+    if (viewportWidth < 768) {
+      return {
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        maxHeight: '80vh',
+        overflow: 'auto'
+      };
+    }
+    
+    // Default position (top)
+    let position: PopoverPosition = { 
+      top: 'calc(100% + 8px)', 
+      left: '50%', 
+      transform: 'translateX(-50%)' 
+    };
+    
+    // Check if there's enough space below
+    const spaceBelow = viewportHeight - (elementRect.bottom + window.scrollY);
+    const contentHeight = 320; // Approximate height of popover
+    
+    if (spaceBelow < contentHeight) {
+      // Not enough space below, try to position above
+      position = { 
+        bottom: 'calc(100% + 8px)', 
+        left: '50%', 
+        transform: 'translateX(-50%)' 
+      };
+    }
+    
+    // Check horizontal overflow
+    const elementCenterX = elementRect.left + (elementRect.width / 2);
+    
+    // If close to right edge
+    if (elementCenterX + 160 > viewportWidth) {
+      position = {
+        ...position,
+        left: 'auto',
+        right: '0',
+        transform: 'none'
+      };
+    } 
+    // If close to left edge
+    else if (elementCenterX - 160 < 0) {
+      position = {
+        ...position,
+        left: '0',
+        transform: 'none'
+      };
+    }
+    
+    return position;
+  };
 
   const handleSkillClick = (skill: Skill, event: React.MouseEvent) => {
     event.stopPropagation();
+    
+    // Get the position of the clicked element
+    const element = event.currentTarget as HTMLElement;
+    const rect = element.getBoundingClientRect();
+    
+    // Calculate optimal position
+    const newPosition = calculatePopoverPosition(event, rect);
+    setPopoverPosition(newPosition);
+    
+    // Toggle the selected skill
     setSelectedSkill(selectedSkill?.name === skill.name ? null : skill);
   };
 
@@ -354,30 +445,27 @@ export default function SkillsSection() {
               </div>
             </div>
 
-            {/* Tooltip/Popover */}
+            {/* Tooltip/Popover with Dynamic Positioning */}
             <AnimatePresence>
               {isSelected && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  style={popoverPosition}
                   className={`
-                    absolute z-50 left-0 right-0 mt-2
+                    z-50
                     bg-[linear-gradient(210deg,_#f4f6fbbd_0%,_#fff_48%)]
                     dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)]
                     border border-gray-200 dark:border-gray-800
                     rounded-xl shadow-lg
                     p-6
-                    min-w-[320px] max-w-md
+                    min-w-[300px] w-[90vw] sm:w-auto max-w-[400px]
                     transform origin-top
+                    backdrop-blur-sm
                   `}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {/* Tooltip Arrow */}
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2">
-                    <div className="border-8 border-transparent border-b-[#f4f6fbbd] dark:border-b-[#1d232c]" />
-                  </div>
-
                   {/* Header with icon and close button */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">

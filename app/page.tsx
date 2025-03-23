@@ -453,6 +453,24 @@ export default function Home() {
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
+
+      /* Add styles for horizontal scroll containers with visual feedback */
+      .horizontal-scroll-container {
+        cursor: grab;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+      }
+      
+      .horizontal-scroll-container:active {
+        cursor: grabbing;
+      }
+      
+      /* This ensures vertical scrolling is prioritized */
+      .horizontal-scroll-container.scrolling-x {
+        touch-action: pan-x;
+      }
     `;
     document.head.appendChild(styleElement);
 
@@ -474,6 +492,56 @@ export default function Home() {
       } else {
         console.warn('Project container or progress bar not found on mount');
       }
+      
+      // Enhance horizontal scrolling for mobile
+      const enhanceHorizontalScrolling = (selector: string) => {
+        const containers = document.querySelectorAll(selector);
+        
+        containers.forEach(container => {
+          let isScrollingHorizontally = false;
+          let startX = 0;
+          let startY = 0;
+          let startScrollLeft = 0;
+          
+          container.addEventListener('touchstart', ((e: Event) => {
+            const touchEvent = e as TouchEvent;
+            const touch = touchEvent.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            startScrollLeft = (container as HTMLElement).scrollLeft;
+          }) as EventListener);
+          
+          container.addEventListener('touchmove', ((e: Event) => {
+            const touchEvent = e as TouchEvent;
+            if (touchEvent.touches.length > 1) return; // Ignore multi-touch
+            
+            const touch = touchEvent.touches[0];
+            const deltaX = startX - touch.clientX;
+            const deltaY = Math.abs(startY - touch.clientY);
+            
+            // If clear horizontal movement and minimal vertical movement
+            if (Math.abs(deltaX) > 10 && deltaY < Math.abs(deltaX) * 0.7) {
+              isScrollingHorizontally = true;
+              (container as HTMLElement).classList.add('scrolling-x');
+              
+              // Scroll the container horizontally
+              (container as HTMLElement).scrollLeft = startScrollLeft + deltaX;
+              
+              // Prevent default to avoid page scroll
+              e.preventDefault();
+            }
+          }) as EventListener);
+          
+          container.addEventListener('touchend', (() => {
+            isScrollingHorizontally = false;
+            (container as HTMLElement).classList.remove('scrolling-x');
+          }) as EventListener);
+        });
+      };
+      
+      // Apply enhanced scrolling
+      enhanceHorizontalScrolling('#projects .overflow-x-auto, #experience .overflow-x-auto');
+      
     }, 1000); // Check after 1 second to ensure DOM is fully rendered
 
     return () => {
@@ -915,12 +983,36 @@ export default function Home() {
             <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent dark:from-[#020b14] dark:to-transparent z-10 pointer-events-none opacity-70"></div>
             
             <div className="
+              horizontal-scroll-container
               flex overflow-x-auto pb-8 pt-4 px-6 gap-6 snap-x snap-mandatory
               scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700
               scrollbar-track-transparent
               mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 8px), transparent);
               hide-scrollbar
-            ">
+              touch-pan-x
+              overscroll-x-contain
+            "
+            onTouchStart={(e) => {
+              // Store initial touch position
+              const touch = e.touches[0];
+              (e.currentTarget as HTMLElement).dataset.touchStartX = touch.clientX.toString();
+              (e.currentTarget as HTMLElement).dataset.touchStartY = touch.clientY.toString();
+            }}
+            onTouchMove={(e) => {
+              const container = e.currentTarget as HTMLElement;
+              const startX = parseInt(container.dataset.touchStartX || '0');
+              const startY = parseInt(container.dataset.touchStartY || '0');
+              const touch = e.touches[0];
+              const deltaX = Math.abs(touch.clientX - startX);
+              const deltaY = Math.abs(touch.clientY - startY);
+              
+              // If the horizontal movement is greater than vertical and significant enough
+              if (deltaX > deltaY && deltaX > 10) {
+                // Prevent page scrolling to allow horizontal scrolling
+                e.stopPropagation();
+              }
+            }}
+            >
               {experiences.map((exp) => (
                 <motion.div
                   key={exp.title}
@@ -1141,16 +1233,39 @@ export default function Home() {
               >
                 <div className="
                   projects-scroll-container
+                  horizontal-scroll-container
                   flex overflow-x-auto pb-10 pt-6 px-6 gap-8 snap-x snap-mandatory
                   scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700
                   scrollbar-track-transparent
                   hide-scrollbar
                   relative
                   touch-pan-x
-                  cursor-grab active:cursor-grabbing
+                  overscroll-x-contain
                   "
                   id="project-scroll-container"
-                  
+                  style={{
+                    maskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)'
+                  }}
+                  onTouchStart={(e) => {
+                    // Store initial touch position
+                    const touch = e.touches[0];
+                    (e.currentTarget as HTMLElement).dataset.touchStartX = touch.clientX.toString();
+                    (e.currentTarget as HTMLElement).dataset.touchStartY = touch.clientY.toString();
+                  }}
+                  onTouchMove={(e) => {
+                    const container = e.currentTarget as HTMLElement;
+                    const startX = parseInt(container.dataset.touchStartX || '0');
+                    const startY = parseInt(container.dataset.touchStartY || '0');
+                    const touch = e.touches[0];
+                    const deltaX = Math.abs(touch.clientX - startX);
+                    const deltaY = Math.abs(touch.clientY - startY);
+                    
+                    // If the horizontal movement is greater than vertical and significant enough
+                    if (deltaX > deltaY && deltaX > 10) {
+                      // Prevent page scrolling to allow horizontal scrolling
+                      e.stopPropagation();
+                    }
+                  }}
                   onScroll={(e) => {
                     // Ensure the scroll indicator updates on scroll events
                     const progressBar = document.getElementById('projectsScrollProgress');
