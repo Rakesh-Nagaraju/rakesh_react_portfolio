@@ -296,12 +296,34 @@ export default function SkillsSection() {
     transform?: string;
     maxHeight?: string;
     overflow?: string;
+    width?: string;
+    zIndex?: string;
   }>({});
+  const [isMobile, setIsMobile] = useState(false);
+  const lastScrollY = useRef(0);
 
   let currentSkills: Skill[];
   if (activeTab === 0) currentSkills = techStack;
   else if (activeTab === 1) currentSkills = aiExpertise;
   else currentSkills = additionalSkills;
+
+  // Check screen size on component mount and window resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Add resize listener
+    window.addEventListener('resize', checkMobile);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
 
   // Add click away listener
   useEffect(() => {
@@ -321,8 +343,32 @@ export default function SkillsSection() {
     };
   }, [selectedSkill]);
   
-  // Define a type for the popover position to avoid TypeScript errors
-  type PopoverPosition = {
+  // Add scroll event listener to close popover on significant scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      // Only handle scroll events on desktop
+      if (!isMobile && selectedSkill) {
+        const currentScrollY = window.scrollY;
+        // If user scrolls more than 150px, close the popover
+        if (Math.abs(currentScrollY - lastScrollY.current) > 200) {
+          setSelectedSkill(null);
+        }
+      }
+    };
+    
+    // Store initial scroll position when popover opens
+    if (selectedSkill) {
+      lastScrollY.current = window.scrollY;
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [selectedSkill, isMobile]);
+
+  // Calculate popover position to keep it in viewport
+  const calculatePopoverPosition = (event: React.MouseEvent, elementRect: DOMRect): {
     position?: 'fixed' | 'absolute' | 'relative' | 'static' | 'sticky';
     top?: string;
     bottom?: string;
@@ -331,63 +377,68 @@ export default function SkillsSection() {
     transform?: string;
     maxHeight?: string;
     overflow?: string;
-  };
-
-  // Calculate popover position to keep it in viewport
-  const calculatePopoverPosition = (event: React.MouseEvent, elementRect: DOMRect): PopoverPosition => {
+    width?: string;
+    zIndex?: string;
+  } => {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
-    // For mobile screens (under 768px), center in the viewport
-    if (viewportWidth < 768) {
+    // For mobile screens (under 768px), use a full screen modal approach
+    if (isMobile) {
       return {
         position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        maxHeight: '80vh',
-        overflow: 'auto'
+        top: '0',
+        left: '0',
+        right: '0',
+        bottom: '0',
+        transform: 'none',
+        maxHeight: '100vh',
+        overflow: 'auto',
+        zIndex: '100'
       };
     }
     
-    // Default position (top)
-    let position: PopoverPosition = { 
-      top: 'calc(100% + 8px)', 
-      left: '50%', 
-      transform: 'translateX(-50%)' 
-    };
-    
-    // Check if there's enough space below
-    const spaceBelow = viewportHeight - (elementRect.bottom + window.scrollY);
-    const contentHeight = 320; // Approximate height of popover
-    
-    if (spaceBelow < contentHeight) {
-      // Not enough space below, try to position above
-      position = { 
-        bottom: 'calc(100% + 8px)', 
-        left: '50%', 
-        transform: 'translateX(-50%)' 
-      };
-    }
-    
-    // Check horizontal overflow
+    // For desktop, we'll use fixed positioning for more reliable placement
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
     const elementCenterX = elementRect.left + (elementRect.width / 2);
     
-    // If close to right edge
-    if (elementCenterX + 160 > viewportWidth) {
-      position = {
-        ...position,
-        left: 'auto',
-        right: '0',
-        transform: 'none'
-      };
-    } 
-    // If close to left edge
-    else if (elementCenterX - 160 < 0) {
-      position = {
-        ...position,
-        left: '0',
-        transform: 'none'
+    // Calculate available space
+    const spaceBelow = viewportHeight - elementRect.bottom;
+    const spaceAbove = elementRect.top;
+    
+    // Set width based on viewport
+    const popoverWidth = Math.min(400, viewportWidth - 40);
+    
+    // Default position below the element
+    let position: {
+      position?: 'fixed' | 'absolute' | 'relative' | 'static' | 'sticky';
+      top?: string;
+      bottom?: string;
+      left?: string;
+      right?: string;
+      transform?: string;
+      maxHeight?: string;
+      overflow?: string;
+      width?: string;
+      zIndex?: string;
+    } = { 
+      position: 'fixed',
+      top: `${elementRect.bottom + 10}px`,
+      left: `${Math.max(20, Math.min(viewportWidth - popoverWidth - 20, elementCenterX - (popoverWidth / 2)))}px`,
+      width: `${popoverWidth}px`,
+      maxHeight: `${Math.min(450, spaceBelow - 20)}px`,
+      overflow: 'auto'
+    };
+    
+    // If not enough space below but enough space above, position above
+    if (spaceBelow < 300 && spaceAbove > spaceBelow) {
+      position = { 
+        position: 'fixed',
+        bottom: `${viewportHeight - elementRect.top + 10}px`,
+        left: `${Math.max(20, Math.min(viewportWidth - popoverWidth - 20, elementCenterX - (popoverWidth / 2)))}px`,
+        width: `${popoverWidth}px`,
+        maxHeight: `${Math.min(450, spaceAbove - 20)}px`,
+        overflow: 'auto'
       };
     }
     
@@ -407,7 +458,165 @@ export default function SkillsSection() {
     
     // Toggle the selected skill
     setSelectedSkill(selectedSkill?.name === skill.name ? null : skill);
+    
+    // For mobile, prevent background scrolling when popover is open
+    if (isMobile && skill && selectedSkill?.name !== skill.name) {
+      document.body.style.overflow = 'hidden';
+    } else if (isMobile) {
+      document.body.style.overflow = '';
+    }
   };
+  
+  // Reset body overflow when skill is deselected
+  useEffect(() => {
+    if (!selectedSkill && isMobile) {
+      document.body.style.overflow = '';
+    }
+  }, [selectedSkill, isMobile]);
+
+  // Render mobile popover
+  const renderMobilePopover = (skill: Skill) => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-white dark:bg-gray-900"
+    >
+      {/* Header with back button */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
+        <div className="flex items-center gap-3">
+          <span 
+            className="text-3xl"
+            style={{ color: skill.color }}
+          >
+            {skill.icon}
+          </span>
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            {skill.name}
+          </h3>
+        </div>
+        <button
+          onClick={() => {
+            setSelectedSkill(null);
+            document.body.style.overflow = '';
+          }}
+          className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+          aria-label="Close skill details"
+        >
+          <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      {/* Content */}
+      <div className="flex-1 p-4 overflow-y-auto">
+        <div className="space-y-4">
+          {skill.message.split('\n').map((line, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+            >
+              <div 
+                className="p-4 rounded-lg bg-gray-50/80 dark:bg-gray-800/60
+                border border-gray-100 dark:border-gray-700/50
+                hover:bg-gray-100/80 dark:hover:bg-gray-800/80
+                transition-colors duration-300"
+              >
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                  {line.replace('• ', '')}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  // Render desktop popover
+  const renderDesktopPopover = (skill: Skill) => (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      style={popoverPosition}
+      className="
+        z-50
+        bg-[linear-gradient(210deg,_#f4f6fbbd_0%,_#fff_48%)]
+        dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)]
+        border border-gray-200 dark:border-gray-800
+        rounded-xl shadow-lg
+        p-6
+        backdrop-blur-sm
+      "
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Header with icon and close button */}
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <span 
+            className="text-3xl transition-transform duration-300 hover:scale-110"
+            style={{ color: skill.color }}
+          >
+            {skill.icon}
+          </span>
+          <h3 className="text-lg font-semibold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+            {skill.name}
+          </h3>
+        </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setSelectedSkill(null);
+          }}
+          className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+          aria-label="Close skill details"
+        >
+          <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Content with modern styling */}
+      <div className="space-y-3 overflow-y-auto max-h-[350px]">
+        {skill.message.split('\n').map((line, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="group"
+          >
+            <div 
+              className="p-3 rounded-lg bg-gray-50/50 dark:bg-gray-800/30
+              border border-gray-100 dark:border-gray-700/50
+              hover:bg-gray-100/50 dark:hover:bg-gray-800/50
+              transition-colors duration-300 min-h-[60px] flex items-center"
+            >
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                {line.replace('• ', '')}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      
+      {/* Scroll hint */}
+      <div className="mt-4 text-center">
+        <span className="text-xs text-gray-400 dark:text-gray-500">Scroll down to dismiss</span>
+      </div>
+
+      {/* Bottom decoration */}
+      <div 
+        className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 rounded-full opacity-20"
+        style={{ backgroundColor: skill.color }}
+      />
+    </motion.div>
+  );
 
   const renderSkills = (skills: Skill[]) => (
     <div ref={containerRef} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-5xl mx-auto">
@@ -448,80 +657,12 @@ export default function SkillsSection() {
             {/* Tooltip/Popover with Dynamic Positioning */}
             <AnimatePresence>
               {isSelected && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  style={popoverPosition}
-                  className={`
-                    z-50
-                    bg-[linear-gradient(210deg,_#f4f6fbbd_0%,_#fff_48%)]
-                    dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)]
-                    border border-gray-200 dark:border-gray-800
-                    rounded-xl shadow-lg
-                    p-6
-                    min-w-[300px] w-[90vw] sm:w-auto max-w-[400px]
-                    transform origin-top
-                    backdrop-blur-sm
-                  `}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {/* Header with icon and close button */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <span 
-                        className="text-3xl transition-transform duration-300 hover:scale-110"
-                        style={{ color: skill.color }}
-                      >
-                        {skill.icon}
-                      </span>
-                      <h3 className="text-lg font-semibold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-                        {skill.name}
-                      </h3>
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedSkill(null);
-                      }}
-                      className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-                    >
-                      <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Content with modern styling */}
-                  <div className="space-y-3">
-                    {skill.message.split('\n').map((line, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className="group"
-                      >
-                        <div 
-                          className="p-3 rounded-lg bg-gray-50/50 dark:bg-gray-800/30
-                          border border-gray-100 dark:border-gray-700/50
-                          hover:bg-gray-100/50 dark:hover:bg-gray-800/50
-                          transition-colors duration-300 h-[60px] flex items-center"
-                        >
-                          <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-2">
-                            {line.replace('• ', '')}
-                          </p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* Bottom decoration */}
-                  <div 
-                    className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 rounded-full opacity-20"
-                    style={{ backgroundColor: skill.color }}
-                  />
-                </motion.div>
+                <>
+                  {isMobile 
+                    ? renderMobilePopover(skill)
+                    : renderDesktopPopover(skill)
+                  }
+                </>
               )}
             </AnimatePresence>
           </div>

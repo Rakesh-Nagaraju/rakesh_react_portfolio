@@ -461,15 +461,44 @@ export default function Home() {
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
+        /* Prevent touch action conflicts */
+        touch-action: pan-x;
       }
       
       .horizontal-scroll-container:active {
         cursor: grabbing;
       }
       
-      /* This ensures vertical scrolling is prioritized */
+      /* When actively scrolling horizontally */
       .horizontal-scroll-container.scrolling-x {
+        /* Prevent any vertical scrolling during horizontal swipes */
         touch-action: pan-x;
+        overscroll-behavior: contain;
+      }
+
+      /* Visual indicator for scrollable areas */
+      .scrollable-x::after {
+        content: "";
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        width: 40px;
+        height: 4px;
+        background: rgba(100, 100, 255, 0.3);
+        border-radius: 2px;
+        animation: pulseScroll 1.5s infinite;
+      }
+
+      @keyframes pulseScroll {
+        0% { opacity: 0.3; width: 20px; }
+        50% { opacity: 0.7; width: 40px; }
+        100% { opacity: 0.3; width: 20px; }
+      }
+
+      /* Enhanced snap points for better scrolling experience */
+      .horizontal-scroll-container > * {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
       }
     `;
     document.head.appendChild(styleElement);
@@ -509,6 +538,8 @@ export default function Home() {
             startX = touch.clientX;
             startY = touch.clientY;
             startScrollLeft = (container as HTMLElement).scrollLeft;
+            isScrollingHorizontally = false; // Reset the flag on new touch
+            (container as HTMLElement).classList.remove('scrolling-x');
           }) as EventListener);
           
           container.addEventListener('touchmove', ((e: Event) => {
@@ -519,23 +550,42 @@ export default function Home() {
             const deltaX = startX - touch.clientX;
             const deltaY = Math.abs(startY - touch.clientY);
             
-            // If clear horizontal movement and minimal vertical movement
-            if (Math.abs(deltaX) > 10 && deltaY < Math.abs(deltaX) * 0.7) {
+            // If clear horizontal movement and minimal vertical movement or already in horizontal scrolling mode
+            if ((Math.abs(deltaX) > 10 && deltaY < Math.abs(deltaX) * 0.7) || isScrollingHorizontally) {
               isScrollingHorizontally = true;
               (container as HTMLElement).classList.add('scrolling-x');
               
               // Scroll the container horizontally
               (container as HTMLElement).scrollLeft = startScrollLeft + deltaX;
               
-              // Prevent default to avoid page scroll
-              e.preventDefault();
+              // Prevent default only when we're sure it's horizontal scrolling
+              if (isScrollingHorizontally) {
+                e.preventDefault();
+                e.stopPropagation();
+              }
             }
-          }) as EventListener);
+          }) as EventListener, { passive: false }); // Important: passive: false allows preventDefault to work
           
           container.addEventListener('touchend', (() => {
-            isScrollingHorizontally = false;
-            (container as HTMLElement).classList.remove('scrolling-x');
+            // Keep the flag and class for a short period to prevent immediate vertical scrolling
+            setTimeout(() => {
+              isScrollingHorizontally = false;
+              (container as HTMLElement).classList.remove('scrolling-x');
+            }, 50);
           }) as EventListener);
+          
+          // Add visual indicators for scrollable areas
+          container.addEventListener('mouseenter', () => {
+            if ((container as HTMLElement).scrollWidth > (container as HTMLElement).clientWidth) {
+              document.body.style.cursor = 'grab';
+              (container as HTMLElement).classList.add('scrollable-x');
+            }
+          });
+          
+          container.addEventListener('mouseleave', () => {
+            document.body.style.cursor = '';
+            (container as HTMLElement).classList.remove('scrollable-x');
+          });
         });
       };
       
@@ -987,10 +1037,10 @@ export default function Home() {
               flex overflow-x-auto pb-8 pt-4 px-6 gap-6 snap-x snap-mandatory
               scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700
               scrollbar-track-transparent
-              mask-image: linear-gradient(to right, transparent, black 8px, black calc(100% - 8px), transparent);
               hide-scrollbar
               touch-pan-x
               overscroll-x-contain
+              relative
             "
             onTouchStart={(e) => {
               // Store initial touch position
@@ -1010,6 +1060,21 @@ export default function Home() {
               if (deltaX > deltaY && deltaX > 10) {
                 // Prevent page scrolling to allow horizontal scrolling
                 e.stopPropagation();
+              }
+            }}
+            onScroll={(e) => {
+              // Update progress bar
+              const container = e.currentTarget;
+              const progressBar = document.getElementById('experienceScrollProgress');
+              if (progressBar) {
+                const scrollLeft = container.scrollLeft;
+                const scrollWidth = container.scrollWidth;
+                const containerWidth = container.clientWidth;
+                
+                if (scrollWidth > containerWidth) {
+                  const scrollPercent = scrollLeft / (scrollWidth - containerWidth);
+                  progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercent * 100))}%`;
+                }
               }
             }}
             >
@@ -1243,9 +1308,7 @@ export default function Home() {
                   overscroll-x-contain
                   "
                   id="project-scroll-container"
-                  style={{
-                    maskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)'
-                  }}
+                  
                   onTouchStart={(e) => {
                     // Store initial touch position
                     const touch = e.touches[0];
@@ -1262,9 +1325,15 @@ export default function Home() {
                     
                     // If the horizontal movement is greater than vertical and significant enough
                     if (deltaX > deltaY && deltaX > 10) {
+                      // Add class to signal horizontal scrolling
+                      container.classList.add('scrolling-x');
                       // Prevent page scrolling to allow horizontal scrolling
                       e.stopPropagation();
                     }
+                  }}
+                  onTouchEnd={(e) => {
+                    const container = e.currentTarget as HTMLElement;
+                    container.classList.remove('scrolling-x');
                   }}
                   onScroll={(e) => {
                     // Ensure the scroll indicator updates on scroll events
@@ -1278,6 +1347,18 @@ export default function Home() {
                       if (scrollWidth > containerWidth) {
                         const scrollPercent = scrollLeft / (scrollWidth - containerWidth);
                         progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercent * 100))}%`;
+                        
+                        // Add classes for visual indicators
+                        if (scrollLeft < 10) {
+                          container.classList.add('at-start');
+                          container.classList.remove('at-end', 'scrolling');
+                        } else if (scrollLeft > scrollWidth - containerWidth - 10) {
+                          container.classList.add('at-end');
+                          container.classList.remove('at-start', 'scrolling');
+                        } else {
+                          container.classList.add('scrolling');
+                          container.classList.remove('at-start', 'at-end');
+                        }
                       }
                     }
                   }}

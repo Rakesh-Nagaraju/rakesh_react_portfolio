@@ -256,8 +256,8 @@ export default function ExperienceModal({ isOpen, onClose, experience }: Experie
                       {experience.timeframe && (
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
                           {experience.timeframe}
-                        </p>
-                      )}
+                    </p>
+                  )}
                     </motion.div>
                   )}
                 </div>
@@ -350,19 +350,19 @@ export default function ExperienceModal({ isOpen, onClose, experience }: Experie
                                 
                                 {/* Text content with balanced sizing and spacing */}
                                 <div className="relative py-1.5 pl-3 pr-2 text-sm text-gray-600 dark:text-gray-400 group-hover/item:translate-x-1 transition-transform duration-300">
-                                  {isLink ? (
-                                    <a
-                                      href={point}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
+                                {isLink ? (
+                                  <a
+                                    href={point}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                       className="text-blue-600 dark:text-blue-400 hover:underline focus:outline-none focus:ring-1 focus:ring-blue-500 rounded"
                                       title={`Visit ${point}`}
-                                    >
-                                      {point}
-                                    </a>
-                                  ) : (
-                                    <span>{point}</span>
-                                  )}
+                                  >
+                                    {point}
+                                  </a>
+                                ) : (
+                                  <span>{point}</span>
+                                )}
                                 </div>
                               </motion.li>
                             );
@@ -447,16 +447,16 @@ export default function ExperienceModal({ isOpen, onClose, experience }: Experie
 
 // Hook for using the experience modal
 export function useExperienceModal() {
-  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
-  const [isExperienceModalOpen, setIsExperienceModalOpen] = useState<boolean>(false);
+const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+const [isExperienceModalOpen, setIsExperienceModalOpen] = useState<boolean>(false);
 
-  const openExperienceModal = (exp: Experience) => {
-    setSelectedExperience(exp);
-    setIsExperienceModalOpen(true);
-  };
+const openExperienceModal = (exp: Experience) => {
+  setSelectedExperience(exp);
+  setIsExperienceModalOpen(true);
+};
 
-  const closeExperienceModal = () => {
-    setIsExperienceModalOpen(false);
+const closeExperienceModal = () => {
+  setIsExperienceModalOpen(false);
     // We'll keep the experience data until the animation completes
     setTimeout(() => setSelectedExperience(null), 300);
   };
@@ -467,4 +467,4 @@ export function useExperienceModal() {
     openExperienceModal,
     closeExperienceModal
   };
-}
+  }
