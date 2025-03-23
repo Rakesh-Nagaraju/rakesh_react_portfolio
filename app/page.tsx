@@ -500,6 +500,84 @@ export default function Home() {
         scroll-snap-align: start;
         scroll-snap-stop: always;
       }
+
+      /* Mobile optimizations - replace horizontal scroll with grid layout */
+      @media (max-width: 767px) {
+        .mobile-grid-layout {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 16px;
+          overflow-x: visible;
+          touch-action: auto;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          cursor: default;
+        }
+
+        .mobile-grid-layout > * {
+          width: 100% !important;
+          scroll-snap-align: none;
+          scroll-snap-stop: none;
+        }
+
+        .mobile-grid-layout::after,
+        .mobile-grid-layout::before {
+          display: none !important;
+        }
+
+        .scroll-indicator-container {
+          display: none !important;
+        }
+
+        /* Hide gradient indicators on mobile */
+        .scroll-gradient-indicators {
+          display: none !important;
+        }
+        
+        /* Fix project tabs on mobile */
+        .mobile-tabs-container {
+          padding: 0.25rem !important;
+          border-radius: 0.5rem !important;
+          gap: 0.25rem !important;
+        }
+        
+        .mobile-tab-button {
+          border-radius: 0.5rem !important;
+          font-size: 0.75rem !important;
+          padding: 0.5rem 0.75rem !important;
+        }
+        
+        /* Collapsible sections for mobile */
+        .mobile-collapsible-container {
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .mobile-collapsible-container.collapsed {
+          max-height: 410px; /* Show only first card */
+        }
+        
+        .mobile-show-more-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          padding: 0.75rem;
+          margin-top: 0.5rem;
+          background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.9) 30%, white);
+          dark:background: linear-gradient(to bottom, transparent, rgba(2,11,20,0.9) 30%, #020b14);
+          border-radius: 0 0 0.5rem 0.5rem;
+          text-align: center;
+          font-weight: 500;
+          font-size: 0.875rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        .mobile-show-more-button:hover {
+          background-color: rgba(255,255,255,0.1);
+        }
+      }
     `;
     document.head.appendChild(styleElement);
 
@@ -532,7 +610,28 @@ export default function Home() {
           let startY = 0;
           let startScrollLeft = 0;
           
+          // Apply mobile grid layout if needed
+          const handleResize = () => {
+            if (window.innerWidth < 768) { // Mobile view
+              container.classList.add('mobile-grid-layout');
+              container.classList.remove('horizontal-scroll-container');
+            } else { // Desktop view
+              container.classList.remove('mobile-grid-layout');
+              container.classList.add('horizontal-scroll-container');
+            }
+          };
+          
+          // Initial check
+          handleResize();
+          
+          // Listen for resize events
+          window.addEventListener('resize', handleResize);
+          
+          // Add touch event handlers for desktop only
           container.addEventListener('touchstart', ((e: Event) => {
+            // Skip for mobile grid layout
+            if (window.innerWidth < 768) return;
+            
             const touchEvent = e as TouchEvent;
             const touch = touchEvent.touches[0];
             startX = touch.clientX;
@@ -543,6 +642,9 @@ export default function Home() {
           }) as EventListener);
           
           container.addEventListener('touchmove', ((e: Event) => {
+            // Skip for mobile grid layout
+            if (window.innerWidth < 768) return;
+            
             const touchEvent = e as TouchEvent;
             if (touchEvent.touches.length > 1) return; // Ignore multi-touch
             
@@ -567,6 +669,9 @@ export default function Home() {
           }) as EventListener, { passive: false }); // Important: passive: false allows preventDefault to work
           
           container.addEventListener('touchend', (() => {
+            // Skip for mobile grid layout
+            if (window.innerWidth < 768) return;
+            
             // Keep the flag and class for a short period to prevent immediate vertical scrolling
             setTimeout(() => {
               isScrollingHorizontally = false;
@@ -576,7 +681,7 @@ export default function Home() {
           
           // Add visual indicators for scrollable areas
           container.addEventListener('mouseenter', () => {
-            if ((container as HTMLElement).scrollWidth > (container as HTMLElement).clientWidth) {
+            if (window.innerWidth >= 768 && (container as HTMLElement).scrollWidth > (container as HTMLElement).clientWidth) {
               document.body.style.cursor = 'grab';
               (container as HTMLElement).classList.add('scrollable-x');
             }
@@ -590,7 +695,7 @@ export default function Home() {
       };
       
       // Apply enhanced scrolling
-      enhanceHorizontalScrolling('#projects .overflow-x-auto, #experience .overflow-x-auto');
+      enhanceHorizontalScrolling('#projects .overflow-x-auto, #experience .overflow-x-auto, .horizontal-scroll-container');
       
     }, 1000); // Check after 1 second to ensure DOM is fully rendered
 
@@ -820,6 +925,47 @@ export default function Home() {
     );
   };
 
+  // Add state for managing collapsed sections on mobile
+  const [experienceCollapsed, setExperienceCollapsed] = useState(true);
+  const [projectsCollapsed, setProjectsCollapsed] = useState(true);
+  
+  // Reset collapse state when changing tabs
+  useEffect(() => {
+    setProjectsCollapsed(true);
+  }, [activeTab]);
+  
+  // Function to toggle collapsed state
+  const toggleExperienceCollapse = () => {
+    const section = document.getElementById('experience');
+  
+    if (!experienceCollapsed && section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  
+      // Optional: add a short delay before collapsing for smoother UX
+      setTimeout(() => {
+        setExperienceCollapsed(true);
+      }, 300); // You can tweak this delay
+      return;
+    }
+  
+    setExperienceCollapsed(false);
+  };
+  
+  
+  const toggleProjectsCollapse = () => {
+    const section = document.getElementById('projects');
+  
+    // If collapsing, scroll the user to the top of the Projects section smoothly
+    if (!projectsCollapsed && section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  
+    // Now toggle the collapse state
+    setProjectsCollapsed(!projectsCollapsed);
+  };
+  
+  
+
   return (
     <main
       className={`
@@ -1028,11 +1174,11 @@ export default function Home() {
 
           {/* Horizontal Scrollable Experience Cards */}
           <div className="relative">
-            {/* Gradient Indicators for Scrolling - Reduced width and opacity */}
-            <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent dark:from-[#020b14] dark:to-transparent z-10 pointer-events-none opacity-70"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent dark:from-[#020b14] dark:to-transparent z-10 pointer-events-none opacity-70"></div>
+            {/* Gradient Indicators for Desktop Only */}
+            <div className="hidden md:block scroll-gradient-indicators absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent dark:from-[#020b14] dark:to-transparent z-10 pointer-events-none opacity-70"></div>
+            <div className="hidden md:block scroll-gradient-indicators absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent dark:from-[#020b14] dark:to-transparent z-10 pointer-events-none opacity-70"></div>
             
-            <div className="
+            <div className={`
               horizontal-scroll-container
               flex overflow-x-auto pb-8 pt-4 px-6 gap-6 snap-x snap-mandatory
               scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700
@@ -1041,27 +1187,13 @@ export default function Home() {
               touch-pan-x
               overscroll-x-contain
               relative
-            "
-            onTouchStart={(e) => {
-              // Store initial touch position
-              const touch = e.touches[0];
-              (e.currentTarget as HTMLElement).dataset.touchStartX = touch.clientX.toString();
-              (e.currentTarget as HTMLElement).dataset.touchStartY = touch.clientY.toString();
-            }}
-            onTouchMove={(e) => {
-              const container = e.currentTarget as HTMLElement;
-              const startX = parseInt(container.dataset.touchStartX || '0');
-              const startY = parseInt(container.dataset.touchStartY || '0');
-              const touch = e.touches[0];
-              const deltaX = Math.abs(touch.clientX - startX);
-              const deltaY = Math.abs(touch.clientY - startY);
-              
-              // If the horizontal movement is greater than vertical and significant enough
-              if (deltaX > deltaY && deltaX > 10) {
-                // Prevent page scrolling to allow horizontal scrolling
-                e.stopPropagation();
-              }
-            }}
+              mobile-collapsible-container
+              ${experienceCollapsed ? 'max-h-[410px] overflow-hidden' : 'max-h-full'}
+              transition-all duration-500 ease-in-out
+              grid grid-cols-1 gap-6 
+              md:flex md:overflow-x-auto md:horizontal-scroll-container md:snap-x md:snap-mandatory
+  
+            `}
             onScroll={(e) => {
               // Update progress bar
               const container = e.currentTarget;
@@ -1180,10 +1312,34 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
+            
+            {/* Mobile Show More/Less Button for Experience */}
+            <div className="md:hidden mt-2">
+              <button 
+                onClick={toggleExperienceCollapse}
+                className="w-full bg-gray-50 dark:bg-gray-800/50 py-2 px-4 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 flex items-center justify-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                {experienceCollapsed ? (
+                  <>
+                    <span>Show More</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </>
+                ) : (
+                  <>
+                    <span>Show Less</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
+                    </svg>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
           
-          {/* Scroll Indicator that responds to scroll */}
-          <div className="flex flex-col items-center justify-center mt-6">
+          {/* Scroll Indicator that responds to scroll - Desktop Only */}
+          <div className="scroll-indicator-container flex flex-col items-center justify-center mt-6">
             <div className="relative w-32 h-[2px] bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
               {/* Progress Bar that moves based on scroll */}
               <div id="experienceScrollProgress" className="absolute left-0 top-0 h-full bg-gradient-to-r from-gray-300 via-blue-400 to-blue-500 dark:from-gray-700 dark:via-blue-600 dark:to-blue-400 w-0 transition-all duration-300"></div>
@@ -1245,16 +1401,18 @@ export default function Home() {
           <div className="mb-12 flex justify-center">
             <div
               className="
-                no-scrollbar
-                inline-flex gap-6
-                px-6 py-2
-                overflow-x-auto 
-                backdrop-blur-md
-                rounded-full
-                bg-white/80 dark:bg-gray-900/50
-                border border-gray-200/50 dark:border-gray-700/50
-                shadow-lg shadow-gray-200/20 dark:shadow-gray-950/20
+              no-scrollbar inline-flex gap-6
+              px-6 py-2
+              overflow-x-auto 
+              backdrop-blur-md
+              rounded-full
+              bg-white/80 dark:bg-gray-900/50
+              border border-gray-200/50 dark:border-gray-700/50
+              shadow-lg shadow-gray-200/20 dark:shadow-gray-950/20
+              w-full md:w-auto md:mx-auto max-w-[95vw]
+              mobile-tabs-container
               "
+            
             >
               {projectTabs.map((tab) => {
                 const isActive = activeTab === tab.name;
@@ -1265,6 +1423,7 @@ export default function Home() {
                     className={`
                       relative cursor-pointer text-sm font-medium px-4 py-2
                       rounded-full transition-all duration-300
+                      mobile-tab-button
                       ${
                         isActive
                           ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-md shadow-purple-500/20"
@@ -1279,13 +1438,11 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Project Section - Redesigned with horizontal scrolling like experiences */}
-          <div className="relative mx-4 after:absolute after:right-0 after:top-0 after:bottom-0 after:w-10 after:bg-gradient-to-l after:from-white after:to-transparent after:dark:from-[#01070e] after:dark:to-transparent after:pointer-events-none
-                  before:absolute before:left-0 before:top-0 before:bottom-0 before:w-10 before:bg-gradient-to-r before:from-white before:to-transparent before:dark:from-[#01070e] before:dark:to-transparent before:pointer-events-none
-                  ">
-            {/* Gradient Indicators for Scrolling */}
-            {/* <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent dark:from-[#01070e] dark:to-transparent z-10 pointer-events-none opacity-70"></div> */}
-            {/* <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent dark:from-[#01070e] dark:to-transparent z-10 pointer-events-none opacity-70"></div> */}
+          {/* Project Section - Redesigned with responsive handling */}
+          <div className="relative mx-4">
+            {/* Gradient Indicators for Desktop Only */}
+            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-white to-transparent dark:from-[#01070e] dark:to-transparent pointer-events-none before:scroll-gradient-indicators"></div>
+            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-white to-transparent dark:from-[#01070e] dark:to-transparent pointer-events-none after:scroll-gradient-indicators"></div>
             
             <AnimatePresence mode="wait">
               <motion.div 
@@ -1296,7 +1453,7 @@ export default function Home() {
                 transition={{ duration: 0.2 }}
                 className="w-full"
               >
-                <div className="
+                <div className={`
                   projects-scroll-container
                   horizontal-scroll-container
                   flex overflow-x-auto pb-10 pt-6 px-6 gap-8 snap-x snap-mandatory
@@ -1306,35 +1463,14 @@ export default function Home() {
                   relative
                   touch-pan-x
                   overscroll-x-contain
-                  "
+                  mobile-collapsible-container
+                  ${projectsCollapsed ? 'max-h-[510px] overflow-hidden' : 'max-h-full'}
+                  transition-all duration-500 ease-in-out
+                  grid grid-cols-1 gap-6 
+                  md:flex md:overflow-x-auto md:horizontal-scroll-container md:snap-x md:snap-mandatory
+                
+                  `}
                   id="project-scroll-container"
-                  
-                  onTouchStart={(e) => {
-                    // Store initial touch position
-                    const touch = e.touches[0];
-                    (e.currentTarget as HTMLElement).dataset.touchStartX = touch.clientX.toString();
-                    (e.currentTarget as HTMLElement).dataset.touchStartY = touch.clientY.toString();
-                  }}
-                  onTouchMove={(e) => {
-                    const container = e.currentTarget as HTMLElement;
-                    const startX = parseInt(container.dataset.touchStartX || '0');
-                    const startY = parseInt(container.dataset.touchStartY || '0');
-                    const touch = e.touches[0];
-                    const deltaX = Math.abs(touch.clientX - startX);
-                    const deltaY = Math.abs(touch.clientY - startY);
-                    
-                    // If the horizontal movement is greater than vertical and significant enough
-                    if (deltaX > deltaY && deltaX > 10) {
-                      // Add class to signal horizontal scrolling
-                      container.classList.add('scrolling-x');
-                      // Prevent page scrolling to allow horizontal scrolling
-                      e.stopPropagation();
-                    }
-                  }}
-                  onTouchEnd={(e) => {
-                    const container = e.currentTarget as HTMLElement;
-                    container.classList.remove('scrolling-x');
-                  }}
                   onScroll={(e) => {
                     // Ensure the scroll indicator updates on scroll events
                     const progressBar = document.getElementById('projectsScrollProgress');
@@ -1347,18 +1483,6 @@ export default function Home() {
                       if (scrollWidth > containerWidth) {
                         const scrollPercent = scrollLeft / (scrollWidth - containerWidth);
                         progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercent * 100))}%`;
-                        
-                        // Add classes for visual indicators
-                        if (scrollLeft < 10) {
-                          container.classList.add('at-start');
-                          container.classList.remove('at-end', 'scrolling');
-                        } else if (scrollLeft > scrollWidth - containerWidth - 10) {
-                          container.classList.add('at-end');
-                          container.classList.remove('at-start', 'scrolling');
-                        } else {
-                          container.classList.add('scrolling');
-                          container.classList.remove('at-start', 'at-end');
-                        }
                       }
                     }
                   }}
@@ -1458,94 +1582,111 @@ export default function Home() {
                       )}
                 </div>
                   )}
+                      </div>
 
-                        {/* Links & View Details */}
-                        <div className="flex items-center justify-between mt-6 px-6 pb-6">
-                          <div className="flex gap-2">
+                      {/* Links & View Details */}
+                      <div className="flex items-center justify-between mt-6 px-6 pb-6">
+                        <div className="flex gap-2">
                   {proj.demoLink && (
                     <a
                       href={proj.demoLink}
                       onClick={(e) => e.stopPropagation()}
-                      title={`View live demo of ${proj.title}`}
-                                className="relative group/link flex items-center gap-1
-                                text-xs text-orange-600 dark:text-orange-400
-                                hover:text-orange-700 dark:hover:text-orange-300
-                                font-medium bg-gradient-to-r from-orange-400/10 to-pink-400/10
-                                dark:from-orange-600/20 dark:to-pink-600/20
-                                px-3 py-2 rounded-full
-                                hover:shadow-md hover:-translate-y-0.5
-                                transition-all duration-300"
+                              title={`View live demo of ${proj.title}`}
+                              className="relative group/link flex items-center gap-1
+                              text-xs text-orange-600 dark:text-orange-400
+                              hover:text-orange-700 dark:hover:text-orange-300
+                              font-medium bg-gradient-to-r from-orange-400/10 to-pink-400/10
+                              dark:from-orange-600/20 dark:to-pink-600/20
+                              px-3 py-2 rounded-full
+                              hover:shadow-md hover:-translate-y-0.5
+                              transition-all duration-300"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                                <FaBolt className="w-3 h-3" />
-                                <span>Live Demo</span>
+                              <FaBolt className="w-3 h-3" />
+                              <span>Live Demo</span>
                     </a>
                   )}
                   {proj.githubLink && (
                     <a
                       href={proj.githubLink}
                       onClick={(e) => e.stopPropagation()}
-                      title={`View source code for ${proj.title} on GitHub`}
-                                className="relative group/link flex items-center gap-1
-                                text-xs text-gray-700 dark:text-gray-300
-                                hover:text-gray-900 dark:hover:text-white
-                                font-medium bg-gradient-to-r from-gray-200/70 to-gray-100/70
-                                dark:from-gray-700/70 dark:to-gray-800/70
-                                px-3 py-2 rounded-full
-                                hover:shadow-md hover:-translate-y-0.5
-                                transition-all duration-300"
+                              title={`View source code for ${proj.title} on GitHub`}
+                              className="relative group/link flex items-center gap-1
+                              text-xs text-gray-700 dark:text-gray-300
+                              hover:text-gray-900 dark:hover:text-white
+                              font-medium bg-gradient-to-r from-gray-200/70 to-gray-100/70
+                              dark:from-gray-700/70 dark:to-gray-800/70
+                              px-3 py-2 rounded-full
+                              hover:shadow-md hover:-translate-y-0.5
+                              transition-all duration-300"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                                <FaGithub className="w-3 h-3" />
-                                <span>Source Code</span>
+                              <FaGithub className="w-3 h-3" />
+                              <span>Source Code</span>
                     </a>
                   )}
                     </div>
-                          
-                      {/* Compact View Details button */}
-                      <div className="mt-4 text-blue-500 dark:text-blue-400 text-xs font-medium absolute bottom-3 right-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                        <span className="px-2 py-1 rounded-full bg-blue-50/50 dark:bg-blue-900/20 group-hover:bg-blue-100/80 dark:group-hover:bg-blue-900/30 transition-colors flex items-center">
-                          <span className="hidden sm:inline mr-1">Details</span>
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        
+                        {/* Compact View Details button */}
+                        <div className="mt-4 text-blue-500 dark:text-blue-400 text-xs font-medium absolute bottom-3 right-3 opacity-60 group-hover:opacity-100 transition-opacity">
+                          <span className="px-2 py-1 rounded-full bg-blue-50/50 dark:bg-blue-900/20 group-hover:bg-blue-100/80 dark:group-hover:bg-blue-900/30 transition-colors flex items-center">
+                            <span className="hidden sm:inline mr-1">Details</span>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                       </svg>
-                        </span>
-                      </div>
-
+                          </span>
                   </div>
                 </div>
               </motion.div>
             ))}
                 </div>
+                
+                {/* Mobile Show More/Less Button for Projects */}
+                {currentProjects.length > 1 && (
+                  <div className="md:hidden mt-2">
+                    <button 
+                      onClick={toggleProjectsCollapse}
+                      className="w-full bg-gray-50 dark:bg-gray-800/50 py-2 px-4 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 flex items-center justify-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      {projectsCollapsed ? (
+                        <>
+                          <span>Show All Projects</span>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </>
+                      ) : (
+                        <>
+                          <span>Show Less</span>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
+                          </svg>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
           
-          {/* Scroll Indicator that responds to scroll - Similar to experience section */}
-          <div className="flex flex-col items-center justify-center mt-6">
-            <div className="relative w-36 sm:w-32 h-[4px] bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden shadow-sm">
-              {/* Progress Bar that moves based on scroll - Made more vibrant */}
-              <div 
-                id="projectsScrollProgress" 
-                className="absolute left-0 top-0 h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 dark:from-blue-500 dark:via-indigo-500 dark:to-purple-600 w-0 transition-all duration-200 opacity-90 z-10"
-                style={{ width: '0%' }}
-              ></div>
+          {/* Scroll Indicator for Projects - Desktop Only */}
+          <div className="scroll-indicator-container flex flex-col items-center justify-center mt-6">
+            <div className="relative w-32 h-[2px] bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+              {/* Progress Bar that moves based on scroll */}
+              <div id="projectsScrollProgress" className="absolute left-0 top-0 h-full bg-gradient-to-r from-gray-300 via-blue-400 to-blue-500 dark:from-gray-700 dark:via-blue-600 dark:to-blue-400 w-0 transition-all duration-300"></div>
               
-              {/* Improved arrows with animation */}
-              <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 border-t-2 border-l-2 border-gray-400 dark:border-gray-500 transform -rotate-45 animate-pulse"></div>
+              {/* Left Arrow */}
+              <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 border-t-2 border-l-2 border-gray-300 dark:border-gray-700 transform -rotate-45"></div>
               
-              <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 border-t-2 border-r-2 border-purple-600 dark:border-purple-500 transform rotate-45 animate-pulse"></div>
+              {/* Right Arrow */}
+              <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 border-t-2 border-r-2 border-blue-500 dark:border-blue-400 transform rotate-45"></div>
             </div>
             
-            {/* Enhanced scroll text */}
-            <span className="text-[10px] uppercase tracking-wider text-gray-600 dark:text-gray-400 mt-1 group flex items-center">
-              <span>Scroll</span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </span>
+            {/* Small "Scroll" text */}
+            <span className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-600 mt-1">Scroll</span>
           </div>
         </div>
       </section>
