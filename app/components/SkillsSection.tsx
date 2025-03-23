@@ -399,7 +399,7 @@ export default function SkillsSection() {
     }
     
     // For desktop, we'll use fixed positioning for more reliable placement
-    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    // const scrollY = window.scrollY || document.documentElement.scrollTop;
     const elementCenterX = elementRect.left + (elementRect.width / 2);
     
     // Calculate available space
