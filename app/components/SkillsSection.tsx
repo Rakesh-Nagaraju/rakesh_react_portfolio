@@ -1,23 +1,16 @@
 "use client";
 
-import { useState, useEffect, useRef, Fragment } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   SiPython,
-  SiNodedotjs,
-  SiReact,
   SiDocker,
-  SiDjango,
   SiFastapi,
   SiApachespark,
-  SiTerraform,
-  SiMongodb,
-  SiRabbitmq,
   SiOpencv,
   SiApachekafka,
   SiMlflow,
   SiGithub,
-  SiLinux,
   SiDatabricks,
   SiPrometheus,
   SiPostgresql,
@@ -28,10 +21,26 @@ import {
   SiNvidia,
 } from "react-icons/si";
 
+// Define skill interface
+interface Skill {
+  name: string;
+  icon: React.ReactNode;
+  message: string;
+  color: string;
+}
+
 // ===============
 // TAB 1: TECH STACK (E2E DEVELOPMENT)
 // ===============
 const techStack = [
+  {
+    name: "Training & Fine-Tuning (PyTorch / TensorFlow)",
+    icon: <SiPytorch />,
+    message: `• Trained deep learning models using PyTorch & TensorFlow/Keras
+• Fine-tuned LLMs (BERT, LLaMA, T5) with LoRA & QLoRA
+• Used mixed precision training and DeepSpeed for large-scale models`,
+    color: "#EE4C2C",
+  },
   {
     name: "Python",
     icon: <SiPython />,
@@ -39,6 +48,30 @@ const techStack = [
 • Built automation scripts, ETL pipelines, and backend services
 • Used NumPy, Pandas, and SciPy for ML/data engineering`,
     color: "#3776AB",
+  },
+  {
+    name: "Model Optimization & Deployment",
+    icon: <SiTensorflow />,
+    message: `• Optimized AI models using quantization and pruning techniques
+• Deployed models using TensorRT, ONNX, and TFLite for inference acceleration
+• Configured multi-GPU setups for high-throughput AI inference`,
+    color: "#FF6F00",
+  },
+  {
+    name: "MLflow (MLOps)",
+    icon: <SiMlflow />,
+    message: `• Centralized experiment tracking, model versioning, and deployment
+• Integrated MLflow with CI/CD for automated AI workflows
+• Ensured reproducibility in AI experiments across teams`,
+    color: "#01579B",
+  },
+  {
+    name: "Docker / Kubernetes",
+    icon: <SiDocker />,
+    message: `• Deployed AI models with containerization and orchestration
+• Created reproducible dev/prod environments with Docker Compose
+• Scaled workloads using Kubernetes and Helm charts`,
+    color: "#0db7ed",
   },
   {
     name: "FastAPI / Flask",
@@ -49,12 +82,28 @@ const techStack = [
     color: "#009688",
   },
   {
-    name: "Docker / Kubernetes",
-    icon: <SiDocker />,
-    message: `• Deployed AI models with containerization and orchestration
-• Created reproducible dev/prod environments with Docker Compose
-• Scaled workloads using Kubernetes and Helm charts`,
-    color: "#0db7ed",
+    name: "AWS / GCP",
+    icon: <SiAmazon />,
+    message: `• Deployed AI services on AWS (S3, Lambda, EC2, SageMaker)
+• Managed scalable data pipelines using GCP's Vertex AI
+• Used Terraform for Infrastructure as Code (IaC) automation`,
+    color: "#FF9900",
+  },
+  {
+    name: "MLOps & CI/CD Pipelines",
+    icon: <SiGithub />,
+    message: `• Built automated pipelines for AI model retraining and deployment
+• Integrated MLflow with GitHub Actions for continuous AI releases
+• Ensured model reproducibility across environments`,
+    color: "#6e5494",
+  },
+  {
+    name: "Airflow / Spark",
+    icon: <SiApachespark />,
+    message: `• Orchestrated AI data pipelines using Apache Airflow DAGs
+• Used Apache Spark for distributed data processing at scale
+• Handled real-time streaming & batch processing workloads`,
+    color: "#ed5338",
   },
   {
     name: "Kafka / RabbitMQ",
@@ -73,22 +122,6 @@ const techStack = [
     color: "#336791",
   },
   {
-    name: "AWS / GCP",
-    icon: <SiAmazon />,
-    message: `• Deployed AI services on AWS (S3, Lambda, EC2, SageMaker)
-• Managed scalable data pipelines using GCP's Vertex AI
-• Used Terraform for Infrastructure as Code (IaC) automation`,
-    color: "#FF9900",
-  },
-  {
-    name: "MLflow (MLOps)",
-    icon: <SiMlflow />,
-    message: `• Centralized experiment tracking, model versioning, and deployment
-• Integrated MLflow with CI/CD for automated AI workflows
-• Ensured reproducibility in AI experiments across teams`,
-    color: "#01579B",
-  },
-  {
     name: "Prometheus / Grafana",
     icon: <SiPrometheus />,
     message: `• Built monitoring dashboards for AI performance tracking
@@ -96,52 +129,12 @@ const techStack = [
 • Integrated with Kubernetes for cluster-wide observability`,
     color: "#E6522C",
   },
-  {
-    name: "Airflow / Spark",
-    icon: <SiApachespark />,
-    message: `• Orchestrated AI data pipelines using Apache Airflow DAGs
-• Used Apache Spark for distributed data processing at scale
-• Handled real-time streaming & batch processing workloads`,
-    color: "#ed5338",
-  },
-  {
-    name: "Training & Fine-Tuning (PyTorch / TensorFlow)",
-    icon: <SiPytorch />,
-    message: `• Trained deep learning models using PyTorch & TensorFlow/Keras
-• Fine-tuned LLMs (BERT, LLaMA, T5) with LoRA & QLoRA
-• Used mixed precision training and DeepSpeed for large-scale models`,
-    color: "#EE4C2C",
-  },
-  {
-    name: "MLOps & CI/CD Pipelines",
-    icon: <SiGithub />,
-    message: `• Built automated pipelines for AI model retraining and deployment
-• Integrated MLflow with GitHub Actions for continuous AI releases
-• Ensured model reproducibility across environments`,
-    color: "#6e5494",
-  },
-  {
-    name: "Model Optimization & Deployment",
-    icon: <SiTensorflow />,
-    message: `• Optimized AI models using quantization and pruning techniques
-• Deployed models using TensorRT, ONNX, and TFLite for inference acceleration
-• Configured multi-GPU setups for high-throughput AI inference`,
-    color: "#FF6F00",
-  },
 ];
 
 // ===============
 // TAB 2: AI & LLM EXPERTISE
 // ===============
 const aiExpertise = [
-  {
-    name: "Machine Learning",
-    icon: <SiPython />,
-    message: `• Built classification, regression, and anomaly detection models
-• Used scikit-learn for ML pipelines and feature engineering
-• Optimized hyperparameters and model selection with Optuna`,
-    color: "#A020F0",
-  },
   {
     name: "Computer Vision",
     icon: <SiOpencv />,
@@ -167,12 +160,12 @@ const aiExpertise = [
     color: "#F44747",
   },
   {
-    name: "Multimodal AI",
-    icon: <SiKeras />,
-    message: `• Integrated CLIP, BLIP, and SAM for vision-language applications
-• Built AI models that process both text and images for richer insights
-• Developed AI-powered content retrieval and annotation systems`,
-    color: "#D00000",
+    name: "Machine Learning",
+    icon: <SiPython />,
+    message: `• Built classification, regression, and anomaly detection models
+• Used scikit-learn for ML pipelines and feature engineering
+• Optimized hyperparameters and model selection with Optuna`,
+    color: "#A020F0",
   },
   {
     name: "Vector Databases",
@@ -190,28 +183,20 @@ const aiExpertise = [
 • Tuned hyperparameters to maximize LLM accuracy with minimal compute`,
     color: "#EE4C2C",
   },
+  {
+    name: "Multimodal AI",
+    icon: <SiKeras />,
+    message: `• Integrated CLIP, BLIP, and SAM for vision-language applications
+• Built AI models that process both text and images for richer insights
+• Developed AI-powered content retrieval and annotation systems`,
+    color: "#D00000",
+  },
 ];
 
 // ===============
 // TAB 3: GROWTH & ADVANCED AREAS
 // ===============
 const additionalSkills = [
-  {
-    name: "AutoML & Hyperparameter Optimization",
-    icon: <SiPython />,
-    message: `• Used Optuna and Ray Tune for hyperparameter tuning and model selection
-• Reduced training time via Bayesian optimization techniques
-• Integrated AutoKeras for scalable AutoML experimentation`,
-    color: "#795548",
-  },
-  {
-    name: "Explainable AI & Bias Mitigation",
-    icon: <SiPython />,
-    message: `• Applied SHAP and LIME for AI model interpretability
-• Ensured fairness with bias detection metrics like demographic parity
-• Developed ethical AI pipelines for transparent decision-making`,
-    color: "#795548",
-  },
   {
     name: "Edge AI & Efficient Model Deployment",
     icon: <SiNvidia />,
@@ -229,6 +214,14 @@ const additionalSkills = [
     color: "#76B900",
   },
   {
+    name: "Advanced Vector Search & Optimization",
+    icon: <SiDatabricks />,
+    message: `• Tuned FAISS, Milvus, and Pinecone for high-speed embedding retrieval
+• Implemented hybrid search (dense + sparse) for improved accuracy
+• Benchmarked search latency on billion-scale vector datasets`,
+    color: "#FF6F00",
+  },
+  {
     name: "Data Engineering & AI Pipelines",
     icon: <SiApachespark />,
     message: `• Built ETL/ELT workflows with Airflow, Prefect, and Kubeflow
@@ -237,20 +230,12 @@ const additionalSkills = [
     color: "#ed5338",
   },
   {
-    name: "Security & Adversarial AI",
+    name: "AutoML & Hyperparameter Optimization",
     icon: <SiPython />,
-    message: `• Researched adversarial attacks (FGSM, PGD) and robust defenses
-• Prevented AI poisoning and model theft vulnerabilities
-• Secured ML pipelines against adversarial perturbations`,
-    color: "#9E9E9E",
-  },
-  {
-    name: "Advanced Vector Search & Optimization",
-    icon: <SiDatabricks />,
-    message: `• Tuned FAISS, Milvus, and Pinecone for high-speed embedding retrieval
-• Implemented hybrid search (dense + sparse) for improved accuracy
-• Benchmarked search latency on billion-scale vector datasets`,
-    color: "#FF6F00",
+    message: `• Used Optuna and Ray Tune for hyperparameter tuning and model selection
+• Reduced training time via Bayesian optimization techniques
+• Integrated AutoKeras for scalable AutoML experimentation`,
+    color: "#795548",
   },
   {
     name: "LLM Evaluation & Benchmarking",
@@ -261,12 +246,20 @@ const additionalSkills = [
     color: "#9C27B0",
   },
   {
-    name: "Project Management & AI Roadmaps",
+    name: "Explainable AI & Bias Mitigation",
     icon: <SiPython />,
-    message: `• Defined AI roadmaps aligned with business objectives
-• Translated complex AI concepts for non-technical stakeholders
-• Managed sprint planning and milestone tracking for AI projects`,
-    color: "#607d8b",
+    message: `• Applied SHAP and LIME for AI model interpretability
+• Ensured fairness with bias detection metrics like demographic parity
+• Developed ethical AI pipelines for transparent decision-making`,
+    color: "#795548",
+  },
+  {
+    name: "Security & Adversarial AI",
+    icon: <SiPython />,
+    message: `• Researched adversarial attacks (FGSM, PGD) and robust defenses
+• Prevented AI poisoning and model theft vulnerabilities
+• Secured ML pipelines against adversarial perturbations`,
+    color: "#9E9E9E",
   },
   {
     name: "Research & AI Innovation",
@@ -275,6 +268,14 @@ const additionalSkills = [
 • Contributed to open-source AI libraries for industry adoption
 • Adopted cutting-edge ML techniques for applied research projects`,
     color: "#673ab7",
+  },
+  {
+    name: "Project Management & AI Roadmaps",
+    icon: <SiPython />,
+    message: `• Defined AI roadmaps aligned with business objectives
+• Translated complex AI concepts for non-technical stakeholders
+• Managed sprint planning and milestone tracking for AI projects`,
+    color: "#607d8b",
   },
 ];
 
@@ -298,19 +299,25 @@ const messageVariants = {
 // ===============
 export default function SkillsSection() {
   const tabs = ["Tech Stack", "AI & LLM Expertise", "Growth & Advanced Areas"];
-  const [activeTab, setActiveTab] = useState(tabs[0]);
-  const [selectedSkill, setSelectedSkill] = useState(null);
-  const containerRef = useRef(null);
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const selectedTooltipRef = useRef<HTMLDivElement>(null);
 
-  let currentSkills;
-  if (activeTab === "Tech Stack") currentSkills = techStack;
-  else if (activeTab === "AI & LLM Expertise") currentSkills = aiExpertise;
+  let currentSkills: Skill[];
+  if (activeTab === 0) currentSkills = techStack;
+  else if (activeTab === 1) currentSkills = aiExpertise;
   else currentSkills = additionalSkills;
 
   // Add click away listener
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (selectedSkill && containerRef.current && !containerRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        selectedSkill && 
+        containerRef.current && 
+        !containerRef.current.contains(event.target as Node)
+      ) {
         setSelectedSkill(null);
       }
     };
@@ -321,16 +328,12 @@ export default function SkillsSection() {
     };
   }, [selectedSkill]);
 
-  const handleSkillClick = (skill, event) => {
+  const handleSkillClick = (skill: Skill, event: React.MouseEvent) => {
     event.stopPropagation();
-    if (selectedSkill?.name === skill.name) {
-      setSelectedSkill(null);
-    } else {
-      setSelectedSkill(skill);
-    }
+    setSelectedSkill(selectedSkill?.name === skill.name ? null : skill);
   };
 
-  const renderSkills = (skills) => (
+  const renderSkills = (skills: Skill[]) => (
     <div ref={containerRef} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-5xl mx-auto">
       {skills.map((skill) => {
         const isSelected = selectedSkill?.name === skill.name;
@@ -397,10 +400,10 @@ export default function SkillsSection() {
                         className="text-3xl transition-transform duration-300 hover:scale-110"
                         style={{ color: skill.color }}
                       >
-              {skill.icon}
-            </span>
+                        {skill.icon}
+                      </span>
                       <h3 className="text-lg font-semibold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-            {skill.name}
+                        {skill.name}
                       </h3>
                     </div>
                     <button
@@ -455,7 +458,7 @@ export default function SkillsSection() {
   );
 
   return (
-    <section className="py-20 px-4">
+    <section className="py-20 px-4 bg-gradient-to-b from-white to-gray-50 dark:from-[#020b14] dark:to-[#010913]">
       <div className="relative mb-16 text-center">
         <motion.h2
           className="text-7xl font-extrabold text-gray-200 dark:text-gray-800 absolute inset-0 flex items-center justify-center opacity-10 select-none pointer-events-none"
@@ -481,18 +484,18 @@ export default function SkillsSection() {
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Tabs */}
         <div className="flex justify-center gap-4 flex-wrap">
-          {tabs.map((tab) => (
+          {tabs.map((tab, index) => (
             <motion.button
               key={tab}
               onClick={() => {
-                setActiveTab(tab);
+                setActiveTab(index);
                 setSelectedSkill(null);
               }}
               className={`
                 px-6 py-2 rounded-full text-sm md:text-base
                 transition-all duration-300
                 ${
-                activeTab === tab
+                  activeTab === index
                     ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg shadow-purple-500/20"
                     : "bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700"
                 }
