@@ -279,20 +279,7 @@ const additionalSkills = [
   },
 ];
 
-// ===============
-// FRAMER MOTION ANIMATIONS
-// ===============
-const containerVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -10 },
-};
 
-const messageVariants = {
-  hidden: { opacity: 0, y: -10 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -10 },
-};
 
 // ===============
 // MAIN COMPONENT
@@ -302,8 +289,6 @@ export default function SkillsSection() {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
-  const selectedTooltipRef = useRef<HTMLDivElement>(null);
 
   let currentSkills: Skill[];
   if (activeTab === 0) currentSkills = techStack;

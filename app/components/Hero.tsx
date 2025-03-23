@@ -10,21 +10,6 @@ import { FiInstagram } from "react-icons/fi";
 
 
 // ===============
-// FRAMER MOTION ANIMATIONS
-// ===============
-const containerVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -10 },
-};
-
-const messageVariants = {
-  hidden: { opacity: 0, y: -10 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -10 },
-};
-
-// ===============
 // MAIN COMPONENT
 // ===============
 export default function Hero() {

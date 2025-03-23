@@ -27,7 +27,7 @@ export default function About() {
           >
             
             <h2 className="text-4xl md:text-5xl font-medium text-gray-900 dark:text-white">
-              👋 Hi, I'm Rakesh
+              👋 Hi, I&apos;m Rakesh
             </h2>
           </motion.div>
 
@@ -75,7 +75,7 @@ export default function About() {
                         <p className="text-sm font-medium text-gray-800 dark:text-gray-200">Academic Publication</p>
                         <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5 italic">
                         Published on <span className="underline">arXiv: </span> </p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1.5 non-italic">"Generating Fake Malware Using Auxiliary-Classifier GAN for Malware Analysis" (2021)</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 mt-1.5 non-italic">&quot;Generating Fake Malware Using Auxiliary-Classifier GAN for Malware Analysis&quot; (2021)</p>
                     </a>
                 </div>
                 </div>
@@ -178,8 +178,9 @@ export default function About() {
             </h3>
           </div>
           <p className="text-gray-600 dark:text-gray-400 leading-loose tracking-normal font-sans">
-            AI isn't just my job—it's my passion. Teaching machines to see, understand, and solve real-world problems feels like shaping the future 🌍.
+            AI isn&rsquo;t just my job&mdash;it&rsquo;s my passion. Teaching machines to see, understand, and solve real-world problems feels like shaping the future 🌍.
           </p>
+
         </div>
 
         {/* Beyond Code Card */}
@@ -244,7 +245,7 @@ export default function About() {
                 </h4>
                 <div className="h-[2px] w-12 bg-gradient-to-r from-blue-500 to-purple-500 mb-4"></div>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Constantly exploring new approaches and technologies to push the boundaries of what's possible in AI development.
+                  Constantly exploring new approaches and technologies to push the boundaries of what&rsquo;s possible in AI development.
                 </p>
               </div>
             </motion.div>

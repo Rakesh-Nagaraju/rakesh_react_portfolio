@@ -1,7 +1,7 @@
 "use client";
 import Image from 'next/image';
 import { useState, useMemo, useEffect} from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import SkillsSection from "@/app/components/SkillsSection";
 import ExperienceModal, { useExperienceModal, experiences } from "@/app/components/ExperienceModal";
 
@@ -12,7 +12,7 @@ import { FaLinkedin} from 'react-icons/fa';
 import { SiHuggingface } from "react-icons/si";
 
 import { FaGithub, FaBolt } from 'react-icons/fa';
-import { FiGithub, FiInstagram } from "react-icons/fi";
+import { FiInstagram } from "react-icons/fi";
 import { AnimatePresence } from 'framer-motion';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 
@@ -318,15 +318,17 @@ export default function Home() {
 
   useEffect(() => {
     // Helper function to debounce scroll updates for performance
-    const debounce = (func: (...args: any[]) => void, delay: number) => {
+    const debounce = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
       let timeoutId: NodeJS.Timeout | undefined;
-      return (...args: any[]) => {
+    
+      return ((...args: Parameters<T>) => {
         if (timeoutId) clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
-          func.apply(null, args);
+          func(...args);
         }, delay);
-      };
+      }) as T;
     };
+    
 
     const updateActiveSectionOnLoad = () => {
       const currentScrollY = window.scrollY;
@@ -655,27 +657,27 @@ export default function Home() {
   };
 
   // Parallax
-  const { scrollY } = useScroll();
+  // const { scrollY } = useScroll();
   // const rawY = useTransform(scrollY, [0, 300], [0, -150]);
   // const backgroundY = useSpring(rawY, { stiffness: 100, damping: 20 });
 
-  const [bgImage, setBgImage] = useState("");
+  // const [bgImage, setBgImage] = useState("");
 
-  useEffect(() => {
-    const updateBgImage = () => {
-      const width = window.innerWidth;
-      if (width < 768) {
-        setBgImage("/images/final-bg-1080p.jpg");
-      } else if (width < 1024) {
-        setBgImage("/images/final-bg-1080p.jpg");
-      } else {
-        setBgImage("/images/final-bg-1080p.jpg");
-      }
-    };
-    updateBgImage();
-    window.addEventListener("resize", updateBgImage);
-    return () => window.removeEventListener("resize", updateBgImage);
-  }, [darkMode]);
+  // useEffect(() => {
+  //   const updateBgImage = () => {
+  //     const width = window.innerWidth;
+  //     if (width < 768) {
+  //       setBgImage("/images/final-bg-1080p.jpg");
+  //     } else if (width < 1024) {
+  //       setBgImage("/images/final-bg-1080p.jpg");
+  //     } else {
+  //       setBgImage("/images/final-bg-1080p.jpg");
+  //     }
+  //   };
+  //   updateBgImage();
+  //   window.addEventListener("resize", updateBgImage);
+  //   return () => window.removeEventListener("resize", updateBgImage);
+  // }, [darkMode]);
 
   const currentTabObj = projectTabs.find((t) => t.name === activeTab);
   const currentProjects = currentTabObj ? currentTabObj.projects : [];
@@ -1389,10 +1391,10 @@ export default function Home() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent">
-              Let's Connect
+              Let&rsquo;s Connect
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-base">
-              Got a cool idea or just want to say hi? I'm all ears!
+              Got a cool idea or just want to say hi? I&rsquo;m all ears!
             </p>
           </motion.div>
         </div>
