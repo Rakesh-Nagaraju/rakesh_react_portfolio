@@ -1,7 +1,7 @@
 "use client";
 import Image from 'next/image';
 import { useState, useMemo, useEffect} from "react";
-import { motion, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 import SkillsSection from "@/app/components/SkillsSection";
 import ExperienceModal, { useExperienceModal, experiences } from "@/app/components/ExperienceModal";
 
@@ -16,20 +16,8 @@ import { FiInstagram } from "react-icons/fi";
 import { AnimatePresence } from 'framer-motion';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 
-/* ----- Icons (Phone, Location, Social, Sun/Moon) ----- */
-function PhoneIcon() {
-  return <span>📞</span>;
-}
-function LocationIcon() {
-  return <span>📍</span>;
-}
-function LinkedInIcon() {
-  return <span>LinkedIn</span>;
-}
 
-function GitHubIcon() {
-  return <span>GitHub</span>;
-}
+
 
 // types.ts (or at top of page.tsx, but a separate file is cleaner)
 
@@ -318,16 +306,20 @@ export default function Home() {
 
   useEffect(() => {
     // Helper function to debounce scroll updates for performance
-    const debounce = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
-      let timeoutId: NodeJS.Timeout | undefined;
+    const debounce = <Args extends unknown[]>(
+      func: (...args: Args) => void,
+      delay: number
+    ): ((...args: Args) => void) => {
+      let timeoutId: ReturnType<typeof setTimeout> | undefined;
     
-      return ((...args: Parameters<T>) => {
+      return (...args: Args) => {
         if (timeoutId) clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
           func(...args);
         }, delay);
-      }) as T;
+      };
     };
+    
     
 
     const updateActiveSectionOnLoad = () => {
