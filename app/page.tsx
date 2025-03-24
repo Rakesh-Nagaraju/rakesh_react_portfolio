@@ -1672,7 +1672,7 @@ export default function Home() {
                   touch-pan-x
                   overscroll-x-contain
                   mobile-collapsible-container
-                  ${projectsCollapsed ? 'max-h-[510px] overflow-hidden' : 'max-h-full'}
+                  ${projectsCollapsed ? 'max-h-[610px] overflow-hidden' : 'max-h-full'}
                   transition-all duration-500 ease-in-out
                   grid grid-cols-1 gap-6 
                   md:flex md:overflow-x-auto md:horizontal-scroll-container md:snap-x md:snap-mandatory
