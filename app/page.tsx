@@ -1401,7 +1401,7 @@ export default function Home() {
               overscroll-x-contain
               relative
               mobile-collapsible-container
-              ${experienceCollapsed ? 'max-h-[410px] overflow-hidden' : 'max-h-full'}
+              ${experienceCollapsed ? 'max-h-[650px] overflow-hidden' : 'max-h-full'}
               transition-all duration-500 ease-in-out
               grid grid-cols-1 gap-6 
               md:flex md:overflow-x-auto md:horizontal-scroll-container md:snap-x md:snap-mandatory
