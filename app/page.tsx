@@ -269,6 +269,37 @@ export default function Home() {
     document.documentElement.classList.toggle('dark', isDark);
   }, []);
 
+  // Scroll to top on page refresh/load
+  useEffect(() => {
+    // Check if this is a page refresh by looking at the navigation type
+    if (window.performance) {
+      const navEntries = performance.getEntriesByType('navigation');
+      if (navEntries.length > 0 && (navEntries[0] as PerformanceNavigationTiming).type === 'reload') {
+        // This is a refresh, scroll to top
+        window.scrollTo(0, 0);
+      } else {
+        // Alternative method for browsers that don't support the above
+        window.scrollTo(0, 0);
+      }
+    } else {
+      // Fallback for browsers without the Performance API
+      window.scrollTo(0, 0);
+    }
+
+    // Also handle hash in URL (e.g., example.com/#experience)
+    if (window.location.hash) {
+      // If there's a hash, we'll need to scroll to that element after a small delay
+      setTimeout(() => {
+        const element = document.getElementById(window.location.hash.substring(1));
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          window.scrollTo(0, 0);
+        }
+      }, 100);
+    }
+  }, []);
+
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
@@ -963,6 +994,8 @@ export default function Home() {
     // Now toggle the collapse state
     setProjectsCollapsed(!projectsCollapsed);
   };
+
+  
   
   
 
@@ -1402,13 +1435,13 @@ export default function Home() {
             <div
               className="
               no-scrollbar inline-flex gap-6
-              px-6 py-2
-              overflow-x-auto 
-              backdrop-blur-md
-              rounded-full
-              bg-white/80 dark:bg-gray-900/50
-              border border-gray-200/50 dark:border-gray-700/50
-              shadow-lg shadow-gray-200/20 dark:shadow-gray-950/20
+                px-6 py-2
+                overflow-x-auto 
+                backdrop-blur-md
+                rounded-full
+                bg-white/80 dark:bg-gray-900/50
+                border border-gray-200/50 dark:border-gray-700/50
+                shadow-lg shadow-gray-200/20 dark:shadow-gray-950/20
               w-full md:w-auto md:mx-auto max-w-[95vw]
               mobile-tabs-container
               "
@@ -1501,7 +1534,7 @@ export default function Home() {
                         hover:translate-y-[-3px]
                         snap-start
                         flex-shrink-0
-                        max-w-[90vw] sm:max-w-[330px] md:max-w-[330px]
+                        max-w-[90vw] sm:max-w-[400px] md:max-w-[450px]
                         min-h-[380px]
                   flex flex-col
                   relative
@@ -1854,5 +1887,6 @@ export default function Home() {
     </main>
   );
 }
+
 
 

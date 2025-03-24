@@ -261,7 +261,7 @@ export default function Hero() {
             alt="My profile picture"
             width={150}
             height={150}
-            className="w-full h-full object-contain rounded-full relative z-10 transition-all duration-500 group-hover:scale-105 
+            className="mt-[48px] w-full h-full object-contain rounded-full relative z-10 transition-all duration-500 group-hover:scale-105 
               shadow-lg 
               border-[3px] border-white/40 dark:border-blue-500/30 
               dark:shadow-blue-900/20
@@ -272,7 +272,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.span 
-          className="inline-flex items-center bg-gradient-to-r from-blue-500/5 to-purple-500/5 dark:from-blue-500/10 dark:to-purple-500/10 text-gray-600 dark:text-gray-300 text-sm font-medium rounded-full px-4 py-1.5 border border-blue-100/50 dark:border-blue-800/50"
+          className="mt-[14px] inline-flex items-center bg-gradient-to-r from-blue-500/5 to-purple-500/5 dark:from-blue-500/10 dark:to-purple-500/10 text-gray-600 dark:text-gray-300 text-sm font-medium rounded-full px-4 py-1.5 border border-blue-100/50 dark:border-blue-800/50"
           initial={{ scale: 0.95 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -281,7 +281,7 @@ export default function Hero() {
         </motion.span>
         
         <motion.h1
-          className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent"
+          className="text-4xl p-[10px] font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}

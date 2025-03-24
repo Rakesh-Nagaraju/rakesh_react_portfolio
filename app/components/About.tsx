@@ -95,41 +95,41 @@ export default function About() {
 
         {/* Right Side (Image) */}
         <motion.div
-  className="relative flex justify-center" // ✅ Added `relative` here
-  initial={{ opacity: 0, scale: 0.9 }}
-  whileInView={{ opacity: 1, scale: 1 }}
-  viewport={{ once: true }}
-  transition={{ duration: 0.8, ease: "easeOut" }}
->
-  {/* Ambient Blobs */}
-  <div className="absolute -top-20 -left-20 w-72 h-72 bg-blue-400/20 dark:bg-blue-500/15 rounded-full blur-3xl z-0"></div>
-  <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/10 dark:bg-purple-600/15 rounded-full blur-[120px] z-0"></div>
+          className="relative flex justify-center" // ✅ Added `relative` here
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          {/* Ambient Blobs */}
+          <div className="absolute -top-20 -left-20 w-72 h-72 bg-blue-400/20 dark:bg-blue-500/15 rounded-full blur-3xl z-0"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/10 dark:bg-purple-600/15 rounded-full blur-[120px] z-0"></div>
 
-  {/* Image Container */}
-  <div className="flex items-center justify-center h-full z-10">
-    <div className="relative w-[500px] h-auto group flex items-center justify-center">
-      {/* Enhanced Glow Layer */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/15 to-blue-400/20 dark:from-blue-600/20 dark:via-purple-500/15 dark:to-blue-600/20 rounded-xl blur-3xl group-hover:blur-4xl transition-all duration-500"></div>
-      
-      {/* Secondary Glow for Added Depth */}
-      <div className="absolute inset-0 scale-90 bg-gradient-to-br from-[#abdae1]/10 via-transparent to-[#d8b4fe]/10 dark:from-[#93c5fd]/10 dark:via-transparent dark:to-[#d8b4fe]/15 rounded-xl blur-2xl opacity-70 group-hover:opacity-90 transition-all duration-500"></div>
+          {/* Image Container */}
+          <div className="flex items-center justify-center h-full z-10">
+            <div className="relative w-[500px] h-auto group flex items-center justify-center">
+              {/* Enhanced Glow Layer */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#4079af]/20 via-[#5c9db1]/15 to-[#79d2ff]/20 dark:from-[#3a6a8a]/20 dark:via-[#4d8299]/15 dark:to-[#79d2ff]/20 rounded-xl blur-3xl group-hover:blur-4xl transition-all duration-500"></div>
 
-      {/* Image */}
-      <Image
-        src="/images/profile_pic_2.jpeg"
-        alt="My profile picture"
-        title="My profile picture"
-        width={500}
-        height={700}
-        className="w-[70%] h-auto object-cover rounded-xl relative z-10 transition-all duration-500 group-hover:scale-105 shadow-xl
-             border border-white/15 dark:border-blue-500/20 dark:shadow-blue-900/10
-             dark:brightness-[0.75] dark:contrast-[1.05] dark:saturate-[0.95]
-             ring-1 ring-blue-100/20 dark:ring-blue-500/10"
-        priority
-      />
-    </div>
-  </div>
-</motion.div>
+              {/* Secondary Glow for Added Depth */}
+              <div className="absolute inset-0 scale-90 bg-gradient-to-br from-[#4079af]/10 via-transparent to-[#79d2ff]/10 dark:from-[#3a6a8a]/10 dark:via-transparent dark:to-[#79d2ff]/15 rounded-xl blur-2xl opacity-70 group-hover:opacity-90 transition-all duration-500"></div>
+
+              {/* Image */}
+              <Image
+                src="/images/profile_pic_2.jpeg"
+                alt="Me @LakeTahoe"
+                title="Me @LakeTahoe"
+                width={500}
+                height={700}
+                className="w-[70%] h-auto object-cover rounded-xl relative z-10 transition-all duration-500 group-hover:scale-105 shadow-xl
+                    border border-white/15 dark:border-blue-500/20 dark:shadow-blue-900/10
+                    dark:brightness-[0.75] dark:contrast-[1.05] dark:saturate-[0.95]
+                    ring-1 ring-blue-100/20 dark:ring-blue-500/10"
+                priority
+              />
+            </div>
+          </div>
+        </motion.div>
 
       </div>
 
