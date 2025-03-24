@@ -634,8 +634,8 @@ export default function SkillsSection() {
                 rounded-xl p-4
                 transition-all duration-300
                 cursor-pointer
-                hover:border-gray-300 dark:hover:border-gray-700
-                hover:shadow-lg dark:hover:shadow-gray-900/20
+                lg:hover:border-gray-300 lg:dark:hover:border-gray-700
+                lg:hover:shadow-lg lg:dark:hover:shadow-gray-900/20
                 h-[100px] flex flex-col justify-center
                 ${isSelected ? 'border-blue-500 dark:border-blue-500 ring-2 ring-blue-500/20' : ''}
               `}

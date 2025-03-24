@@ -142,7 +142,7 @@ export default function About() {
         transition={{ duration: 0.8, delay: 0.5 }}
       >
         {/* What I Do Card */}
-        <div className="group p-10 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-gray-900 dark:to-gray-900/50 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-300 shadow-lg">
+        <div className="group p-10 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-gray-900 dark:to-gray-900/50 border border-gray-200 dark:border-gray-800 lg:hover:border-gray-300 lg:dark:hover:border-gray-700 transition-all duration-300 shadow-lg">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-14 h-14 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110">
               <span className="text-3xl">🚀</span>
@@ -184,7 +184,7 @@ export default function About() {
         </div>
 
         {/* Beyond Code Card */}
-        <div className="group p-10 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-gray-900 dark:to-gray-900/50 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-300 shadow-lg">
+        <div className="group p-10 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-gray-900 dark:to-gray-900/50 border border-gray-200 dark:border-gray-800 lg:hover:border-gray-300 lg:dark:hover:border-gray-700 transition-all duration-300 shadow-lg">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-14 h-14 rounded-xl bg-pink-500/10 dark:bg-pink-500/20 flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110">
               <span className="text-3xl">🎮</span>
