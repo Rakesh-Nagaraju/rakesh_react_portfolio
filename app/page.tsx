@@ -462,7 +462,7 @@ export default function Home() {
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
         /* Prevent touch action conflicts */
-        touch-action: pan-x;
+        touch-action: auto;
       }
       
       .horizontal-scroll-container:active {
@@ -1226,7 +1226,7 @@ export default function Home() {
                     hover:translate-y-[-5px]
                     snap-start
                     flex-shrink-0
-                    w-[85vw] sm:w-[400px] md:w-[450px]
+                    max-w-[90vw] sm:max-w-[400px] md:max-w-[450px]
                     min-h-[300px]
                     flex flex-col
                     relative
@@ -1501,7 +1501,7 @@ export default function Home() {
                         hover:translate-y-[-3px]
                         snap-start
                         flex-shrink-0
-                        w-[85vw] sm:w-[280px] md:w-[330px] lg:w-[380px]
+                        max-w-[90vw] sm:max-w-[330px] md:max-w-[330px]
                         min-h-[380px]
                   flex flex-col
                   relative
