@@ -608,8 +608,33 @@ export default function Home() {
         .mobile-show-more-button:hover {
           background-color: rgba(255,255,255,0.1);
         }
+        
+        /* Fix experience and project card hover effects on mobile */
+        .experience-card, .project-card {
+          border-color: rgba(229, 231, 235, 0.7) !important;
+          transform: none !important;
+          transition: none !important;
+          -webkit-tap-highlight-color: transparent !important;
+        }
+        
+        .dark .experience-card, .dark .project-card {
+          border-color: rgba(31, 41, 55, 0.7) !important;
+        }
+        
+        .experience-card:hover, .project-card:hover,
+        .experience-card:active, .project-card:active,
+        .experience-card:focus, .project-card:focus {
+          border-color: inherit !important;
+          transform: none !important;
+          box-shadow: inherit !important;
+        }
+        
+        .project-card img, .experience-card img {
+          transform: none !important;
+          transition: none !important;
+        }
       }
-
+      
       /* DISABLE HOVER EFFECTS FOR TOUCH DEVICES */
       
       /* Media query targeting touch devices */
@@ -618,6 +643,14 @@ export default function Home() {
         * {
           transition: none !important;
           animation: none !important;
+          -webkit-tap-highlight-color: transparent !important; /* Disable the mobile tap highlight */
+        }
+        
+        /* Prevent any border, outline, or box-shadow changes on touch */
+        *:hover, *:active, *:focus {
+          border-color: inherit !important;
+          outline: none !important;
+          box-shadow: inherit !important;
         }
         
         /* Remove hover:* Tailwind classes effects for touch devices */
@@ -655,6 +688,17 @@ export default function Home() {
           border-color: inherit !important;
           color: inherit !important;
           filter: none !important;
+        }
+        
+        /* Explicitly target experience and project cards to prevent border changes */
+        #experience .group,
+        #projects .group {
+          border: none !important; /* border-gray-200/70 */
+        }
+        
+        #experience .dark .group,
+        #projects .dark .group {
+          border: none !important; /* dark:border-gray-800/70 */
         }
         
         /* Disable any group-hover effects */
@@ -725,6 +769,27 @@ export default function Home() {
       
       /* Specific media query for mobile and small screens */
       @media (max-width: 767px) {
+        /* Disable all hover effects for experience cards */
+        .experience-card:hover,
+        .experience-card:active,
+        .experience-card:focus {
+          border-color: rgba(229, 231, 235, 0.7) !important; /* Light mode border */
+          transform: none !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important; /* shadow-md */
+          outline: none !important;
+        }
+        
+        .dark .experience-card:hover,
+        .dark .experience-card:active,
+        .dark .experience-card:focus {
+          border-color: rgba(31, 41, 55, 0.7) !important; /* Dark mode border */
+        }
+        
+        /* Ensure tap doesn't create highlight */
+        .experience-card {
+          -webkit-tap-highlight-color: transparent !important;
+        }
+        
         /* Disable Framer Motion hover/tap animations */
         [style*="transform"] {
           transform: none !important;
@@ -744,6 +809,29 @@ export default function Home() {
           transform: none !important;
           transition: none !important;
           animation: none !important;
+        }
+        
+        /* Target experience and project cards to prevent border/outline changes */
+        #experience motion.div,
+        #projects motion.div {
+          border-color: rgba(229, 231, 235, 0.7) !important;
+          outline: none !important;
+        }
+        
+        .dark #experience motion.div,
+        .dark #projects motion.div {
+          border-color: rgba(31, 41, 55, 0.7) !important;
+        }
+        
+        /* Explicitly prevent any active/focus state changes */
+        *:active, *:focus {
+          border-color: inherit !important;
+          outline: none !important;
+        }
+        
+        /* Disable touch highlight on mobile */
+        * {
+          -webkit-tap-highlight-color: transparent !important;
         }
         
         /* Disable scroll animations for experience and project cards */
@@ -1445,6 +1533,7 @@ export default function Home() {
                     relative
                     overflow-hidden
                     mx-1
+                    experience-card
                   "
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1715,6 +1804,7 @@ export default function Home() {
                   relative
                         overflow-hidden
                         my-6 mx-2 sm:mx-4
+                        project-card
                 `}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
