@@ -54,7 +54,7 @@ export default function About() {
                 {/* Expertise highlight with improved typography */}
                 <div className="space-y-6">
                   <p className="text-[1.05rem] md:text-[1.15rem] text-gray-700 dark:text-gray-300 leading-[1.8] tracking-wide">
-                    My extensive expertise spans <span className="font-medium text-blue-600/80 dark:text-blue-400/90">Computer Vision</span> and <span className="font-medium text-purple-600/80 dark:text-purple-400/90">Large Language Models (LLMs)</span>, developing production-ready AI systems that transform cutting-edge research into scalable applications.
+                    My expertise spans <span className="font-medium text-blue-600/80 dark:text-blue-400/90">Computer Vision</span> and <span className="font-medium text-purple-600/80 dark:text-purple-400/90">Large Language Models (LLMs)</span>, developing production-ready AI systems that transform cutting-edge research into scalable applications.
                   </p>
                   
                   {/* Value proposition with improved typography */}
@@ -94,6 +94,7 @@ export default function About() {
         </motion.div>
 
         {/* Right Side (Image) */}
+        {/* Right Side (Image) */}
         <motion.div
           className="relative flex justify-center" // ✅ Added `relative` here
           initial={{ opacity: 0, scale: 0.9 }}
@@ -108,28 +109,27 @@ export default function About() {
           {/* Image Container */}
           <div className="flex items-center justify-center h-full z-10">
             <div className="relative w-[500px] h-auto group flex items-center justify-center">
+              
               {/* Enhanced Glow Layer */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#4079af]/20 via-[#5c9db1]/15 to-[#79d2ff]/20 dark:from-[#3a6a8a]/20 dark:via-[#4d8299]/15 dark:to-[#79d2ff]/20 rounded-xl blur-3xl group-hover:blur-4xl transition-all duration-500"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#4079af]/20 via-[#5c9db1]/15 to-[#79d2ff]/20 dark:from-[#3a6a8a]/20 dark:via-[#4d8299]/15 dark:to-[#79d2ff]/20 rounded-xl blur-3xl transition-all duration-500 sm:group-hover:blur-none sm:transition-none sm:duration-0"></div>
 
               {/* Secondary Glow for Added Depth */}
-              <div className="absolute inset-0 scale-90 bg-gradient-to-br from-[#4079af]/10 via-transparent to-[#79d2ff]/10 dark:from-[#3a6a8a]/10 dark:via-transparent dark:to-[#79d2ff]/15 rounded-xl blur-2xl opacity-70 group-hover:opacity-90 transition-all duration-500"></div>
+              <div className="absolute inset-0 scale-90 bg-gradient-to-br from-[#4079af]/10 via-transparent to-[#79d2ff]/10 dark:from-[#3a6a8a]/10 dark:via-transparent dark:to-[#79d2ff]/15 rounded-xl blur-2xl opacity-70 transition-all duration-500 sm:group-hover:opacity-70 sm:transition-none sm:duration-0"></div>
 
               {/* Image */}
               <Image
-                src="/images/profile_pic_2.jpeg"
+                src="/images/profile_pic_2.png"
                 alt="Me @LakeTahoe"
                 title="Me @LakeTahoe"
                 width={500}
                 height={700}
-                className="w-[70%] h-auto object-cover rounded-xl relative z-10 transition-all duration-500 group-hover:scale-105 shadow-xl
-                    border border-white/15 dark:border-blue-500/20 dark:shadow-blue-900/10
-                    dark:brightness-[0.75] dark:contrast-[1.05] dark:saturate-[0.95]
-                    ring-1 ring-blue-100/20 dark:ring-blue-500/10"
+                className="w-[70%] h-auto object-cover rounded-xl relative z-10 transition-all duration-500 group-hover:scale-105 shadow-xl border border-white/15 dark:border-blue-500/20 dark:shadow-blue-900/10 dark:brightness-[0.75] dark:contrast-[1.05] dark:saturate-[0.95] ring-1 ring-blue-100/20 dark:ring-blue-500/10 sm:group-hover:scale-100 sm:transition-none sm:duration-0"
                 priority
               />
             </div>
           </div>
         </motion.div>
+
 
       </div>
 

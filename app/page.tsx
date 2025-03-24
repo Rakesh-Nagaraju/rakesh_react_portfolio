@@ -609,6 +609,192 @@ export default function Home() {
           background-color: rgba(255,255,255,0.1);
         }
       }
+
+      /* DISABLE HOVER EFFECTS FOR TOUCH DEVICES */
+      
+      /* Media query targeting touch devices */
+      @media (hover: none) {
+        /* Disable all hover transitions and animations */
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+        
+        /* Remove hover:* Tailwind classes effects for touch devices */
+        .hover\\:scale-\\[1\\.1\\]:hover,
+        .hover\\:scale-\\[1\\.05\\]:hover,
+        .hover\\:scale-110:hover,
+        .hover\\:scale-105:hover,
+        .hover\\:-translate-y-0\\.5:hover,
+        .hover\\:-translate-y-\\[3px\\]:hover,
+        .hover\\:-translate-y-\\[5px\\]:hover,
+        .hover\\:translate-y-\\[-3px\\]:hover,
+        .hover\\:translate-y-\\[-5px\\]:hover,
+        .hover\\:shadow-lg:hover,
+        .hover\\:shadow-md:hover,
+        .hover\\:shadow-xl:hover,
+        .hover\\:opacity-100:hover,
+        .hover\\:bg-gray-100:hover,
+        .hover\\:bg-gray-50:hover,
+        .hover\\:bg-gray-800:hover,
+        .hover\\:bg-blue-100\\/80:hover,
+        .hover\\:bg-blue-900\\/30:hover,
+        .hover\\:border-transparent:hover,
+        .hover\\:border-blue-200\\/50:hover,
+        .hover\\:text-gray-900:hover,
+        .hover\\:text-white:hover,
+        .hover\\:text-orange-700:hover,
+        .hover\\:text-orange-300:hover,
+        .hover\\:text-gray-700:hover,
+        .hover\\:text-gray-200:hover,
+        .hover\\:brightness-\\[0\\.8\\]:hover {
+          transform: none !important;
+          box-shadow: inherit !important;
+          opacity: inherit !important;
+          background-color: inherit !important;
+          border-color: inherit !important;
+          color: inherit !important;
+          filter: none !important;
+        }
+        
+        /* Disable any group-hover effects */
+        .group:hover .group-hover\\:opacity-0,
+        .group:hover .group-hover\\:opacity-100,
+        .group:hover .group-hover\\:translate-x-1,
+        .group:hover .group-hover\\:w-full,
+        .group:hover .group-hover\\:bg-blue-400,
+        .group:hover .group-hover\\:bg-blue-500,
+        .group\\/item:hover .group-hover\\/item\\:translate-x-1,
+        .group\\/item:hover .group-hover\\/item\\:w-full,
+        .group\\/item:hover .group-hover\\/item\\:bg-blue-400,
+        .group\\/item:hover .group-hover\\/item\\:bg-blue-500,
+        .group\\/link:hover .group-hover\\/link\\:translate-x-1 {
+          opacity: inherit !important;
+          transform: none !important;
+          width: auto !important;
+          background-color: inherit !important;
+        }
+        
+        /* Disable all :after and :before hover animations */
+        *:hover::after,
+        *:hover::before {
+          transform: none !important;
+          width: inherit !important;
+          opacity: inherit !important;
+        }
+        
+        /* Remove cursor changes on touch devices */
+        .cursor-pointer,
+        .cursor-grab,
+        .cursor-grabbing {
+          cursor: default !important;
+        }
+        
+        /* Ensure links still look tappable */
+        a, button {
+          -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+        }
+        
+        /* Disable image hover effects */
+        img:hover, 
+        .group:hover img,
+        .group-hover\\:scale-110 {
+          transform: none !important;
+        }
+        
+        /* Remove before/after hover effects for navigation */
+        nav a:hover::before,
+        nav a.active::before {
+          width: inherit !important;
+        }
+        
+        /* Remove scrollable-x indicators that rely on hover */
+        .scrollable-x::after {
+          display: none !important;
+        }
+        
+        /* Disable Framer Motion animations on mobile devices */
+        .mobile-grid-layout motion-div,
+        .mobile-grid-layout .motion-div,
+        .mobile-grid-layout [data-framer-component-type] {
+          transform: none !important;
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+      
+      /* Specific media query for mobile and small screens */
+      @media (max-width: 767px) {
+        /* Disable Framer Motion hover/tap animations */
+        [style*="transform"] {
+          transform: none !important;
+          transition: none !important;
+        }
+        
+        /* Disable hover effects on Framer Motion components */
+        [data-framer-component-type="hover"],
+        [data-framer-component-type="tap"] {
+          transform: none !important;
+          transition: none !important;
+        }
+        
+        /* Disable animations for motion components in our sections */
+        motion\.a, motion\.div, motion\.button,
+        .motion-a, .motion-div, .motion-button {
+          transform: none !important;
+          transition: none !important;
+          animation: none !important;
+        }
+        
+        /* Disable scroll animations for experience and project cards */
+        #experience motion.div,
+        #projects motion.div,
+        .mobile-collapsible-container motion.div,
+        .mobile-collapsible-container .motion-div,
+        .mobile-collapsible-container [data-framer-component-type] {
+          opacity: 1 !important;
+          transform: none !important;
+          animation: none !important;
+          transition: none !important;
+        }
+        
+        /* Target our custom data attribute */
+        [data-disable-animation-mobile="true"] {
+          opacity: 1 !important;
+          transform: none !important;
+          animation: none !important;
+          transition: max-height 0.3s ease-out !important; /* Keep only height transition */
+          will-change: max-height; /* Optimize the only transition we keep */
+        }
+        
+        /* Keep animations disabled after expand button is pressed */
+        .mobile-collapsible-container:not(.collapsed) * {
+          animation: none !important;
+          transition: none !important;
+          transform: none !important;
+          opacity: 1 !important;
+        }
+        
+        /* Force immediate visibility for expanded content */
+        #experience:not(.collapsed) motion.div,
+        #projects:not(.collapsed) motion.div {
+          opacity: 1 !important;
+          transform: none !important;
+          animation: none !important;
+        }
+        
+        /* Disable any whileInView animations */
+        [data-framer-component-type="whileInView"],
+        [data-motion="whileInView"] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        
+        /* Make sure expanded content is immediately visible */
+        .mobile-collapsible-container:not(.collapsed) {
+          transition: max-height 0.3s ease-out !important;
+        }
+      }
     `;
     document.head.appendChild(styleElement);
 
@@ -1183,20 +1369,14 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6">
           {/* Watermark Container */}
           <div className="relative mb-16 text-center">
-            <motion.h2
-              className="text-7xl font-extrabold text-gray-200 dark:text-gray-800 absolute inset-0 flex items-center justify-center opacity-10 select-none pointer-events-none"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 0.1 }}
-              viewport={{ once: true }}
-            >
-              EXPERIENCE
-            </motion.h2>
+            
 
             <motion.div
               className="relative space-y-4"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
+              data-disable-animation-mobile="true"
             >
               <h2 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent">
                 Professional Experience
@@ -1270,6 +1450,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                   viewport={{ once: true, margin: "-100px" }}
+                  data-disable-animation-mobile="true"
                 >
                   {/* Decorative accent - original size */}
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
@@ -1407,20 +1588,14 @@ export default function Home() {
       >
         {/* Watermark Container */}
         <div className="relative mb-16 text-center">
-          <motion.h2
-            className="text-7xl font-extrabold text-gray-200 dark:text-gray-800 absolute inset-0 flex items-center justify-center opacity-10 select-none pointer-events-none"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 0.1 }}
-            viewport={{ once: true }}
-          >
-            PROJECTS
-          </motion.h2>
+          
 
           <motion.div
             className="relative space-y-4"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
+            data-disable-animation-mobile="true"
           >
             <h2 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent">
               Featured Projects
@@ -1542,8 +1717,9 @@ export default function Home() {
                         my-6 mx-2 sm:mx-4
                 `}
                 initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                data-disable-animation-mobile="true"
               >
                       {/* Decorative accent - matching experience cards */}
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
@@ -1737,26 +1913,20 @@ export default function Home() {
       >
         
         <div className="relative mb-16 text-center">
-          <motion.h2
-            className="text-8xl font-extrabold text-gray-200 dark:text-gray-800 absolute inset-0 flex items-center justify-center opacity-10 select-none pointer-events-none"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 0.1 }}
-            viewport={{ once: true }}
-          >
-            CONTACT
-          </motion.h2>
+          
 
           <motion.div
             className="relative space-y-5"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
+            data-disable-animation-mobile="true"
           >
             <h2 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent">
               Let&rsquo;s Connect
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-base">
-              Got a cool idea or just want to say hi? I&rsquo;m all ears!
+              Got an exciting idea or just want to chat? I&rsquo;m all ears and love connecting!
             </p>
           </motion.div>
         </div>
@@ -1766,6 +1936,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          data-disable-animation-mobile="true"
         >
           {/* Contact Info - Simple Layout */}
           <div className="flex flex-col space-y-8 mb-16">
