@@ -1215,36 +1215,46 @@ export default function Home() {
           {/* Logo */}
           <div className="text-xl font-bold group relative">
             <a href="#hero" onClick={closeMenu} className="block" title="Back to top">
-            <span
-              className="
-                inline-flex
-                items-center
-                justify-center
-                align-middle
-                w-10 h-10
-                p-2
-                border-2 border-gray-500
-                rounded-full
-                transition-all duration-300
-                group-hover:border-transparent
-                group-hover:opacity-0
-                text-lg font-semibold
-                bg-gradient-to-r from-blue-500 to-purple-500
-                text-white
-                shadow-md
-                hover:shadow-lg
-                hover:scale-110
-                md:w-auto md:px-4
-                md:group-hover:w-auto md:group-hover:px-4
-                md:group-hover:opacity-100
-                md:group-hover:border-transparent
-                md:group-hover:bg-gradient-to-r md:group-hover:from-blue-500 md:group-hover:to-purple-500
-                md:group-hover:text-white
-                md:group-hover:shadow-lg
-                md:group-hover:scale-110
-              "
-            >
-              <span className="md:hidden">RN</span>
-              <span className="hidden md:inline">Rakesh Nagaraju</span>
-            </span>
+              <span
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  align-middle
+                  w-10 h-10
+                  p-2
+                  border-2 border-gray-500
+                  rounded-full
+                  transition-all duration-300
+                  text-lg font-semibold
+                  bg-gradient-to-r from-blue-500 to-purple-500
+                  text-white
+                  shadow-md
+                  hover:shadow-lg
+                  hover:scale-110
+                  md:w-10 md:h-10
+                  md:group-hover:w-auto md:group-hover:px-4
+                  md:group-hover:border-transparent
+                  md:group-hover:bg-gradient-to-r md:group-hover:from-blue-500 md:group-hover:to-purple-500
+                  md:group-hover:text-white
+                  md:group-hover:shadow-lg
+                  md:group-hover:scale-110
+                "
+              >
+                <span className="block md:group-hover:hidden">RN</span>
+                <span className="hidden md:group-hover:block">Rakesh Nagaraju</span>
+              </span>
+            </a>
+          </div>
+
+          {/* Dark Mode Toggle */}
+          {renderDarkModeButton()}
+        </div>
+      </header>
+
+      {/* Rest of the component content */}
+      {/* ... (existing content) */}
+    </main>
+  );
+}
 
