@@ -1464,6 +1464,8 @@ export default function Home() {
                           width={50} 
                           height={50} 
                           className="rounded object-contain h-[50px] w-[50px]"
+                          quality={75}
+                          sizes="50px"
                         />
                       </div>
                     )}
@@ -1733,7 +1735,9 @@ export default function Home() {
                       alt={`${proj.title} image`}
                       width={400}
                       height={200}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      quality={75}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                           {/* Enhanced gradient overlay for better text readability */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-80 group-hover:opacity-85 transition-opacity duration-300" />

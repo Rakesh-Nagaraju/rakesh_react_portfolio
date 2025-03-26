@@ -65,6 +65,9 @@ export default function Hero() {
                     deleteSpeed: 30,
                     cursor: "▋",
                     loop: true,
+                    skipAddStyles: true,
+                    wrapperClassName: "typewriter-wrapper",
+                    cursorClassName: "typewriter-cursor",
                   }}
                 />
               </div>
@@ -230,13 +233,15 @@ export default function Hero() {
               alt="My profile picture"
               width={250}
               height={250}
-              className="object-cover rounded-full relative z-10 transition-all duration-500 group-hover:scale-105 
+              className="object-cover rounded-full relative z-10 transition-transform duration-300 group-hover:scale-105 
                 shadow-xl 
                 border-[4px] border-white/40 dark:border-blue-500/30
                 dark:shadow-blue-900/20
                 dark:brightness-[0.75] dark:contrast-[1.05]
                 ring-1 ring-purple-200/30 dark:ring-purple-500/20"
               priority
+              quality={85}
+              sizes="(max-width: 768px) 150px, 250px"
             />
           </motion.div>
         </div>
@@ -260,13 +265,15 @@ export default function Hero() {
             alt="My profile picture"
             width={150}
             height={150}
-            className="mt-[48px] w-full h-full object-contain rounded-full relative z-10 transition-all duration-300 group-hover:scale-105 
+            className="mt-[48px] w-full h-full object-contain rounded-full relative z-10 transition-transform duration-300 group-hover:scale-105 
               shadow-lg 
               border-[3px] border-white/40 dark:border-blue-500/30 
               dark:shadow-blue-900/20
               dark:brightness-[0.75] dark:contrast-[1.05]
               ring-1 ring-purple-200/30 dark:ring-purple-500/20"
             priority
+            quality={85}
+            sizes="150px"
           />
         </motion.div>
 
@@ -309,6 +316,9 @@ export default function Hero() {
                 deleteSpeed: 30,
                 cursor: "▋",
                 loop: true,
+                skipAddStyles: true,
+                wrapperClassName: "typewriter-wrapper",
+                cursorClassName: "typewriter-cursor",
               }}
             />
           </div>

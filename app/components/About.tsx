@@ -237,8 +237,8 @@ export default function About() {
             >
               <div className="flex flex-col items-center text-center">
                 <div className="relative mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-xl"></div>
-                  <span className="relative text-5xl transform transition-transform duration-300 hover:scale-110 cursor-default inline-block">🎨</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-lg"></div>
+                  <span className="relative text-5xl transform transition-transform duration-300 hover:scale-105 cursor-default inline-block">🎨</span>
                 </div>
                 <h4 className="text-xl font-medium bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-4">
                   Innovation First
@@ -260,8 +260,8 @@ export default function About() {
             >
               <div className="flex flex-col items-center text-center">
                 <div className="relative mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-xl"></div>
-                  <span className="relative text-5xl transform transition-transform duration-300 hover:scale-110 cursor-default inline-block">⚡</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-lg"></div>
+                  <span className="relative text-5xl transform transition-transform duration-300 hover:scale-105 cursor-default inline-block">⚡</span>
                 </div>
                 <h4 className="text-xl font-medium bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent mb-4">
                   Performance Driven
