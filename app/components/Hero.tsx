@@ -252,16 +252,15 @@ export default function Hero() {
           className="relative w-full max-w-[150px] h-[150px] mx-auto mb-6 flex items-center justify-center group"
           whileHover={{ scale: 1.02 }}
         >
-          {/* Enhanced gradient for mobile image */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/40 via-purple-500/30 to-blue-500/40 dark:from-blue-600/30 dark:via-purple-600/25 dark:to-blue-600/30 rounded-full blur-3xl group-hover:blur-4xl transition-all duration-500"></div>
-          <div className="absolute inset-0 scale-75 bg-gradient-to-br from-blue-400/20 to-purple-400/20 dark:from-blue-400/15 dark:to-purple-400/15 rounded-full blur-xl opacity-80 group-hover:opacity-100 transition-all duration-500"></div>
+          {/* Simplified gradient for better performance */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-purple-500/30 dark:from-blue-600/20 dark:to-purple-600/20 rounded-full blur-2xl"></div>
           
           <Image
             src="/images/bg_removed_1_copy.png"
             alt="My profile picture"
             width={150}
             height={150}
-            className="mt-[48px] w-full h-full object-contain rounded-full relative z-10 transition-all duration-500 group-hover:scale-105 
+            className="mt-[48px] w-full h-full object-contain rounded-full relative z-10 transition-all duration-300 group-hover:scale-105 
               shadow-lg 
               border-[3px] border-white/40 dark:border-blue-500/30 
               dark:shadow-blue-900/20
