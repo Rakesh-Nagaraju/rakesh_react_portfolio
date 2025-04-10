@@ -2,7 +2,7 @@
 
 import React, { memo, useMemo } from "react";
 import Image from 'next/image';
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll } from "framer-motion";
 
 // Memoized core values section to prevent unnecessary re-renders
 const CoreValues = memo(() => {
@@ -164,7 +164,7 @@ ProfessionalCards.displayName = 'ProfessionalCards';
 
 const About = () => {
   const prefersReducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll();
+  // const { scrollYProgress } = useScroll();
   
   // Optimize animation variants based on user preferences
   const fadeInUp = useMemo(() => ({
