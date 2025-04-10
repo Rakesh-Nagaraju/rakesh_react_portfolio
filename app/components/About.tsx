@@ -268,13 +268,14 @@ const About = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-[#4079af]/20 to-[#79d2ff]/20 dark:from-[#3a6a8a]/20 dark:to-[#79d2ff]/20 rounded-xl blur-2xl"></div>
 
               <Image
-                src="/images/profile_pic_2.png"
+                src="/images/profile_pic_2_optimized.png"
                 alt="Me @LakeTahoe"
                 title="Me @LakeTahoe"
                 width={500}
                 height={700}
-                className="w-[70%] h-auto object-cover rounded-xl relative z-10 shadow-xl border border-white/15 dark:border-blue-500/20 dark:shadow-blue-900/10 dark:brightness-[0.75] dark:contrast-[1.05] dark:saturate-[0.95] ring-1 ring-blue-100/20 dark:ring-blue-500/10"
+                className="w-full md:w-[70%] h-auto object-cover rounded-xl relative z-10 shadow-xl border border-white/15 dark:border-blue-500/20 dark:shadow-blue-900/10 dark:brightness-[0.75] dark:contrast-[1.05] dark:saturate-[0.95] ring-1 ring-blue-100/20 dark:ring-blue-500/10"
                 priority
+                sizes="(max-width: 768px) 100vw, 70vw"
               />
             </div>
           </div>

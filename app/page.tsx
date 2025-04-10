@@ -446,7 +446,7 @@ export default function Home() {
   /* Dark Mode */
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
-
+  
   useEffect(() => {
     setMounted(true);
     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -2009,9 +2009,10 @@ export default function Home() {
                   p-5 rounded-lg
                   bg-white dark:bg-gray-900
                   border-2 border-transparent
-                  shadow-sm hover:shadow-md
+                  shadow-sm md:hover:shadow-md
+                  dark:shadow-gray-800/50 dark:md:hover:shadow-black/50
                   transition-all duration-300
-                  hover:-translate-y-1
+                  md:hover:-translate-y-1
                   relative
                   overflow-hidden
                 "

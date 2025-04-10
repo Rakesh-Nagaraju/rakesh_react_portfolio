@@ -64,11 +64,11 @@ interface ActionButtonsProps {
 }
 
 const ActionButtons = memo(({ isMobile = false }: ActionButtonsProps) => (
-  <div className={`flex ${isMobile ? 'flex-col gap-4 pt-6 w-full px-4' : 'flex-col sm:flex-row gap-4 sm:gap-6 pt-6 md:pt-8'}`}>
+  <div className={`flex ${isMobile ? 'flex-col gap-4 pt-6 w-full px-4 items-center' : 'flex-col sm:flex-row gap-4 sm:gap-6 pt-6 md:pt-8'}`}>
     <motion.a
       href="#footer-contact"
       className={`
-        inline-flex items-center gap-2 px-${isMobile ? '6' : '8'} py-${isMobile ? '3' : '4'}
+        inline-flex items-center justify-center gap-2 px-${isMobile ? '6' : '8'} py-${isMobile ? '3' : '4'}
         bg-gradient-to-r from-purple-600 to-pink-500
         dark:from-purple-500 dark:to-pink-400
         text-white
@@ -82,7 +82,7 @@ const ActionButtons = memo(({ isMobile = false }: ActionButtonsProps) => (
         before:bg-gradient-to-r before:from-white/0 before:via-white/20 before:to-white/0
         before:translate-x-[-200%] hover:before:translate-x-[200%]
         before:transition-transform before:duration-700
-        ${isMobile ? 'w-full' : ''}
+        ${isMobile ? 'w-full max-w-[280px]' : ''}
       `}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -109,7 +109,7 @@ const ActionButtons = memo(({ isMobile = false }: ActionButtonsProps) => (
         before:bg-gradient-to-r before:from-white/0 before:via-white/20 before:to-white/0
         before:translate-x-[-200%] hover:before:translate-x-[200%]
         before:transition-transform before:duration-700
-        ${isMobile ? 'w-full' : ''}
+        ${isMobile ? 'w-full max-w-[280px]' : ''}
       `}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -122,7 +122,7 @@ const ActionButtons = memo(({ isMobile = false }: ActionButtonsProps) => (
       href="#experience"
       title="View my professional experience"
       className={`
-        inline-flex items-center gap-2 px-${isMobile ? '6' : '8'} py-${isMobile ? '3' : '4'}
+        inline-flex items-center justify-center gap-2 px-${isMobile ? '6' : '8'} py-${isMobile ? '3' : '4'}
         bg-transparent
         border-2 border-gray-900 dark:border-white
         text-gray-900 dark:text-white
@@ -136,7 +136,7 @@ const ActionButtons = memo(({ isMobile = false }: ActionButtonsProps) => (
         before:bg-gradient-to-r before:from-gray-900/0 before:via-gray-900/10 before:to-gray-900/0
         before:translate-x-[-200%] hover:before:translate-x-[200%]
         before:transition-transform before:duration-700
-        ${isMobile ? 'w-full' : ''}
+        ${isMobile ? 'w-full max-w-[280px]' : ''}
       `}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
