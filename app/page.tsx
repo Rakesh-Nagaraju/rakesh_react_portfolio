@@ -519,7 +519,7 @@ export default function Home() {
       ]
     },
     {
-      name: "NLP/LLM",
+      name: "LLM",
       color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
       projects: [
         {
@@ -543,20 +543,49 @@ export default function Home() {
           imageUrl: "/images/projects/text-summarization.jpg",
           technologies: ["Python", "Transformers", "PyTorch", "HuggingFace"],
           role: "ML Engineer"
-        },
+        }
+      ]
+    },
+    {
+      name: "ML",
+      color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
+      projects: [
         {
-          id: 3,
-          title: "E-commerce Platform",
-          shortDescription: ["Full-stack development", "Real-time inventory management"],
-          longDescription: ["Built a full-stack e-commerce platform with real-time features.", "Implemented secure payment processing with Stripe integration.", "Developed real-time inventory management system.", "Created admin dashboard for product and order management."],
-          liveUrl: "https://github.com/raken-ai/ecommerce-platform",
-          githubUrl: "https://github.com/raken-ai/ecommerce-platform",
-          imageUrl: "/images/projects/ecommerce.jpg",
-          technologies: ["React", "Node.js", "MongoDB", "Stripe"],
-          role: "Full Stack Developer"
-        },
+          id: 1,
+          title: "Machine Learning Pipeline",
+          shortDescription: ["End-to-end ML pipeline", "Automated model training"],
+          longDescription: ["Developed an automated machine learning pipeline for model training and deployment.", "Implemented feature engineering and selection processes.", "Created automated model evaluation and comparison framework.", "Integrated with CI/CD pipeline for continuous deployment."],
+          liveUrl: "https://github.com/raken-ai/ml-pipeline",
+          githubUrl: "https://github.com/raken-ai/ml-pipeline",
+          imageUrl: "/images/projects/ml-pipeline.jpg",
+          technologies: ["Python", "Scikit-learn", "Pandas", "MLflow"],
+          role: "ML Engineer"
+        }
+      ]
+    },
+    {
+      name: "Multimodal",
+      color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
+      projects: [
         {
-          id: 4,
+          id: 1,
+          title: "Multimodal Search Engine",
+          shortDescription: ["Text-to-image search", "Cross-modal retrieval"],
+          longDescription: ["Developed a multimodal search engine supporting text-to-image and image-to-text search.", "Implemented cross-modal embedding learning.", "Built efficient indexing and retrieval system.", "Achieved 90% retrieval accuracy on benchmark datasets."],
+          liveUrl: "https://github.com/raken-ai/multimodal-search",
+          githubUrl: "https://github.com/raken-ai/multimodal-search",
+          imageUrl: "/images/projects/multimodal-search.jpg",
+          technologies: ["Python", "CLIP", "FAISS", "PyTorch"],
+          role: "ML Engineer"
+        }
+      ]
+    },
+    {
+      name: "Other",
+      color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
+      projects: [
+        {
+          id: 1,
           title: "Portfolio Website",
           shortDescription: ["Modern design", "Responsive layout"],
           longDescription: ["Designed and developed a modern portfolio website.", "Implemented responsive design for all device sizes.", "Added animations and interactive elements for better UX.", "Optimized for performance and SEO."],
@@ -1685,6 +1714,14 @@ export default function Home() {
 
   /* Projects State */
   const [currentProjects, setCurrentProjects] = useState<Project[]>([]);
+
+  // Update currentProjects when activeTab changes
+  useEffect(() => {
+    const activeTabData = projectTabs.find(tab => tab.name === activeTab);
+    if (activeTabData) {
+      setCurrentProjects(activeTabData.projects);
+    }
+  }, [activeTab, projectTabs]);
 
   const closeMenu = useCallback(() => {
     setIsMenuOpen(false);

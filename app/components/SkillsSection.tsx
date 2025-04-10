@@ -477,13 +477,13 @@ export default function SkillsSection() {
   // Render mobile popover
   const renderMobilePopover = (skill: Skill) => (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-white dark:bg-gray-900"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md"
     >
       {/* Header with back button */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200/50 dark:border-gray-800/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
         <div className="flex items-center gap-3">
           <span 
             className="text-3xl"
@@ -500,17 +500,17 @@ export default function SkillsSection() {
             setSelectedSkill(null);
             document.body.style.overflow = '';
           }}
-          className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="p-2 rounded-full hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors"
           aria-label="Close skill details"
         >
-          <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-6 h-6 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
       
       {/* Content */}
-      <div className="flex-1 p-4 overflow-y-auto">
+      <div className="flex-1 p-6 overflow-y-auto">
         <div className="space-y-4">
           {skill.message.split('\n').map((line, i) => (
             <motion.div
@@ -520,12 +520,12 @@ export default function SkillsSection() {
               transition={{ delay: i * 0.1 }}
             >
               <div 
-                className="p-4 rounded-lg bg-gray-50/80 dark:bg-gray-800/60
-                border border-gray-100 dark:border-gray-700/50
-                hover:bg-gray-100/80 dark:hover:bg-gray-800/80
-                transition-colors duration-300"
+                className="p-4 rounded-xl bg-white/50 dark:bg-gray-800/50
+                border border-gray-100/50 dark:border-gray-700/50
+                hover:bg-white/80 dark:hover:bg-gray-800/80
+                transition-all duration-300 shadow-sm"
               >
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">
                   {line.replace('• ', '')}
                 </p>
               </div>
@@ -533,6 +533,11 @@ export default function SkillsSection() {
           ))}
         </div>
       </div>
+
+      {/* Bottom gradient */}
+      <div 
+        className="h-16 bg-gradient-to-t from-white dark:from-gray-900 to-transparent absolute bottom-0 left-0 right-0 pointer-events-none"
+      />
     </motion.div>
   );
 
