@@ -2,7 +2,7 @@
 
 import React, { memo, useMemo } from "react";
 import Image from 'next/image';
-import { motion, useReducedMotion, useScroll } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 // Memoized core values section to prevent unnecessary re-renders
 const CoreValues = memo(() => {

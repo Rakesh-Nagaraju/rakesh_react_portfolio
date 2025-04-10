@@ -13,7 +13,6 @@ import { SiHuggingface } from "react-icons/si";
 
 import { FaGithub, FaBolt } from 'react-icons/fa';
 import { FiInstagram } from "react-icons/fi";
-import { AnimatePresence } from 'framer-motion';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 
 
@@ -1352,34 +1351,34 @@ export default function Home() {
   }, [activeTab]);
   
   // Function to toggle collapsed state
-  const toggleExperienceCollapse = () => {
-    const section = document.getElementById('experience');
+  //const toggleExperienceCollapse = () => {
+  //  const section = document.getElementById('experience');
   
-    if (!experienceCollapsed && section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //  if (!experienceCollapsed && section) {
+  //    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
   
       // Optional: add a short delay before collapsing for smoother UX
-      setTimeout(() => {
-        setExperienceCollapsed(true);
-      }, 300); // You can tweak this delay
-      return;
-    }
+  //    setTimeout(() => {
+  //      setExperienceCollapsed(true);
+  //    }, 300); // You can tweak this delay
+  //    return;
+  //  }
   
-    setExperienceCollapsed(false);
-  };
+  //  setExperienceCollapsed(false);
+  //};
   
   
-  const toggleProjectsCollapse = () => {
-    const section = document.getElementById('projects');
+  //const toggleProjectsCollapse = () => {
+  //  const section = document.getElementById('projects');
   
-    // If collapsing, scroll the user to the top of the Projects section smoothly
-    if (!projectsCollapsed && section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  //  // If collapsing, scroll the user to the top of the Projects section smoothly
+  //  if (!projectsCollapsed && section) {
+  //    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //  }
   
-    // Now toggle the collapse state
-    setProjectsCollapsed(!projectsCollapsed);
-  };
+  //  // Now toggle the collapse state
+  //  setProjectsCollapsed(!projectsCollapsed);
+  //};
 
   
   
