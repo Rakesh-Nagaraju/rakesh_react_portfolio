@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useCallback, memo } from "react";
 import { motion } from "framer-motion";
 import SkillsSection from "@/app/components/SkillsSection";
 import ExperienceModal, { useExperienceModal, experiences } from "@/app/components/ExperienceModal";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import Hero from "@/app/components/Hero";
 import About from "@/app/components/About";
@@ -1355,6 +1356,7 @@ export default function Home() {
       `}
       suppressHydrationWarning
     >
+      <SpeedInsights />
       {/* Mobile Menu Backdrop */}
       {isMenuOpen && (
         <div
