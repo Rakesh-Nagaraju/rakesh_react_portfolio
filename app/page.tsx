@@ -1342,13 +1342,13 @@ export default function Home() {
   };
 
   // Add state for managing collapsed sections on mobile
-  const [experienceCollapsed, setExperienceCollapsed] = useState(true);
-  const [projectsCollapsed, setProjectsCollapsed] = useState(true);
+  //const [experienceCollapsed, setExperienceCollapsed] = useState(true);
+  //const [projectsCollapsed, setProjectsCollapsed] = useState(true);
   
   // Reset collapse state when changing tabs
-  useEffect(() => {
-    setProjectsCollapsed(true);
-  }, [activeTab]);
+  //useEffect(() => {
+  //  setProjectsCollapsed(true);
+  //}, [activeTab]);
   
   // Function to toggle collapsed state
   //const toggleExperienceCollapse = () => {
