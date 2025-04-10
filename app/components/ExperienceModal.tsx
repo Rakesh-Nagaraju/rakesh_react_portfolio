@@ -218,8 +218,6 @@ SectionHeader.displayName = 'SectionHeader';
 
 // Main Modal Component
 const ExperienceModal = memo(({ isOpen, onClose, experience }: ExperienceModalProps) => {
-  if (!experience) return null;
-
   // Memoize the close handler
   const handleClose = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -230,6 +228,8 @@ const ExperienceModal = memo(({ isOpen, onClose, experience }: ExperienceModalPr
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Escape') onClose();
   }, [onClose]);
+
+  if (!experience) return null;
 
   return (
     <AnimatePresence>

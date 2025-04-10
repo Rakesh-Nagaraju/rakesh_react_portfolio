@@ -23,14 +23,15 @@ import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 
 
 export interface Project {
+  id: number;
   title: string;
   shortDescription: string[];
-  longDescription?: string[];
-  image?: string;
-  demoLink?: string;
-  githubLink?: string;
-  technologies?: string[];
-  role?: string;
+  longDescription: string[];
+  imageUrl: string;
+  technologies: string[];
+  githubUrl: string;
+  liveUrl: string;
+  role: string;
 }
 
 
@@ -108,10 +109,10 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
         </button>
 
         {/* Project Image */}
-        {project.image && (
+        {project.imageUrl && (
           <div className="relative h-[220px] w-full overflow-hidden rounded-t-2xl">
           <Image
-            src={project.image}
+            src={project.imageUrl}
               alt={`${project.title} preview`}
               width={1200}
               height={400}
@@ -125,9 +126,9 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
               <h3 className="text-2xl font-bold text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
                 {project.title}
               </h3>
-              {project.role && (
+              {project.shortDescription && project.shortDescription.length > 0 && (
                 <p className="text-gray-100 text-sm font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)]">
-                  Role: {project.role}
+                  {project.shortDescription[0]}
                 </p>
               )}
             </div>
@@ -165,7 +166,7 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
                 Project Details
               </h4>
               <ul className="space-y-3">
-                {project.longDescription.map((point, idx) => (
+                {project.longDescription.map((point: string, idx: number) => (
                   <motion.li
                     key={idx}
                     className="text-gray-600 dark:text-gray-400 text-sm relative pl-1"
@@ -185,12 +186,12 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
           )}
 
           {/* Links */}
-        {(project.demoLink || project.githubLink) && (
+        {(project.liveUrl || project.githubUrl) && (
             <div className="flex items-center justify-between pt-4 mt-6 border-t border-gray-200 dark:border-gray-800">
               <div className="flex gap-2">
-            {project.demoLink && (
+            {project.liveUrl && (
               <a
-                href={project.demoLink}
+                href={project.liveUrl}
                   className="
                       relative group/link flex items-center gap-1
                       text-xs text-orange-600 dark:text-orange-400
@@ -210,9 +211,9 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
                     <span>Live Demo</span>
               </a>
             )}
-            {project.githubLink && (
+            {project.githubUrl && (
               <a
-                href={project.githubLink}
+                href={project.githubUrl}
                   className="
                       relative group/link flex items-center gap-1
                       text-xs text-gray-700 dark:text-gray-300
@@ -332,11 +333,11 @@ const ProjectCard = memo(({ proj, index, openProjectModal }: ProjectCardProps) =
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
       
       {/* Project Image with Overlay */}
-      {proj.image && (
+      {proj.imageUrl && (
         <div className="relative h-[220px] w-full overflow-hidden rounded-t-2xl">
           <Image
             loading="lazy"
-            src={proj.image}
+            src={proj.imageUrl}
             alt={`${proj.title} image`}
             width={400}
             height={200}
@@ -352,9 +353,9 @@ const ProjectCard = memo(({ proj, index, openProjectModal }: ProjectCardProps) =
             <h3 className="relative text-xl font-bold text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
               {proj.title}
             </h3>
-            {proj.role && (
+            {proj.shortDescription && proj.shortDescription.length > 0 && (
               <p className="relative text-gray-100 text-sm font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)]">
-                Role: {proj.role}
+                {proj.shortDescription[0]}
               </p>
             )}
           </div>
@@ -365,7 +366,7 @@ const ProjectCard = memo(({ proj, index, openProjectModal }: ProjectCardProps) =
       <div className="flex-1 flex flex-col">
         {/* Description - Refined styling */}
         <div className="space-y-3 mb-6 flex-grow px-6 pt-6">
-          {proj.shortDescription.map((desc, idx) => (
+          {proj.shortDescription.map((desc: string, idx: number) => (
             <div 
               key={idx} 
               className="text-gray-600 dark:text-gray-400 text-sm relative pl-1"
@@ -382,9 +383,9 @@ const ProjectCard = memo(({ proj, index, openProjectModal }: ProjectCardProps) =
         {/* Links & View Details */}
         <div className="flex items-center justify-between mt-auto px-6 pb-6">
           <div className="flex gap-2">
-            {proj.demoLink && (
+            {proj.liveUrl && (
               <a
-                href={proj.demoLink}
+                href={proj.liveUrl}
                 onClick={(e) => e.stopPropagation()}
                 title={`View live demo of ${proj.title}`}
                 className="relative group/link flex items-center gap-1
@@ -402,9 +403,9 @@ const ProjectCard = memo(({ proj, index, openProjectModal }: ProjectCardProps) =
                 <span>Live Demo</span>
               </a>
             )}
-            {proj.githubLink && (
+            {proj.githubUrl && (
               <a
-                href={proj.githubLink}
+                href={proj.githubUrl}
                 onClick={(e) => e.stopPropagation()}
                 title={`View source code for ${proj.title} on GitHub`}
                 className="relative group/link flex items-center gap-1
@@ -443,76 +444,131 @@ ProjectCard.displayName = 'ProjectCard';
 
 export default function Home() {
   /* Dark Mode */
-  const [darkMode, setDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
-    // Get stored preference or system preference
-    const isDark = localStorage.getItem('darkMode') === 'true' || 
-                  (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    setDarkMode(isDark);
-    document.documentElement.classList.toggle('dark', isDark);
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setIsDarkMode(isDark);
   }, []);
 
-  // Scroll to top on page refresh/load
   useEffect(() => {
-    // Check if this is a page refresh by looking at the navigation type
-    if (window.performance) {
-      const navEntries = performance.getEntriesByType('navigation');
-      if (navEntries.length > 0 && (navEntries[0] as PerformanceNavigationTiming).type === 'reload') {
-        // This is a refresh, scroll to top
-        window.scrollTo(0, 0);
-      } else {
-        // Alternative method for browsers that don't support the above
-        window.scrollTo(0, 0);
-      }
-    } else {
-      // Fallback for browsers without the Performance API
-      window.scrollTo(0, 0);
+    if (mounted) {
+      document.documentElement.classList.toggle('dark', isDarkMode);
     }
+  }, [isDarkMode, mounted]);
 
-    // Also handle hash in URL (e.g., example.com/#experience)
-    if (window.location.hash) {
-      // If there's a hash, we'll need to scroll to that element after a small delay
-      setTimeout(() => {
-        const element = document.getElementById(window.location.hash.substring(1));
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          window.scrollTo(0, 0);
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  /* Experience Modal */
+  const { isExperienceModalOpen, openExperienceModal, closeExperienceModal, selectedExperience } = useExperienceModal();
+
+  /* Project Modal */
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+
+  const openProjectModal = useCallback((project: Project) => {
+    setSelectedProject(project);
+    setIsProjectModalOpen(true);
+  }, []);
+
+  const closeProjectModal = useCallback(() => {
+    setIsProjectModalOpen(false);
+    setSelectedProject(null);
+  }, []);
+
+  /* Project Tabs */
+  const [activeTab, setActiveTab] = useState("CV");
+
+  interface ProjectTab {
+    name: string;
+    color: string;
+    projects: Project[];
+  }
+
+  const projectTabs = useMemo<ProjectTab[]>(() => [
+    {
+      name: "CV",
+      color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
+      projects: [
+        {
+          id: 1,
+          title: "Object Detection Pipeline #9",
+          shortDescription: ["Used YOLOv5 to identify and classify objects in real time."],
+          longDescription: ["Built a chatbot using RAG architecture with custom knowledge base.", "Integrated vector search for efficient information retrieval.", "Fine-tuned language model for domain-specific responses.", "Achieved 85% accuracy on domain-specific queries."],
+          imageUrl: "/images/projects/object-detection.jpg",
+          technologies: ["Python", "PyTorch", "YOLOv5", "OpenCV", "TensorRT"],
+          githubUrl: "https://github.com/raken-ai/object-detection-pipeline",
+          liveUrl: "https://github.com/raken-ai/object-detection-pipeline",
+          role: "ML Engineer"
+        },
+        {
+          id: 2,
+          title: "Image Classification System",
+          shortDescription: ["Developed a custom CNN architecture for image classification."],
+          longDescription: ["Developed an abstractive text summarization system.", "Supported multi-document summarization with cross-document attention.", "Achieved ROUGE-1 score of 0.45 on CNN/Daily Mail dataset.", "Optimized for real-time processing of news articles."],
+          imageUrl: "/images/projects/image-classification.jpg",
+          technologies: ["Python", "TensorFlow", "Keras", "OpenCV"],
+          githubUrl: "https://github.com/raken-ai/image-classification",
+          liveUrl: "https://github.com/raken-ai/image-classification",
+          role: "ML Engineer"
         }
-      }, 100);
+      ]
+    },
+    {
+      name: "NLP/LLM",
+      color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
+      projects: [
+        {
+          id: 1,
+          title: "Chatbot with RAG",
+          shortDescription: ["Retrieval-Augmented Generation", "Custom knowledge base integration"],
+          longDescription: ["Built a chatbot using RAG architecture with custom knowledge base.", "Integrated vector search for efficient information retrieval.", "Fine-tuned language model for domain-specific responses.", "Achieved 85% accuracy on domain-specific queries."],
+          liveUrl: "https://github.com/raken-ai/rag-chatbot",
+          githubUrl: "https://github.com/raken-ai/rag-chatbot",
+          imageUrl: "/images/projects/rag-chatbot.jpg",
+          technologies: ["Python", "LangChain", "FAISS", "HuggingFace"],
+          role: "ML Engineer"
+        },
+        {
+          id: 2,
+          title: "Text Summarization",
+          shortDescription: ["Abstractive summarization", "Multi-document support"],
+          longDescription: ["Developed an abstractive text summarization system.", "Supported multi-document summarization with cross-document attention.", "Achieved ROUGE-1 score of 0.45 on CNN/Daily Mail dataset.", "Optimized for real-time processing of news articles."],
+          liveUrl: "https://github.com/raken-ai/text-summarization",
+          githubUrl: "https://github.com/raken-ai/text-summarization",
+          imageUrl: "/images/projects/text-summarization.jpg",
+          technologies: ["Python", "Transformers", "PyTorch", "HuggingFace"],
+          role: "ML Engineer"
+        },
+        {
+          id: 3,
+          title: "E-commerce Platform",
+          shortDescription: ["Full-stack development", "Real-time inventory management"],
+          longDescription: ["Built a full-stack e-commerce platform with real-time features.", "Implemented secure payment processing with Stripe integration.", "Developed real-time inventory management system.", "Created admin dashboard for product and order management."],
+          liveUrl: "https://github.com/raken-ai/ecommerce-platform",
+          githubUrl: "https://github.com/raken-ai/ecommerce-platform",
+          imageUrl: "/images/projects/ecommerce.jpg",
+          technologies: ["React", "Node.js", "MongoDB", "Stripe"],
+          role: "Full Stack Developer"
+        },
+        {
+          id: 4,
+          title: "Portfolio Website",
+          shortDescription: ["Modern design", "Responsive layout"],
+          longDescription: ["Designed and developed a modern portfolio website.", "Implemented responsive design for all device sizes.", "Added animations and interactive elements for better UX.", "Optimized for performance and SEO."],
+          liveUrl: "https://github.com/raken-ai/portfolio",
+          githubUrl: "https://github.com/raken-ai/portfolio",
+          imageUrl: "/images/projects/portfolio.jpg",
+          technologies: ["Next.js", "Tailwind CSS", "Framer Motion"],
+          role: "Frontend Developer"
+        }
+      ]
     }
-  }, []);
-
-  const toggleDarkMode = useCallback(() => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    document.documentElement.classList.toggle('dark', newDarkMode);
-    localStorage.setItem('darkMode', newDarkMode.toString());
-  }, [darkMode]);
-
-  /* Mobile Nav */
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const closeMenu = () => setIsMenuOpen(false);
-
-  // Experience Section
-  const { 
-    selectedExperience, 
-    isExperienceModalOpen, 
-    openExperienceModal, 
-    closeExperienceModal 
-  } = useExperienceModal();
-
-  // ==============================
-  // ADDED: handleNavClick FUNCTION
-  // ==============================
-  const handleNavClick = useCallback((secId: string) => {
-    setIsMenuOpen(false);
-    setActiveSection(secId);
-    document.getElementById(secId)?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  ], []);
 
   /* Scroll Spy Setup */
   const sections = useMemo(() => ["hero", "about", "experience", "projects", "footer-contact"], []);
@@ -1140,249 +1196,535 @@ export default function Home() {
     };
   }, []);
 
-  /* Projects (Tabs) 
-     Now each project has:
-     - shortDescription (shown on the card)
-     - longDescription (array of bullet points shown in the modal)
-  */
-  const [activeTab, setActiveTab] = useState("NLP/LLM");
-  
-  // Effect to reinitialize the progress bar when the tab changes
   useEffect(() => {
-    // Need to wait for the DOM to update after tab change
-    setTimeout(() => {
-      const progressBar = document.getElementById('projectsScrollProgress');
-      const projectContainer = document.getElementById('project-scroll-container');
+    // Insert a style element to hide scrollbars
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Add styles for horizontal scroll containers with visual feedback */
+      .horizontal-scroll-container {
+        cursor: grab;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        /* Prevent touch action conflicts */
+        touch-action: auto;
+        /* Add momentum scrolling */
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling */
+        scroll-behavior: smooth;
+        /* Hide scrollbar but keep functionality */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
       
-      if (progressBar && projectContainer) {
-        // Reset progress bar to 0 when tab changes
-        progressBar.style.width = '0%';
+      .horizontal-scroll-container::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .horizontal-scroll-container:active {
+        cursor: grabbing;
+      }
+      
+      /* When actively scrolling horizontally */
+      .horizontal-scroll-container.scrolling-x {
+        /* Prevent any vertical scrolling during horizontal swipes */
+        touch-action: pan-x;
+        overscroll-behavior: contain;
+      }
+
+      /* Visual indicators for scroll position */
+      .horizontal-scroll-container.at-start::before {
+        opacity: 0;
+      }
+      
+      .horizontal-scroll-container.at-end::after {
+        opacity: 0;
+      }
+
+      /* Add momentum scrolling for smoother experience */
+      .horizontal-scroll-container {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+      }
+
+      /* Enhance touch scrolling */
+      @media (hover: none) {
+        .horizontal-scroll-container {
+          -webkit-overflow-scrolling: touch;
+          scroll-snap-type: x mandatory;
+          scroll-behavior: smooth;
+          touch-action: pan-x;
+        }
+      }
+
+      /* Visual indicator for scrollable areas */
+      .scrollable-x::after {
+        content: "";
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        width: 40px;
+        height: 4px;
+        background: rgba(100, 100, 255, 0.3);
+        border-radius: 2px;
+        animation: pulseScroll 1.5s infinite;
+      }
+
+      @keyframes pulseScroll {
+        0% { opacity: 0.3; width: 20px; }
+        50% { opacity: 0.7; width: 40px; }
+        100% { opacity: 0.3; width: 20px; }
+      }
+
+      /* Enhanced snap points for better scrolling experience */
+      .horizontal-scroll-container > * {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+
+      /* Mobile optimizations - replace horizontal scroll with grid layout */
+      @media (max-width: 767px) {
+        .mobile-grid-layout {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 16px;
+          overflow-x: visible;
+          touch-action: auto;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          cursor: default;
+        }
+
+        .mobile-grid-layout > * {
+          width: 100% !important;
+          scroll-snap-align: none;
+          scroll-snap-stop: none;
+        }
+
+        .mobile-grid-layout::after,
+        .mobile-grid-layout::before {
+          display: none !important;
+        }
+
+        .scroll-indicator-container {
+          display: none !important;
+        }
+
+        /* Hide gradient indicators on mobile */
+        .scroll-gradient-indicators {
+          display: none !important;
+        }
         
-        // Manually trigger the scroll event to update the progress
+        /* Fix project tabs on mobile */
+        .mobile-tabs-container {
+          padding: 0.25rem !important;
+          border-radius: 0.5rem !important;
+          gap: 0.25rem !important;
+        }
+        
+        .mobile-tab-button {
+          border-radius: 0.5rem !important;
+          font-size: 0.75rem !important;
+          padding: 0.5rem 0.75rem !important;
+        }
+        
+        /* Collapsible sections for mobile */
+        .mobile-collapsible-container {
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .mobile-collapsible-container.collapsed {
+          max-height: 410px; /* Show only first card */
+        }
+        
+        .mobile-show-more-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          padding: 0.75rem;
+          margin-top: 0.5rem;
+          background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.9) 30%, white);
+          dark:background: linear-gradient(to bottom, transparent, rgba(2,11,20,0.9) 30%, #020b14);
+          border-radius: 0 0 0.5rem 0.5rem;
+          text-align: center;
+          font-weight: 500;
+          font-size: 0.875rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        
+        .mobile-show-more-button:hover {
+          background-color: rgba(255,255,255,0.1);
+        }
+      }
+
+      /* DISABLE HOVER EFFECTS FOR TOUCH DEVICES */
+      
+      /* Media query targeting touch devices */
+      @media (hover: none) {
+        /* Disable all hover transitions and animations */
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+        
+        /* Remove hover:* Tailwind classes effects for touch devices */
+        .hover\\:scale-\\[1\\.1\\]:hover,
+        .hover\\:scale-\\[1\\.05\\]:hover,
+        .hover\\:scale-110:hover,
+        .hover\\:scale-105:hover,
+        .hover\\:-translate-y-0\\.5:hover,
+        .hover\\:-translate-y-\\[3px\\]:hover,
+        .hover\\:-translate-y-\\[5px\\]:hover,
+        .hover\\:translate-y-\\[-3px\\]:hover,
+        .hover\\:translate-y-\\[-5px\\]:hover,
+        .hover\\:shadow-lg:hover,
+        .hover\\:shadow-md:hover,
+        .hover\\:shadow-xl:hover,
+        .hover\\:opacity-100:hover,
+        .hover\\:bg-gray-100:hover,
+        .hover\\:bg-gray-50:hover,
+        .hover\\:bg-gray-800:hover,
+        .hover\\:bg-blue-100\\/80:hover,
+        .hover\\:bg-blue-900\\/30:hover,
+        .hover\\:border-transparent:hover,
+        .hover\\:border-blue-200\\/50:hover,
+        .hover\\:text-gray-900:hover,
+        .hover\\:text-white:hover,
+        .hover\\:text-orange-700:hover,
+        .hover\\:text-orange-300:hover,
+        .hover\\:text-gray-700:hover,
+        .hover\\:text-gray-200:hover,
+        .hover\\:brightness-\\[0\\.8\\]:hover {
+          transform: none !important;
+          box-shadow: inherit !important;
+          opacity: inherit !important;
+          background-color: inherit !important;
+          border-color: inherit !important;
+          color: inherit !important;
+          filter: none !important;
+        }
+        
+        /* Disable any group-hover effects */
+        .group:hover .group-hover\\:opacity-0,
+        .group:hover .group-hover\\:opacity-100,
+        .group:hover .group-hover\\:translate-x-1,
+        .group:hover .group-hover\\:w-full,
+        .group:hover .group-hover\\:bg-blue-400,
+        .group:hover .group-hover\\:bg-blue-500,
+        .group\\/item:hover .group-hover\\/item\\:translate-x-1,
+        .group\\/item:hover .group-hover\\/item\\:w-full,
+        .group\\/item:hover .group-hover\\/item\\:bg-blue-400,
+        .group\\/item:hover .group-hover\\/item\\:bg-blue-500,
+        .group\\/link:hover .group-hover\\/link\\:translate-x-1 {
+          opacity: inherit !important;
+          transform: none !important;
+          width: auto !important;
+          background-color: inherit !important;
+        }
+        
+        /* Disable all :after and :before hover animations */
+        *:hover::after,
+        *:hover::before {
+          transform: none !important;
+          width: inherit !important;
+          opacity: inherit !important;
+        }
+        
+        /* Remove cursor changes on touch devices */
+        .cursor-pointer,
+        .cursor-grab,
+        .cursor-grabbing {
+          cursor: default !important;
+        }
+        
+        /* Ensure links still look tappable */
+        a, button {
+          -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+        }
+        
+        /* Disable image hover effects */
+        img:hover, 
+        .group:hover img,
+        .group-hover\\:scale-110 {
+          transform: none !important;
+        }
+        
+        /* Remove before/after hover effects for navigation */
+        nav a:hover::before,
+        nav a.active::before {
+          width: inherit !important;
+        }
+        
+        /* Remove scrollable-x indicators that rely on hover */
+        .scrollable-x::after {
+          display: none !important;
+        }
+        
+        /* Disable Framer Motion animations on mobile devices */
+        .mobile-grid-layout motion-div,
+        .mobile-grid-layout .motion-div,
+        .mobile-grid-layout [data-framer-component-type] {
+          transform: none !important;
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+      
+      /* Specific media query for mobile and small screens */
+      @media (max-width: 767px) {
+        /* Disable Framer Motion hover/tap animations */
+        [style*="transform"] {
+          transform: none !important;
+          transition: none !important;
+        }
+        
+        /* Disable hover effects on Framer Motion components */
+        [data-framer-component-type="hover"],
+        [data-framer-component-type="tap"] {
+          transform: none !important;
+          transition: none !important;
+        }
+        
+        /* Disable animations for motion components in our sections */
+        motion\.a, motion\.div, motion\.button,
+        .motion-a, .motion-div, .motion-button {
+          transform: none !important;
+          transition: none !important;
+          animation: none !important;
+        }
+        
+        /* Disable scroll animations for experience and project cards */
+        #experience motion.div,
+        #projects motion.div,
+        .mobile-collapsible-container motion.div,
+        .mobile-collapsible-container .motion-div,
+        .mobile-collapsible-container [data-framer-component-type] {
+          opacity: 1 !important;
+          transform: none !important;
+          animation: none !important;
+          transition: none !important;
+        }
+        
+        /* Target our custom data attribute */
+        [data-disable-animation-mobile="true"] {
+          opacity: 1 !important;
+          transform: none !important;
+          animation: none !important;
+          transition: max-height 0.3s ease-out !important; /* Keep only height transition */
+          will-change: max-height; /* Optimize the only transition we keep */
+        }
+        
+        /* Keep animations disabled after expand button is pressed */
+        .mobile-collapsible-container:not(.collapsed) * {
+          animation: none !important;
+          transition: none !important;
+          transform: none !important;
+          opacity: 1 !important;
+        }
+        
+        /* Force immediate visibility for expanded content */
+        #experience:not(.collapsed) motion.div,
+        #projects:not(.collapsed) motion.div {
+          opacity: 1 !important;
+          transform: none !important;
+          animation: none !important;
+        }
+        
+        /* Disable any whileInView animations */
+        [data-framer-component-type="whileInView"],
+        [data-motion="whileInView"] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        
+        /* Make sure expanded content is immediately visible */
+        .mobile-collapsible-container:not(.collapsed) {
+          transition: max-height 0.3s ease-out !important;
+        }
+      }
+    `;
+    document.head.appendChild(styleElement);
+
+    // Check project scroll container on initial render
+    setTimeout(() => {
+      const projectContainer = document.getElementById('project-scroll-container');
+      const progressBar = document.getElementById('projectsScrollProgress');
+      
+      if (projectContainer && progressBar) {
+        console.log('Project container found on mount:', {
+          scrollWidth: projectContainer.scrollWidth,
+          clientWidth: projectContainer.clientWidth,
+          hasScroll: projectContainer.scrollWidth > projectContainer.clientWidth
+        });
+        
+        // Manually trigger scroll update once
         const scrollEvent = new Event('scroll');
         projectContainer.dispatchEvent(scrollEvent);
-        
-        console.log('Tab changed, progress bar reset');
+      } else {
+        console.warn('Project container or progress bar not found on mount');
       }
-    }, 200);
-  }, [activeTab]);
+      
+      // Enhance horizontal scrolling for mobile
+      const enhanceHorizontalScrolling = (selector: string) => {
+        const containers = document.querySelectorAll(selector);
+        
+        containers.forEach(container => {
+          let isScrollingHorizontally = false;
+          let startX = 0;
+          let startY = 0;
+          let startScrollLeft = 0;
+          
+          // Apply mobile grid layout if needed
+          const handleResize = () => {
+            if (window.innerWidth < 768) { // Mobile view
+              container.classList.add('mobile-grid-layout');
+              container.classList.remove('horizontal-scroll-container');
+            } else { // Desktop view
+              container.classList.remove('mobile-grid-layout');
+              container.classList.add('horizontal-scroll-container');
+            }
+          };
+          
+          // Initial check
+          handleResize();
+          
+          // Listen for resize events
+          window.addEventListener('resize', handleResize);
+          
+          // Add touch event handlers for desktop only
+          container.addEventListener('touchstart', ((e: Event) => {
+            // Skip for mobile grid layout
+            if (window.innerWidth < 768) return;
+            
+            const touchEvent = e as TouchEvent;
+            const touch = touchEvent.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            startScrollLeft = (container as HTMLElement).scrollLeft;
+            isScrollingHorizontally = false; // Reset the flag on new touch
+            (container as HTMLElement).classList.remove('scrolling-x');
+          }) as EventListener);
+          
+          container.addEventListener('touchmove', ((e: Event) => {
+            // Skip for mobile grid layout
+            if (window.innerWidth < 768) return;
+            
+            const touchEvent = e as TouchEvent;
+            if (touchEvent.touches.length > 1) return; // Ignore multi-touch
+            
+            const touch = touchEvent.touches[0];
+            const deltaX = startX - touch.clientX;
+            const deltaY = Math.abs(startY - touch.clientY);
+            
+            // If clear horizontal movement and minimal vertical movement or already in horizontal scrolling mode
+            if ((Math.abs(deltaX) > 10 && deltaY < Math.abs(deltaX) * 0.7) || isScrollingHorizontally) {
+              isScrollingHorizontally = true;
+              (container as HTMLElement).classList.add('scrolling-x');
+              
+              // Scroll the container horizontally
+              (container as HTMLElement).scrollLeft = startScrollLeft + deltaX;
+              
+              // Prevent default only when we're sure it's horizontal scrolling
+              if (isScrollingHorizontally) {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            }
+          }) as EventListener, { passive: false }); // Important: passive: false allows preventDefault to work
+          
+          container.addEventListener('touchend', (() => {
+            // Skip for mobile grid layout
+            if (window.innerWidth < 768) return;
+            
+            // Keep the flag and class for a short period to prevent immediate vertical scrolling
+            setTimeout(() => {
+              isScrollingHorizontally = false;
+              (container as HTMLElement).classList.remove('scrolling-x');
+            }, 50);
+          }) as EventListener);
+          
+          // Add visual indicators for scrollable areas
+          container.addEventListener('mouseenter', () => {
+            if (window.innerWidth >= 768 && (container as HTMLElement).scrollWidth > (container as HTMLElement).clientWidth) {
+              document.body.style.cursor = 'grab';
+              (container as HTMLElement).classList.add('scrollable-x');
+            }
+          });
+          
+          container.addEventListener('mouseleave', () => {
+            document.body.style.cursor = '';
+            (container as HTMLElement).classList.remove('scrollable-x');
+          });
+        });
+      };
+      
+      // Apply enhanced scrolling
+      enhanceHorizontalScrolling('#projects .overflow-x-auto, #experience .overflow-x-auto, .horizontal-scroll-container');
+      
+    }, 1000); // Check after 1 second to ensure DOM is fully rendered
 
-  const projectTabs = [
-    {
-      name: "CV",
-      color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
-      projects: [
-        {
-          title: "Object Detection Pipeline #9",
-          shortDescription: [
-            "YOLO-based real-time detection",
-            "Optimized for speed on edge devices"
-          ],
-          longDescription: [
-            "Used YOLOv5 to identify and classify objects in real time.",
-            "Integrated with OpenCV for real-time video processing.",
-            "Achieved 95% accuracy on custom dataset."
-          ],
-          demoLink: "#",
-          githubLink: "#",
-          image: "/images/ai-side-robot.jpg",
-          technologies: ["YOLOv5", "Python", "OpenCV"],
-          role: "Lead Developer",
-        },
-      ],
-    },
-    {
-      name: "NLP/LLM",
-      color: "bg-[linear-gradient(332deg,_#f0f0ff_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#23232f_0%,_#ffffff00_48%)]",
-      projects: [
-        {
-          title: "RAG System",
-          shortDescription: [
-            "Retrieval-augmented generation for enterprise knowledge."
-          ],
-          longDescription: [
-            "Implemented Elasticsearch for context retrieval.",
-            "Used Hugging Face Transformers for generative responses.",
-            "Improved response accuracy by 20% after fine-tuning."
-          ],
-          demoLink: "#",
-          githubLink: "#",
-          image: "/images/placeholder.jpg",
-          technologies: ["Python", "Transformers", "Elasticsearch"],
-          role: "AI Engineer",
-        },
-        {
-          title: "AI News Bot",
-          shortDescription: [
-            "NLP-driven aggregator for personalized headlines."
-          ],
-          longDescription: [
-            "Scraped multiple news APIs for real-time updates.",
-            "Used NLTK for text processing and classification.",
-            "Front-end built with React for subscription-based channels."
-          ],
-          demoLink: "#",
-          githubLink: "#",
-          image: "/images/placeholder.jpg",
-          technologies: ["Python", "NLTK", "React"],
-          role: "Full Stack Developer",
-        },
-      ],
-    },
-    {
-      name: "Multimodal",
-      color: "bg-[linear-gradient(332deg,_#fff0f0_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#49202d94_0%,_#ffffff00_48%)]",
-      projects: [
-        {
-          title: "Vision + Language Model",
-          shortDescription: [
-            "CLIP + GPT for image captioning & Q&A."
-          ],
-          longDescription: [
-            "Combined CLIP embeddings with GPT-3 for advanced image Q&A.",
-            "Deployed on AWS with GPU instances for real-time inference.",
-            "Conducted user tests yielding 85% success in open-ended Q&A."
-          ],
-          demoLink: "#",
-          githubLink: "#",
-          image: "/images/placeholder.jpg",
-          technologies: ["Python", "PyTorch", "GPT-3", "CLIP"],
-          role: "AI Researcher",
-        },
-      ],
-    },
-    {
-      name: "ML",
-      color: "bg-[linear-gradient(332deg,_#f0fffb_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#12252094_0%,_#ffffff00_48%)]",
-      projects: [
-        {
-          title: "Recommendation Engine",
-          shortDescription: [
-            "Collaborative filtering for personalization."
-          ],
-          longDescription: [
-            "Implemented matrix factorization for product recommendations.",
-            "Optimized model with hyperparameter tuning, leading to 10% lift in CTR.",
-            "Integrated solution into client's microservice architecture."
-          ],
-          demoLink: "#",
-          githubLink: "#",
-          image: "/images/placeholder.jpg",
-          technologies: ["Scikit-learn", "Python", "Pandas"],
-          role: "Machine Learning Engineer",
-        },
-        {
-          title: "Time Series Forecasting",
-          shortDescription: [
-            "Predictive models using ARIMA, LSTM, Prophet."
-          ],
-          longDescription: [
-            "Benchmarked ARIMA vs. LSTM for stock price predictions.",
-            "Built an automated pipeline for daily training & inference.",
-            "Reduced MSE by 12% using Prophet's advanced seasonality."
-          ],
-          demoLink: "#",
-          githubLink: "#",
-          image: "/images/placeholder.jpg",
-          technologies: ["Python", "TensorFlow", "Prophet"],
-          role: "Data Scientist",
-        },
-      ],
-    },
-  ];
-
-  
-
-  // For Project Modal
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false);
-
-  const openProjectModal = useCallback((proj: Project) => {
-    setSelectedProject(proj);
-    setIsProjectModalOpen(true);
+    return () => {
+      document.head.removeChild(styleElement);
+    };
   }, []);
 
-  const closeProjectModal = useCallback(() => {
-    setSelectedProject(null);
-    setIsProjectModalOpen(false);
+  /* Menu State */
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  /* Projects State */
+  const [currentProjects, setCurrentProjects] = useState<Project[]>([]);
+
+  const closeMenu = useCallback(() => {
+    setIsMenuOpen(false);
   }, []);
 
-  // Memoize the current projects to prevent unnecessary recalculations
-  const currentProjects = useMemo(() => {
-    const currentTabObj = projectTabs.find((t) => t.name === activeTab);
-    return currentTabObj ? currentTabObj.projects : [];
-  }, [activeTab, projectTabs]);
+  const handleNavClick = useCallback((sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      closeMenu();
+    }
+  }, [closeMenu]);
 
-  // Only render dark mode toggle after mounting
-  const renderDarkModeButton = () => {
-    if (!mounted) return null;
-    
-    return (
-      <button
-        onClick={toggleDarkMode}
-        className="
-          w-9 h-9
-          flex items-center justify-center
-          rounded-full
-          border border-transparent
-          hover:brightness-[0.8]
-          bg-transparent
-          ml-3
-          focus:outline-none
-        "
-        aria-label="Toggle Dark Mode"
-      >
-        {darkMode ? (
-          <HiOutlineSun className="h-5 w-5" />
-        ) : (
-          <HiOutlineMoon className="h-5 w-5" />
-        )}
-      </button>
-    );
-  };
-
-  // Add state for managing collapsed sections on mobile
-  //const [experienceCollapsed, setExperienceCollapsed] = useState(true);
-  //const [projectsCollapsed, setProjectsCollapsed] = useState(true);
-  
-  // Reset collapse state when changing tabs
-  //useEffect(() => {
-  //  setProjectsCollapsed(true);
-  //}, [activeTab]);
-  
-  // Function to toggle collapsed state
-  //const toggleExperienceCollapse = () => {
-  //  const section = document.getElementById('experience');
-  
-  //  if (!experienceCollapsed && section) {
-  //    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  
-      // Optional: add a short delay before collapsing for smoother UX
-  //    setTimeout(() => {
-  //      setExperienceCollapsed(true);
-  //    }, 300); // You can tweak this delay
-  //    return;
-  //  }
-  
-  //  setExperienceCollapsed(false);
-  //};
-  
-  
-  //const toggleProjectsCollapse = () => {
-  //  const section = document.getElementById('projects');
-  
-  //  // If collapsing, scroll the user to the top of the Projects section smoothly
-  //  if (!projectsCollapsed && section) {
-  //    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  //  }
-  
-  //  // Now toggle the collapse state
-  //  setProjectsCollapsed(!projectsCollapsed);
-  //};
-
-  
-  
-  
+  useEffect(() => {
+    // Initialize projects
+    setCurrentProjects([
+      {
+        id: 1,
+        title: "Project 1",
+        shortDescription: ["Description for Project 1"],
+        longDescription: ["Description for Project 1"],
+        imageUrl: "/project1.jpg",
+        technologies: ["React", "TypeScript", "Node.js"],
+        githubUrl: "https://github.com/yourusername/project1",
+        liveUrl: "https://project1.com",
+        role: "Full Stack Developer"
+      },
+      {
+        id: 2,
+        title: "Project 2",
+        shortDescription: ["Description for Project 2"],
+        longDescription: ["Description for Project 2"],
+        imageUrl: "/project2.jpg",
+        technologies: ["Next.js", "Tailwind CSS", "MongoDB"],
+        githubUrl: "https://github.com/yourusername/project2",
+        liveUrl: "https://project2.com",
+        role: "Frontend Developer"
+      }
+    ]);
+  }, []);
 
   return (
     <main
@@ -1407,7 +1749,7 @@ export default function Home() {
         className={`
           fixed w-full top-0 z-50
           backdrop-blur-md
-          ${darkMode ? "text-white" : "40 text-gray-900"}
+          ${isDarkMode ? "text-white" : "40 text-gray-900"}
         `}
       >
         <div className=" mx-auto flex items-center justify-between py-3 px-4 md:px-8 bg-[#ffffff66] dark:bg-[#02020266]">
@@ -1477,7 +1819,26 @@ export default function Home() {
               );
             })}
             {/* Dark Mode Toggle (Desktop) */}
-            {renderDarkModeButton()}
+            <button
+              onClick={toggleDarkMode}
+              className="
+                w-9 h-9
+                flex items-center justify-center
+                rounded-full
+                border border-transparent
+                hover:brightness-[0.8]
+                bg-transparent
+                ml-3
+                focus:outline-none
+              "
+              aria-label="Toggle Dark Mode"
+            >
+              {isDarkMode ? (
+                <HiOutlineSun className="h-5 w-5" />
+              ) : (
+                <HiOutlineMoon className="h-5 w-5" />
+              )}
+            </button>
           </nav>
 
           {/* Mobile Nav Toggle (Hamburger) */}
@@ -1489,21 +1850,21 @@ export default function Home() {
             <div
               className={`
                 w-6 h-0.5 mb-1 transition-all
-                ${darkMode ? "bg-white" : "bg-black"}
+                ${isDarkMode ? "bg-white" : "bg-black"}
                 ${isMenuOpen ? "transform rotate-45 translate-y-1.5" : ""}
               `}
             />
             <div
               className={`
                 w-6 h-0.5 mb-1 transition-all
-                ${darkMode ? "bg-white" : "bg-black"}
+                ${isDarkMode ? "bg-white" : "bg-black"}
                 ${isMenuOpen ? "opacity-0" : ""}
               `}
             />
             <div
               className={`
                 w-6 h-0.5 transition-all
-                ${darkMode ? "bg-white" : "bg-black"}
+                ${isDarkMode ? "bg-white" : "bg-black"}
                 ${isMenuOpen ? "-rotate-45 -translate-y-1" : ""}
               `}
             />
@@ -1552,7 +1913,26 @@ export default function Home() {
 
             {/* Dark Mode Toggle (Mobile) */}
             <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
-              {renderDarkModeButton()}
+              <button
+                onClick={toggleDarkMode}
+                className="
+                  w-9 h-9
+                  flex items-center justify-center
+                  rounded-full
+                  border border-transparent
+                  hover:brightness-[0.8]
+                  bg-transparent
+                  ml-3
+                  focus:outline-none
+                "
+                aria-label="Toggle Dark Mode"
+              >
+                {isDarkMode ? (
+                  <HiOutlineSun className="h-5 w-5" />
+                ) : (
+                  <HiOutlineMoon className="h-5 w-5" />
+                )}
+              </button>
             </div>
           </nav>
         )}
