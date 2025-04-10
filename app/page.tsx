@@ -1789,29 +1789,39 @@ export default function Home() {
   useEffect(() => {
     // Initialize projects
     setCurrentProjects([
-      {
-        id: 1,
-        title: "Project 1",
-        shortDescription: ["Description for Project 1"],
-        longDescription: ["Description for Project 1"],
-        imageUrl: "/project1.jpg",
-        technologies: ["React", "TypeScript", "Node.js"],
-        githubUrl: "https://github.com/yourusername/project1",
-        liveUrl: "https://project1.com",
-        role: "Full Stack Developer"
-      },
-      {
-        id: 2,
-        title: "Project 2",
-        shortDescription: ["Description for Project 2"],
-        longDescription: ["Description for Project 2"],
-        imageUrl: "/project2.jpg",
-        technologies: ["Next.js", "Tailwind CSS", "MongoDB"],
-        githubUrl: "https://github.com/yourusername/project2",
-        liveUrl: "https://project2.com",
-        role: "Frontend Developer"
-      }
-    ]);
+        {
+          id: 1,
+          title: "Real-time Object Detection System",
+          shortDescription: ["Developed a real-time object detection system using YOLOv5 for industrial applications."],
+          longDescription: [
+            "Implemented YOLOv5 architecture for high-speed object detection",
+            "Optimized model for edge deployment with TensorRT",
+            "Achieved 95% mAP on custom industrial dataset",
+            "Integrated with industrial cameras for real-time processing"
+          ],
+          imageUrl: "/images/projects/object-detection.jpg",
+          technologies: ["Python", "PyTorch", "YOLOv5", "OpenCV", "TensorRT"],
+          githubUrl: "https://github.com/raken-ai/object-detection-pipeline",
+          liveUrl: "https://github.com/raken-ai/object-detection-pipeline",
+          role: "ML Engineer"
+        },
+        {
+          id: 2,
+          title: "Multi-class Image Classification",
+          shortDescription: ["Built a custom CNN architecture for industrial defect detection."],
+          longDescription: [
+            "Designed and trained custom CNN architecture",
+            "Implemented data augmentation pipeline",
+            "Achieved 98% accuracy on test dataset",
+            "Deployed model for real-time inference"
+          ],
+          imageUrl: "/images/projects/image-classification.jpg",
+          technologies: ["Python", "TensorFlow", "Keras", "OpenCV"],
+          githubUrl: "https://github.com/raken-ai/image-classification",
+          liveUrl: "https://github.com/raken-ai/image-classification",
+          role: "ML Engineer"
+        }
+      ]);
   }, []);
 
   return (
