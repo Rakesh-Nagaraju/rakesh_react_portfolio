@@ -1,6 +1,6 @@
 "use client";
 import Image from 'next/image';
-import { useState, useMemo, useEffect} from "react";
+import { useState, useMemo, useEffect, useCallback, memo } from "react";
 import { motion } from "framer-motion";
 import SkillsSection from "@/app/components/SkillsSection";
 import ExperienceModal, { useExperienceModal, experiences } from "@/app/components/ExperienceModal";
@@ -169,19 +169,16 @@ function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
                 {project.longDescription.map((point, idx) => (
                   <motion.li
                     key={idx}
-                    className="text-gray-600 dark:text-gray-400 text-sm relative pl-1 group/item overflow-hidden"
+                    className="text-gray-600 dark:text-gray-400 text-sm relative pl-1"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.1 }}
                   >
-                    {/* Subtle left indicator instead of gradient - matching project cards */}
-                    <div className="absolute left-0 top-0 w-[1px] h-full bg-gray-300 dark:bg-gray-700 group-hover/item:bg-blue-400 dark:group-hover/item:bg-blue-500 transition-colors duration-300"></div>
+                    {/* Simple bullet point */}
+                    <div className="absolute left-0 top-0 w-[1px] h-full bg-gray-300 dark:bg-gray-700"></div>
                     
-                    {/* Subtle background highlight on hover */}
-                    <div className="absolute left-0 top-0 w-0 h-full bg-gray-100 dark:bg-gray-800/50 group-hover/item:w-full transition-all duration-500 rounded-r-md"></div>
-                    
-                    {/* Text content with reduced padding */}
-                    <p className="relative py-1.5 pl-2 pr-1 leading-relaxed group-hover/item:translate-x-1 transition-transform duration-300">{point}</p>
+                    {/* Text content */}
+                    <p className="relative py-1.5 pl-2 pr-1 leading-relaxed">{point}</p>
                   </motion.li>
                 ))}
               </ul>
@@ -255,6 +252,196 @@ function CopyrightYear() {
   return year;
 }
 
+// Add proper TypeScript interfaces
+interface ProjectTab {
+  name: string;
+  color: string;
+  projects: Project[];
+}
+
+interface ProjectTabsProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  projectTabs: ProjectTab[];
+}
+
+interface ProjectCardProps {
+  proj: Project;
+  index: number;
+  openProjectModal: (proj: Project) => void;
+}
+
+// Memoize the project tabs to prevent unnecessary re-renders
+const ProjectTabs = memo(({ activeTab, setActiveTab, projectTabs }: ProjectTabsProps) => {
+  return (
+    <div className="mb-12 flex justify-center">
+      <div className="no-scrollbar inline-flex gap-6 px-6 py-2 overflow-x-auto backdrop-blur-md rounded-full bg-white/80 dark:bg-gray-900/50 border border-gray-200/50 dark:border-gray-700/50 shadow-lg shadow-gray-200/20 dark:shadow-gray-950/20 w-full md:w-auto md:mx-auto max-w-[95vw] mobile-tabs-container">
+        {projectTabs.map((tab: ProjectTab) => {
+          const isActive = activeTab === tab.name;
+          return (
+            <button
+              key={tab.name}
+              onClick={() => setActiveTab(tab.name)}
+              className={`
+                relative cursor-pointer text-sm font-medium px-4 py-2
+                rounded-full transition-all duration-300
+                mobile-tab-button
+                ${
+                  isActive
+                    ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-md shadow-purple-500/20"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                }
+              `}
+            >
+              {tab.name}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+});
+
+ProjectTabs.displayName = 'ProjectTabs';
+
+// Memoize the project card component
+const ProjectCard = memo(({ proj, index, openProjectModal }: ProjectCardProps) => {
+  return (
+    <motion.div
+      key={proj.title}
+      onClick={() => openProjectModal(proj)}
+      className={`
+        group cursor-pointer
+        p-0 rounded-2xl
+        bg-gradient-to-br from-white to-blue-50/50 dark:from-gray-900/80 dark:to-blue-900/20
+        shadow-sm hover:shadow-md
+        backdrop-blur-sm
+        transition-all duration-300
+        hover:translate-y-[-3px]
+        w-full
+        h-[400px]
+        flex flex-col
+        relative
+        overflow-hidden
+      `}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      data-disable-animation-mobile="true"
+    >
+      {/* Decorative accent - matching experience cards */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
+      
+      {/* Project Image with Overlay */}
+      {proj.image && (
+        <div className="relative h-[220px] w-full overflow-hidden rounded-t-2xl">
+          <Image
+            loading="lazy"
+            src={proj.image}
+            alt={`${proj.title} image`}
+            width={400}
+            height={200}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            quality={75}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+          {/* Enhanced gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-80 group-hover:opacity-85 transition-opacity duration-300" />
+          
+          {/* Project Title Overlay - Enhanced visibility */}
+          <div className="absolute bottom-0 left-0 right-0 p-6">
+            <h3 className="relative text-xl font-bold text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
+              {proj.title}
+            </h3>
+            {proj.role && (
+              <p className="relative text-gray-100 text-sm font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)]">
+                Role: {proj.role}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Content Container */}
+      <div className="flex-1 flex flex-col">
+        {/* Description - Refined styling */}
+        <div className="space-y-3 mb-6 flex-grow px-6 pt-6">
+          {proj.shortDescription.map((desc, idx) => (
+            <div 
+              key={idx} 
+              className="text-gray-600 dark:text-gray-400 text-sm relative pl-1"
+            >
+              {/* Simple bullet point */}
+              <div className="absolute left-0 top-0 w-[1px] h-full bg-gray-300 dark:bg-gray-700"></div>
+              
+              {/* Text content */}
+              <p className="relative py-1.5 pl-2 pr-1 leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Links & View Details */}
+        <div className="flex items-center justify-between mt-auto px-6 pb-6">
+          <div className="flex gap-2">
+            {proj.demoLink && (
+              <a
+                href={proj.demoLink}
+                onClick={(e) => e.stopPropagation()}
+                title={`View live demo of ${proj.title}`}
+                className="relative group/link flex items-center gap-1
+                text-xs text-orange-600 dark:text-orange-400
+                hover:text-orange-700 dark:hover:text-orange-300
+                font-medium bg-gradient-to-r from-orange-400/10 to-pink-400/10
+                dark:from-orange-600/20 dark:to-pink-600/20
+                px-3 py-2 rounded-full
+                hover:shadow-md hover:-translate-y-0.5
+                transition-all duration-300"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaBolt className="w-3 h-3" />
+                <span>Live Demo</span>
+              </a>
+            )}
+            {proj.githubLink && (
+              <a
+                href={proj.githubLink}
+                onClick={(e) => e.stopPropagation()}
+                title={`View source code for ${proj.title} on GitHub`}
+                className="relative group/link flex items-center gap-1
+                text-xs text-gray-700 dark:text-gray-300
+                hover:text-gray-900 dark:hover:text-white
+                font-medium bg-gradient-to-r from-gray-200/70 to-gray-100/70
+                dark:from-gray-700/70 dark:to-gray-800/70
+                px-3 py-2 rounded-full
+                hover:shadow-md hover:-translate-y-0.5
+                transition-all duration-300"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaGithub className="w-3 h-3" />
+                <span>Source Code</span>
+              </a>
+            )}
+          </div>
+          
+          {/* Compact View Details button */}
+          <div className="text-blue-500 dark:text-blue-400 text-xs font-medium opacity-60 group-hover:opacity-100 transition-opacity">
+            <span className="px-2 py-1 rounded-full bg-blue-50/50 dark:bg-blue-900/20 group-hover:bg-blue-100/80 dark:group-hover:bg-blue-900/30 transition-colors flex items-center">
+              <span className="hidden sm:inline mr-1">Details</span>
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+});
+
+ProjectCard.displayName = 'ProjectCard';
+
 export default function Home() {
   /* Dark Mode */
   const [darkMode, setDarkMode] = useState(false);
@@ -300,12 +487,12 @@ export default function Home() {
     }
   }, []);
 
-  const toggleDarkMode = () => {
+  const toggleDarkMode = useCallback(() => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     document.documentElement.classList.toggle('dark', newDarkMode);
     localStorage.setItem('darkMode', newDarkMode.toString());
-  };
+  }, [darkMode]);
 
   /* Mobile Nav */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -322,14 +509,11 @@ export default function Home() {
   // ==============================
   // ADDED: handleNavClick FUNCTION
   // ==============================
-  function handleNavClick(secId: string) {
-    // 1) Close the mobile menu
+  const handleNavClick = useCallback((secId: string) => {
     setIsMenuOpen(false);
-    // 2) Force the nav highlight to update right away
     setActiveSection(secId);
-    // 3) Smooth scroll to the target section
     document.getElementById(secId)?.scrollIntoView({ behavior: "smooth" });
-  }
+  }, []);
 
   /* Scroll Spy Setup */
   const sections = useMemo(() => ["hero", "about", "experience", "projects", "footer-contact"], []);
@@ -494,6 +678,17 @@ export default function Home() {
         scroll-behavior: smooth;
         /* Prevent touch action conflicts */
         touch-action: auto;
+        /* Add momentum scrolling */
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling */
+        scroll-behavior: smooth;
+        /* Hide scrollbar but keep functionality */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      
+      .horizontal-scroll-container::-webkit-scrollbar {
+        display: none;
       }
       
       .horizontal-scroll-container:active {
@@ -505,6 +700,31 @@ export default function Home() {
         /* Prevent any vertical scrolling during horizontal swipes */
         touch-action: pan-x;
         overscroll-behavior: contain;
+      }
+
+      /* Visual indicators for scroll position */
+      .horizontal-scroll-container.at-start::before {
+        opacity: 0;
+      }
+      
+      .horizontal-scroll-container.at-end::after {
+        opacity: 0;
+      }
+
+      /* Add momentum scrolling for smoother experience */
+      .horizontal-scroll-container {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+      }
+
+      /* Enhance touch scrolling */
+      @media (hover: none) {
+        .horizontal-scroll-container {
+          -webkit-overflow-scrolling: touch;
+          scroll-snap-type: x mandatory;
+          scroll-behavior: smooth;
+          touch-action: pan-x;
+        }
       }
 
       /* Visual indicator for scrollable areas */
@@ -1078,41 +1298,21 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState<boolean>(false);
 
-  const openProjectModal = (proj: Project) => {
+  const openProjectModal = useCallback((proj: Project) => {
     setSelectedProject(proj);
     setIsProjectModalOpen(true);
-  };
+  }, []);
 
-  const closeProjectModal = () => {
+  const closeProjectModal = useCallback(() => {
     setSelectedProject(null);
     setIsProjectModalOpen(false);
-  };
+  }, []);
 
-  // Parallax
-  // const { scrollY } = useScroll();
-  // const rawY = useTransform(scrollY, [0, 300], [0, -150]);
-  // const backgroundY = useSpring(rawY, { stiffness: 100, damping: 20 });
-
-  // const [bgImage, setBgImage] = useState("");
-
-  // useEffect(() => {
-  //   const updateBgImage = () => {
-  //     const width = window.innerWidth;
-  //     if (width < 768) {
-  //       setBgImage("/images/final-bg-1080p.jpg");
-  //     } else if (width < 1024) {
-  //       setBgImage("/images/final-bg-1080p.jpg");
-  //     } else {
-  //       setBgImage("/images/final-bg-1080p.jpg");
-  //     }
-  //   };
-  //   updateBgImage();
-  //   window.addEventListener("resize", updateBgImage);
-  //   return () => window.removeEventListener("resize", updateBgImage);
-  // }, [darkMode]);
-
-  const currentTabObj = projectTabs.find((t) => t.name === activeTab);
-  const currentProjects = currentTabObj ? currentTabObj.projects : [];
+  // Memoize the current projects to prevent unnecessary recalculations
+  const currentProjects = useMemo(() => {
+    const currentTabObj = projectTabs.find((t) => t.name === activeTab);
+    return currentTabObj ? currentTabObj.projects : [];
+  }, [activeTab, projectTabs]);
 
   // Only render dark mode toggle after mounting
   const renderDarkModeButton = () => {
@@ -1367,10 +1567,8 @@ export default function Home() {
       {/* Experience Section */}
       <section id="experience" className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-[#020b14] dark:to-[#010913]">
         <div className="max-w-6xl mx-auto px-6">
-          {/* Watermark Container */}
+          {/* Section Header */}
           <div className="relative mb-16 text-center">
-            
-
             <motion.div
               className="relative space-y-4"
               initial={{ opacity: 0 }}
@@ -1381,194 +1579,95 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent">
                 Professional Experience
               </h2>
-              
             </motion.div>
           </div>
 
-          {/* Horizontal Scrollable Experience Cards */}
-          <div className="relative">
-            {/* Gradient Indicators for Desktop Only */}
-            <div className="hidden md:block scroll-gradient-indicators absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-white to-transparent dark:from-[#020b14] dark:to-transparent z-10 pointer-events-none opacity-70"></div>
-            <div className="hidden md:block scroll-gradient-indicators absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-white to-transparent dark:from-[#020b14] dark:to-transparent z-10 pointer-events-none opacity-70"></div>
-            
-            <div className={`
-              horizontal-scroll-container
-              flex overflow-x-auto pb-8 pt-4 px-6 gap-6 snap-x snap-mandatory
-              scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700
-              scrollbar-track-transparent
-              hide-scrollbar
-              touch-pan-x
-              overscroll-x-contain
-              relative
-              mobile-collapsible-container
-              ${experienceCollapsed ? 'max-h-[650px] overflow-hidden' : 'max-h-full'}
-              transition-all duration-500 ease-in-out
-              grid grid-cols-1 gap-6 
-              md:flex md:overflow-x-auto md:horizontal-scroll-container md:snap-x md:snap-mandatory
-  
-            `}
-            onScroll={(e) => {
-              // Update progress bar
-              const container = e.currentTarget;
-              const progressBar = document.getElementById('experienceScrollProgress');
-              if (progressBar) {
-                const scrollLeft = container.scrollLeft;
-                const scrollWidth = container.scrollWidth;
-                const containerWidth = container.clientWidth;
+          {/* Experience Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {experiences.map((exp) => (
+              <motion.div
+                key={exp.title}
+                onClick={() => openExperienceModal(exp)}
+                className="
+                  group cursor-pointer
+                  p-5 rounded-lg
+                  bg-white dark:bg-gray-900
+                  border-2 border-transparent
+                  shadow-sm hover:shadow-md
+                  transition-all duration-300
+                  hover:-translate-y-1
+                  relative
+                  overflow-hidden
+                "
+                data-disable-animation-mobile="true"
+              >
+                {/* Top Gradient Border */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
                 
-                if (scrollWidth > containerWidth) {
-                  const scrollPercent = scrollLeft / (scrollWidth - containerWidth);
-                  progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercent * 100))}%`;
-                }
-              }
-            }}
-            >
-              {experiences.map((exp) => (
-                <motion.div
-                  key={exp.title}
-                  onClick={() => openExperienceModal(exp)}
-                  className="
-                    group cursor-pointer
-                    p-6 rounded-xl
-                    bg-gradient-to-br from-white to-gray-100 dark:from-gray-900/80 dark:to-[#090f1a]
-                    shadow-md lg:hover:shadow-xl
-                    border border-gray-200/70 dark:border-gray-800/70
-                    lg:hover:border-blue-200/50 lg:dark:hover:border-blue-900/30
-                    backdrop-blur-sm
-                    transition-all duration-300
-                    lg:hover:translate-y-[-5px]
-                    snap-start
-                    flex-shrink-0
-                    max-w-[90vw] sm:max-w-[400px] md:max-w-[450px]
-                    min-h-[300px]
-                    flex flex-col
-                    relative
-                    overflow-hidden
-                    mx-1
-                  "
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  data-disable-animation-mobile="true"
-                >
-                  {/* Decorative accent - original size */}
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
-                  
-                  <div className="flex items-center gap-4 mb-5">
-                    {exp.logo && (
-                      <div className="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm flex-shrink-0">
-                        <Image 
-                          src={exp.logo} 
-                          alt={`${exp.company} logo`} 
-                          width={50} 
-                          height={50} 
-                          className="rounded object-contain h-[50px] w-[50px]"
-                          quality={75}
-                          sizes="50px"
-                        />
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">{exp.title}</h3>
-                      {exp.company && (
-                        <p className="text-gray-700 dark:text-gray-300">{exp.company}</p>
-                      )}
-                      {exp.timeframe && (
-                        <p className="text-sm text-blue-500 dark:text-blue-400 font-medium">{exp.timeframe}</p>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2 mb-5 flex-grow">
-                    {exp.shortDescription.map((desc, idx) => (
-                      <div 
-                        key={idx} 
-                        className="text-gray-600 dark:text-gray-400 text-sm relative pl-1 group/item overflow-hidden"
-                      >
-                        {/* Subtle left indicator instead of gradient */}
-                        <div className="absolute left-0 top-0 w-[1px] h-full bg-gray-300 dark:bg-gray-700 group-hover/item:bg-blue-400 dark:group-hover/item:bg-blue-500 transition-colors duration-300"></div>
-                        
-                        {/* Subtle background highlight on hover */}
-                        <div className="absolute left-0 top-0 w-0 h-full bg-gray-100 dark:bg-gray-800/50 group-hover/item:w-full transition-all duration-500 rounded-r-md"></div>
-                        
-                        {/* Text content with reduced padding */}
-                        <p className="relative py-1.5 pl-2 pr-1 leading-relaxed group-hover/item:translate-x-1 transition-transform duration-300">{desc}</p>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {exp.technologies && exp.technologies.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
-                      {exp.technologies.slice(0, 3).map((tech, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2 py-1 text-xs font-medium bg-blue-50/70 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full border border-blue-100/50 dark:border-blue-800/50"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                      {exp.technologies.length > 3 && (
-                        <span className="px-2 py-1 text-xs font-medium bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/80 dark:to-gray-700/80 text-gray-600 dark:text-gray-300 rounded-full shadow-sm">
-                          +{exp.technologies.length - 3}
-                        </span>
-                      )}
+                <div className="flex items-center gap-4 mb-4">
+                  {exp.logo && (
+                    <div className="bg-gray-50 dark:bg-gray-800 p-2 rounded-md">
+                      <Image 
+                        src={exp.logo} 
+                        alt={`${exp.company} logo`} 
+                        width={40} 
+                        height={40} 
+                        className="rounded object-contain h-[40px] w-[40px]"
+                        quality={75}
+                        sizes="40px"
+                      />
                     </div>
                   )}
-                  
-                  {/* Compact View Details button */}
-                  <div className="mt-4 text-blue-500 dark:text-blue-400 text-xs font-medium absolute bottom-3 right-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                    <span className="px-2 py-1 rounded-full bg-blue-50/50 dark:bg-blue-900/20 group-hover:bg-blue-100/80 dark:group-hover:bg-blue-900/30 transition-colors flex items-center">
-                      <span className="hidden sm:inline mr-1">View</span>
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </span>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      {exp.title}
+                    </h3>
+                    {exp.company && (
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{exp.company}</p>
+                    )}
+                    {exp.timeframe && (
+                      <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">{exp.timeframe}</p>
+                    )}
                   </div>
-                </motion.div>
-              ))}
-            </div>
-            
-            {/* Mobile Show More/Less Button for Experience */}
-            <div className="md:hidden mt-2">
-              <button 
-                onClick={toggleExperienceCollapse}
-                className="w-full bg-gray-50 dark:bg-gray-800/50 py-2 px-4 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 flex items-center justify-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                {experienceCollapsed ? (
-                  <>
-                    <span>Show More</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </>
-                ) : (
-                  <>
-                    <span>Show Less</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
-                    </svg>
-                  </>
+                </div>
+
+                {/* Key Achievement */}
+                <div className="mb-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                    {exp.shortDescription[0]}
+                  </p>
+                </div>
+
+                {/* Technologies */}
+                {exp.technologies && exp.technologies.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mb-8">
+                    {exp.technologies.slice(0, 2).map((tech, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-0.5 text-xs font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {exp.technologies.length > 2 && (
+                      <span className="px-2 py-0.5 text-xs font-medium bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-full">
+                        +{exp.technologies.length - 2}
+                      </span>
+                    )}
+                  </div>
                 )}
-              </button>
-            </div>
-          </div>
-          
-          {/* Scroll Indicator that responds to scroll - Desktop Only */}
-          <div className="scroll-indicator-container flex flex-col items-center justify-center mt-6">
-            <div className="relative w-32 h-[2px] bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
-              {/* Progress Bar that moves based on scroll */}
-              <div id="experienceScrollProgress" className="absolute left-0 top-0 h-full bg-gradient-to-r from-gray-300 via-blue-400 to-blue-500 dark:from-gray-700 dark:via-blue-600 dark:to-blue-400 w-0 transition-all duration-300"></div>
-              
-              {/* Left Arrow */}
-              <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 border-t-2 border-l-2 border-gray-300 dark:border-gray-700 transform -rotate-45"></div>
-              
-              {/* Right Arrow */}
-              <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 border-t-2 border-r-2 border-blue-500 dark:border-blue-400 transform rotate-45"></div>
-            </div>
-            
-            {/* Small "Scroll" text */}
-            <span className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-600 mt-1">Scroll</span>
+
+                {/* View Details Link - Positioned at bottom right */}
+                <div className="absolute bottom-4 right-4 text-xs text-blue-600 dark:text-blue-400 font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="px-2 py-1 rounded-full bg-blue-50/50 dark:bg-blue-900/20 group-hover:bg-blue-100/80 dark:group-hover:bg-blue-900/30 transition-colors flex items-center gap-1">
+                    View Details
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -1607,300 +1706,26 @@ export default function Home() {
         </div>
 
         <div className="max-w-6xl mx-auto">
-          {/* Tab buttons container */}
-          <div className="mb-12 flex justify-center">
-            <div
-              className="
-              no-scrollbar inline-flex gap-6
-                px-6 py-2
-                overflow-x-auto 
-                backdrop-blur-md
-                rounded-full
-                bg-white/80 dark:bg-gray-900/50
-                border border-gray-200/50 dark:border-gray-700/50
-                shadow-lg shadow-gray-200/20 dark:shadow-gray-950/20
-              w-full md:w-auto md:mx-auto max-w-[95vw]
-              mobile-tabs-container
-              "
-            
-            >
-              {projectTabs.map((tab) => {
-                const isActive = activeTab === tab.name;
-                return (
-                  <button
-                    key={tab.name}
-                    onClick={() => setActiveTab(tab.name)}
-                    className={`
-                      relative cursor-pointer text-sm font-medium px-4 py-2
-                      rounded-full transition-all duration-300
-                      mobile-tab-button
-                      ${
-                        isActive
-                          ? "text-white bg-gradient-to-r from-blue-500 to-purple-500 shadow-md shadow-purple-500/20"
-                          : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-                      }
-                    `}
-                  >
-                    {tab.name}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          {/* Replace the project tabs section with the memoized component */}
+          <ProjectTabs 
+            activeTab={activeTab} 
+            setActiveTab={setActiveTab} 
+            projectTabs={projectTabs} 
+          />
 
-          {/* Project Section - Redesigned with responsive handling */}
-          <div className="relative mx-4">
-            {/* Gradient Indicators for Desktop Only */}
-            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-white to-transparent dark:from-[#01070e] dark:to-transparent pointer-events-none before:scroll-gradient-indicators"></div>
-            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-white to-transparent dark:from-[#01070e] dark:to-transparent pointer-events-none after:scroll-gradient-indicators"></div>
-            
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={activeTab}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="w-full"
-              >
-                <div className={`
-                  projects-scroll-container
-                  horizontal-scroll-container
-                  flex overflow-x-auto pb-10 pt-6 px-6 gap-8 snap-x snap-mandatory
-                  scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700
-                  scrollbar-track-transparent
-                  hide-scrollbar
-                  relative
-                  touch-pan-x
-                  overscroll-x-contain
-                  mobile-collapsible-container
-                  ${projectsCollapsed ? 'max-h-[610px] overflow-hidden' : 'max-h-full'}
-                  transition-all duration-500 ease-in-out
-                  grid grid-cols-1 gap-6 
-                  md:flex md:overflow-x-auto md:horizontal-scroll-container md:snap-x md:snap-mandatory
-                
-                  `}
-                  id="project-scroll-container"
-                  onScroll={(e) => {
-                    // Ensure the scroll indicator updates on scroll events
-                    const progressBar = document.getElementById('projectsScrollProgress');
-                    if (progressBar) {
-                      const container = e.currentTarget;
-                      const scrollLeft = container.scrollLeft;
-                      const scrollWidth = container.scrollWidth;
-                      const containerWidth = container.clientWidth;
-                      
-                      if (scrollWidth > containerWidth) {
-                        const scrollPercent = scrollLeft / (scrollWidth - containerWidth);
-                        progressBar.style.width = `${Math.min(100, Math.max(0, scrollPercent * 100))}%`;
-                      }
-                    }
-                  }}
-                >
-                  {currentProjects.map((proj, index) => (
-              <motion.div
-                key={proj.title}
-                onClick={() => openProjectModal(proj)}
-                className={`
-                        group cursor-pointer
-                        p-0 rounded-2xl
-                        bg-gradient-to-br from-white to-gray-100 dark:from-gray-900/80 dark:to-[#090f1a]
-                        shadow-sm hover:shadow-md
-                        backdrop-blur-sm
-                  transition-all duration-300
-                        hover:translate-y-[-3px]
-                        snap-start
-                        flex-shrink-0
-                        max-w-[90vw] sm:max-w-[400px] md:max-w-[450px]
-                        min-h-[380px]
-                  flex flex-col
-                  relative
-                        overflow-hidden
-                        my-6 mx-2 sm:mx-4
-                `}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                data-disable-animation-mobile="true"
-              >
-                      {/* Decorative accent - matching experience cards */}
-                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
-                      
-                {/* Project Image with Overlay */}
-                {proj.image && (
-                        <div className="relative h-[220px] w-full overflow-hidden rounded-t-2xl">
-                    <Image
-                      loading="lazy"
-                      src={proj.image}
-                      alt={`${proj.title} image`}
-                      width={400}
-                      height={200}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      quality={75}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                          {/* Enhanced gradient overlay for better text readability */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-80 group-hover:opacity-85 transition-opacity duration-300" />
-                          
-                          {/* Project Title Overlay - Enhanced visibility */}
-                          <div className="absolute bottom-0 left-0 right-0 p-6">
-                            <h3 className="relative text-xl font-bold text-white mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
-                  {proj.title}
-                </h3>
-                            {proj.role && (
-                              <p className="relative text-gray-100 text-sm font-medium drop-shadow-[0_1px_3px_rgba(0,0,0,0.7)]">
-                                Role: {proj.role}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Content Container */}
-                      <div className="flex-1  flex flex-col">
-                        {/* Description - Refined styling */}
-                        <div className="space-y-3 mb-6 flex-grow px-3 pt-6">
-                  {proj.shortDescription.map((desc, idx) => (
-                            <div 
-                              key={idx} 
-                              className="text-gray-600 dark:text-gray-400 text-sm relative pl-1 group/item overflow-hidden"
-                            >
-                              {/* Subtle left indicator instead of gradient */}
-                              <div className="absolute left-0 top-0 w-[1px] h-full bg-gray-300 dark:bg-gray-700 group-hover/item:bg-blue-400 dark:group-hover/item:bg-blue-500 transition-colors duration-300"></div>
-                              
-                              {/* Subtle background highlight on hover */}
-                              <div className="absolute left-0 top-0 w-0 h-full bg-gray-100 dark:bg-gray-800/50 group-hover/item:w-full transition-all duration-500 rounded-r-md"></div>
-                              
-                              {/* Text content with reduced padding */}
-                              <p className="relative py-1.5 pl-2 pr-1 leading-relaxed group-hover/item:translate-x-1 transition-transform duration-300">{desc}</p>
-                            </div>
-                          ))}
-                        </div>
-
-                  {/* Technologies */}
-                        {proj.technologies && proj.technologies.length > 0 && (
-                          <div className="flex flex-wrap px-6 py-1 pt-4 gap-2 mt-auto border-t border-gray-100 dark:border-gray-800 ">
-                      {proj.technologies.slice(0, 3).map((tech, idx) => (
-                        <span
-                          key={idx}
-                                className="px-2.5 py-1 text-xs font-medium bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-600/20 dark:to-purple-600/20 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-purple-700/50 shadow-sm"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                      {proj.technologies.length > 3 && (
-                              <span className="px-2.5 py-1 text-xs font-medium bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/80 dark:to-gray-700/80 text-gray-600 dark:text-gray-300 rounded-full shadow-sm">
-                          +{proj.technologies.length - 3}
-                        </span>
-                      )}
-                </div>
-                  )}
-                      </div>
-
-                      {/* Links & View Details */}
-                      <div className="flex items-center justify-between mt-6 px-6 pb-6">
-                        <div className="flex gap-2">
-                  {proj.demoLink && (
-                    <a
-                      href={proj.demoLink}
-                      onClick={(e) => e.stopPropagation()}
-                              title={`View live demo of ${proj.title}`}
-                              className="relative group/link flex items-center gap-1
-                              text-xs text-orange-600 dark:text-orange-400
-                              hover:text-orange-700 dark:hover:text-orange-300
-                              font-medium bg-gradient-to-r from-orange-400/10 to-pink-400/10
-                              dark:from-orange-600/20 dark:to-pink-600/20
-                              px-3 py-2 rounded-full
-                              hover:shadow-md hover:-translate-y-0.5
-                              transition-all duration-300"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                              <FaBolt className="w-3 h-3" />
-                              <span>Live Demo</span>
-                    </a>
-                  )}
-                  {proj.githubLink && (
-                    <a
-                      href={proj.githubLink}
-                      onClick={(e) => e.stopPropagation()}
-                              title={`View source code for ${proj.title} on GitHub`}
-                              className="relative group/link flex items-center gap-1
-                              text-xs text-gray-700 dark:text-gray-300
-                              hover:text-gray-900 dark:hover:text-white
-                              font-medium bg-gradient-to-r from-gray-200/70 to-gray-100/70
-                              dark:from-gray-700/70 dark:to-gray-800/70
-                              px-3 py-2 rounded-full
-                              hover:shadow-md hover:-translate-y-0.5
-                              transition-all duration-300"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                              <FaGithub className="w-3 h-3" />
-                              <span>Source Code</span>
-                    </a>
-                  )}
-                    </div>
-                        
-                        {/* Compact View Details button */}
-                        <div className="mt-4 text-blue-500 dark:text-blue-400 text-xs font-medium absolute bottom-3 right-3 opacity-60 group-hover:opacity-100 transition-opacity">
-                          <span className="px-2 py-1 rounded-full bg-blue-50/50 dark:bg-blue-900/20 group-hover:bg-blue-100/80 dark:group-hover:bg-blue-900/30 transition-colors flex items-center">
-                            <span className="hidden sm:inline mr-1">Details</span>
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                      </svg>
-                          </span>
-                  </div>
-                </div>
-              </motion.div>
+          {/* Replace the project cards with the memoized component */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 py-6">
+            {currentProjects.map((proj, index) => (
+              <ProjectCard 
+                key={proj.title} 
+                proj={proj} 
+                index={index} 
+                openProjectModal={openProjectModal} 
+              />
             ))}
-                </div>
-                
-                {/* Mobile Show More/Less Button for Projects */}
-                {currentProjects.length > 1 && (
-                  <div className="md:hidden mt-2">
-                    <button 
-                      onClick={toggleProjectsCollapse}
-                      className="w-full bg-gray-50 dark:bg-gray-800/50 py-2 px-4 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 flex items-center justify-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    >
-                      {projectsCollapsed ? (
-                        <>
-                          <span>Show All Projects</span>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </>
-                      ) : (
-                        <>
-                          <span>Show Less</span>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
-                          </svg>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
           </div>
           
-          {/* Scroll Indicator for Projects - Desktop Only */}
-          <div className="scroll-indicator-container flex flex-col items-center justify-center mt-6">
-            <div className="relative w-32 h-[2px] bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
-              {/* Progress Bar that moves based on scroll */}
-              <div id="projectsScrollProgress" className="absolute left-0 top-0 h-full bg-gradient-to-r from-gray-300 via-blue-400 to-blue-500 dark:from-gray-700 dark:via-blue-600 dark:to-blue-400 w-0 transition-all duration-300"></div>
-              
-              {/* Left Arrow */}
-              <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 border-t-2 border-l-2 border-gray-300 dark:border-gray-700 transform -rotate-45"></div>
-              
-              {/* Right Arrow */}
-              <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 border-t-2 border-r-2 border-blue-500 dark:border-blue-400 transform rotate-45"></div>
-            </div>
-            
-            {/* Small "Scroll" text */}
-            <span className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-600 mt-1">Scroll</span>
-          </div>
+          {/* Remove scroll indicator since we're using grid layout now */}
         </div>
       </section>
 

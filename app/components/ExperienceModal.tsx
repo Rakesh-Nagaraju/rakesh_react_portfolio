@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, memo, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { FiLink, FiGithub, FiExternalLink } from "react-icons/fi";
@@ -164,54 +164,121 @@ export const experiences = [
 /* --------------------- */
 /*   EXPERIENCE MODAL    */
 /* --------------------- */
-export default function ExperienceModal({ isOpen, onClose, experience }: ExperienceModalProps) {
-    if (!experience) return null;
-  
-    // Handle keyboard events
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-  
-    return (
-      <AnimatePresence>
-        {isOpen && (
+
+// Memoized Technology Tag Component
+const TechnologyTag = memo(({ tech, index }: { tech: string; index: number }) => (
+  <motion.span
+    className="px-2.5 py-1 text-xs font-medium 
+      bg-gradient-to-r from-blue-50 to-blue-100 
+      dark:from-blue-900/30 dark:to-blue-800/30 
+      text-blue-600 dark:text-blue-400 
+      rounded-full
+      shadow-sm
+      hover:shadow-md
+      hover:scale-105
+      transition-all duration-200
+      border border-blue-100/50 dark:border-blue-800/50"
+    initial={{ scale: 0.8, opacity: 0 }}
+    animate={{ scale: 1, opacity: 1 }}
+    transition={{ delay: 0.6 + index * 0.05 }}
+  >
+    {tech}
+  </motion.span>
+));
+
+TechnologyTag.displayName = 'TechnologyTag';
+
+// Memoized Overview Item Component
+const OverviewItem = memo(({ point, idx }: { point: string; idx: number }) => (
+  <motion.li
+    className="relative pl-4 overflow-hidden"
+    initial={{ x: -20, opacity: 0 }}
+    animate={{ x: 0, opacity: 1 }}
+    transition={{ delay: 0.2 + idx * 0.1 }}
+  >
+    <div className="absolute left-0 top-0 w-[2px] h-full bg-blue-500 dark:bg-blue-500"></div>
+    <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-r from-blue-50/50 to-transparent dark:from-blue-900/20 dark:to-transparent rounded-r-md"></div>
+    <div className="relative py-2 pl-4 pr-3 text-base text-gray-600 dark:text-gray-400 translate-x-1">
+      <span>{point}</span>
+    </div>
+  </motion.li>
+));
+
+OverviewItem.displayName = 'OverviewItem';
+
+// Memoized Section Header Component
+const SectionHeader = memo(({ title, icon }: { title: string; icon: React.ReactNode }) => (
+  <h4 className="text-base font-medium bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent inline-flex items-center gap-2">
+    {icon}
+    {title}
+  </h4>
+));
+
+SectionHeader.displayName = 'SectionHeader';
+
+// Main Modal Component
+const ExperienceModal = memo(({ isOpen, onClose, experience }: ExperienceModalProps) => {
+  if (!experience) return null;
+
+  // Memoize the close handler
+  const handleClose = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    onClose();
+  }, [onClose]);
+
+  // Memoize the keydown handler
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') onClose();
+  }, [onClose]);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          onClick={handleClose}
+          onKeyDown={handleKeyDown}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+          tabIndex={-1}
+        >
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            onClick={onClose}
-            onKeyDown={handleKeyDown}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-title"
-            tabIndex={-1}
+            className="relative bg-[linear-gradient(210deg,_#f0f4ff_0%,_#ffffff_48%)] dark:bg-[linear-gradient(210deg,_#1a2238_0%,_#0a0f1f_48%)] rounded-xl shadow-2xl max-w-4xl w-full mx-4 overflow-hidden"
+            initial={{ scale: 0.9, y: 20, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.9, y: 20, opacity: 0 }}
+            transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <motion.div
-              className="relative bg-[linear-gradient(210deg,_#f4f6fbbd_0%,_#fff_48%)] dark:bg-[linear-gradient(210deg,_#1d232c_0%,_#06090f_48%)] rounded-xl shadow-2xl max-w-3xl w-full mx-4 overflow-hidden"
-              initial={{ scale: 0.9, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0.9, y: 20, opacity: 0 }}
-              transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
-              onClick={(e) => e.stopPropagation()}
+            {/* Decorative accent - matching experience cards */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 via-purple-500 to-blue-400"></div>
+            
+            {/* Close Button */}
+            <button
+              className="absolute top-6 right-6 p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 
+                bg-white/80 dark:bg-gray-800/80 rounded-full 
+                shadow-sm hover:shadow-md 
+                transition-all duration-200 
+                z-20
+                backdrop-blur-sm
+                hover:scale-110"
+              onClick={handleClose}
+              aria-label="Close modal"
             >
-              {/* Decorative accent - matching experience cards */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500"></div>
-              
-              {/* Close Button */}
-              <button
-                className="absolute top-4 right-4 p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-opacity-50 z-10"
-                onClick={onClose}
-                aria-label="Close modal"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-  
-              {/* Header Section - Refined with balanced text size and spacing */}
-              <div className="flex flex-col md:flex-row items-center border-b border-gray-200 dark:border-gray-700 p-6 gap-5">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+    
+            {/* Header Section */}
+            <div className="flex flex-col md:flex-row items-start justify-between border-b border-gray-200/50 dark:border-gray-700/50 p-8 gap-6">
+              {/* Left side - Logo and Title */}
+              <div className="flex items-start gap-6">
                 {experience.logo && (
                   <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
@@ -224,14 +291,14 @@ export default function ExperienceModal({ isOpen, onClose, experience }: Experie
                       alt={`${experience.company} logo`}
                       width={70}
                       height={70}
-                      className="rounded-lg object-contain"
+                      className="rounded-xl object-contain shadow-sm"
                     />
                   </motion.div>
                 )}
-                <div className="flex-1 text-center md:text-left space-y-2">
+                <div className="space-y-2">
                   <motion.h3
                     id="modal-title"
-                    className="text-lg font-semibold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent"
+                    className="text-2xl font-semibold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent tracking-tight"
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.3 }}
@@ -248,218 +315,231 @@ export default function ExperienceModal({ isOpen, onClose, experience }: Experie
                         href={experience.companyUrl || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200"
-                        title={`Visit my previous employer: ${experience.company}`}
+                        className="text-lg font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200 inline-flex items-center gap-2 group"
+                        title={`Visit ${experience.company}`}
                       >
                         {experience.company}
+                        <svg className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
                       </a>
-                      {experience.timeframe && (
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
-                          {experience.timeframe}
-                    </p>
-                  )}
                     </motion.div>
                   )}
                 </div>
               </div>
-  
-              {/* Content Section - Refined with balanced text sizes and spacing */}
-              <div className="p-6 space-y-7 max-h-[60vh] overflow-y-auto 
-                [&::-webkit-scrollbar]:w-1.5
-                [&::-webkit-scrollbar-track]:bg-gray-100
-                [&::-webkit-scrollbar-track]:dark:bg-gray-800
-                [&::-webkit-scrollbar-thumb]:bg-gray-300
-                [&::-webkit-scrollbar-thumb]:dark:bg-gray-600
-                [&::-webkit-scrollbar-thumb]:rounded-full
-                [&::-webkit-scrollbar-thumb]:border-1
-                [&::-webkit-scrollbar-thumb]:border-gray-100
-                [&::-webkit-scrollbar-thumb]:dark:border-gray-800
-                hover:[&::-webkit-scrollbar-thumb]:bg-gray-400
-                hover:[&::-webkit-scrollbar-thumb]:dark:bg-gray-500
-              ">
-                {/* Overview Section */}
-                {experience.shortDescription && experience.shortDescription.length > 0 && (
+
+              {/* Right side - Date */}
+              <motion.div 
+                className="flex items-center justify-end pr-12"
+                initial={{ x: 20, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                {experience.timeframe && (
+                  <div className="text-base text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg">
+                    {experience.timeframe}
+                  </div>
+                )}
+              </motion.div>
+            </div>
+    
+            {/* Content Section */}
+            <div className="p-8 space-y-8 max-h-[60vh] overflow-y-auto 
+              [&::-webkit-scrollbar]:w-2
+              [&::-webkit-scrollbar-track]:bg-gray-100/50
+              [&::-webkit-scrollbar-track]:dark:bg-gray-800/50
+              [&::-webkit-scrollbar-thumb]:bg-gray-300/80
+              [&::-webkit-scrollbar-thumb]:dark:bg-gray-600/80
+              [&::-webkit-scrollbar-thumb]:rounded-full
+              [&::-webkit-scrollbar-thumb]:border-2
+              [&::-webkit-scrollbar-thumb]:border-gray-100/50
+              [&::-webkit-scrollbar-thumb]:dark:border-gray-800/50
+              hover:[&::-webkit-scrollbar-thumb]:bg-gray-400/80
+              hover:[&::-webkit-scrollbar-thumb]:dark:bg-gray-500/80
+              scrollbar-gutter: stable
+            ">
+              {/* Overview Section */}
+              {experience.shortDescription && experience.shortDescription.length > 0 && (
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="space-y-4"
+                >
+                  <SectionHeader 
+                    title="Overview" 
+                    icon={
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    } 
+                  />
+                  <ul className="space-y-3 text-gray-700 dark:text-gray-300">
+                    {experience.shortDescription.map((point, idx) => (
+                      <OverviewItem key={idx} point={point} idx={idx} />
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+
+              {/* Detailed Sections */}
+              {experience.description &&
+              typeof experience.description === "object" &&
+              Object.keys(experience.description).length > 0 ? (
+                Object.entries(experience.description).map(([section, points], index) => (
                   <motion.div
+                    key={index}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.1 }}
-                    className="space-y-3"
+                    transition={{ delay: 0.2 + index * 0.1 }}
+                    className="space-y-4"
                   >
-                    <h4 className="text-base font-medium bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-3">
-                      Overview
-                    </h4>
-                    <ul className="space-y-2.5 text-gray-700 dark:text-gray-300">
-                      {experience.shortDescription.map((point, idx) => (
-                        <motion.li
-                          key={idx}
-                          className="relative pl-1 group/item overflow-hidden"
-                          initial={{ x: -20, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          transition={{ delay: 0.2 + idx * 0.1 }}
-                        >
-                          {/* Subtle left indicator with overview color */}
-                          <div className="absolute left-0 top-0 w-[1px] h-full bg-blue-300 dark:bg-purple-700 group-hover/item:bg-blue-500 dark:group-hover/item:bg-purple-500 transition-colors duration-300"></div>
-                          
-                          {/* Subtle background highlight on hover with overview color */}
-                          <div className="absolute left-0 top-0 w-0 h-full bg-blue-50 dark:bg-purple-900/20 group-hover/item:w-full transition-all duration-500 rounded-r-md"></div>
-                          
-                          {/* Text content with balanced sizing and spacing */}
-                          <div className="relative py-1.5 pl-3 pr-2 text-sm text-gray-600 dark:text-gray-400 group-hover/item:translate-x-1 transition-transform duration-300">
-                            <span>{point}</span>
-                          </div>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                )}
-
-                {/* Detailed Sections */}
-                {experience.description &&
-                typeof experience.description === "object" &&
-                Object.keys(experience.description).length > 0 ? (
-                  Object.entries(experience.description).map(([section, points], index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ y: 20, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.2 + index * 0.1 }}
-                      className="space-y-3"
-                    >
-                      <h4 className="text-base font-medium bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent mb-3">
-                        {section}
-                      </h4>
-                      {Array.isArray(points) ? (
-                        <ul className="space-y-2.5 text-gray-700 dark:text-gray-300">
-                          {points.map((point, idx) => {
-                            const isLink =
-                              typeof point === "string" &&
-                              (point.startsWith("http://") || point.startsWith("https://"));
-                            return (
-                              <motion.li
-                                key={idx}
-                                className="relative pl-1 group/item overflow-hidden"
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0.3 + idx * 0.1 }}
-                              >
-                                {/* Subtle left indicator instead of bullet */}
-                                <div className="absolute left-0 top-0 w-[1px] h-full bg-gray-300 dark:bg-gray-700 group-hover/item:bg-blue-400 dark:group-hover/item:bg-blue-500 transition-colors duration-300"></div>
-                                
-                                {/* Subtle background highlight on hover */}
-                                <div className="absolute left-0 top-0 w-0 h-full bg-gray-100 dark:bg-gray-800/50 group-hover/item:w-full transition-all duration-500 rounded-r-md"></div>
-                                
-                                {/* Text content with balanced sizing and spacing */}
-                                <div className="relative py-1.5 pl-3 pr-2 text-sm text-gray-600 dark:text-gray-400 group-hover/item:translate-x-1 transition-transform duration-300">
+                    <SectionHeader 
+                      title={section} 
+                      icon={
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      } 
+                    />
+                    {Array.isArray(points) ? (
+                      <ul className="space-y-3 text-gray-700 dark:text-gray-300">
+                        {points.map((point, idx) => {
+                          const isLink =
+                            typeof point === "string" &&
+                            (point.startsWith("http://") || point.startsWith("https://"));
+                          return (
+                            <motion.li
+                              key={idx}
+                              className="text-sm relative pl-4"
+                              initial={{ x: -20, opacity: 0 }}
+                              animate={{ x: 0, opacity: 1 }}
+                              transition={{ delay: 0.3 + idx * 0.1 }}
+                            >
+                              {/* Simple left border indicator */}
+                              <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-blue-500/20 dark:bg-blue-500/30 rounded"></div>
+                              
+                              {/* Text content */}
+                              <div className="py-1">
                                 {isLink ? (
                                   <a
                                     href={point}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                      className="text-blue-600 dark:text-blue-400 hover:underline focus:outline-none focus:ring-1 focus:ring-blue-500 rounded"
-                                      title={`Visit ${point}`}
+                                    className="text-blue-600 dark:text-blue-400 hover:underline"
+                                    title={`Visit ${point}`}
                                   >
                                     {point}
                                   </a>
                                 ) : (
                                   <span>{point}</span>
                                 )}
-                                </div>
-                              </motion.li>
-                            );
-                          })}
-                        </ul>
-                      ) : (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 pl-3">{String(points)}</p>
-                      )}
-                    </motion.div>
-                  ))
-                ) : (
-                  <p className="text-sm text-gray-600 dark:text-gray-400">No details available.</p>
-                )}
+                              </div>
+                            </motion.li>
+                          );
+                        })}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-gray-600 dark:text-gray-400 pl-3">{String(points)}</p>
+                    )}
+                  </motion.div>
+                ))
+              ) : (
+                <p className="text-sm text-gray-600 dark:text-gray-400">No details available.</p>
+              )}
   
-                {/* Technologies Section - Balanced text size and spacing */}
-                {experience.technologies && experience.technologies.length > 0 && (
-                  <motion.div
-                    className="pt-4 mt-1 border-t border-gray-200 dark:border-gray-700"
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">
-                      Technologies & Tools
-                    </h4>
+              {/* Links Section */}
+              {experience.links && experience.links.length > 0 && (
+                <div className="mt-6 flex flex-wrap gap-3">
+                  {experience.links.map((link, idx) => (
+                    <a
+                      key={idx}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`Visit ${link.label}`}
+                      className="
+                        inline-flex items-center gap-1.5
+                        px-3 py-1.5 rounded-lg
+                        bg-blue-50 dark:bg-blue-900/30
+                        text-blue-700 dark:text-blue-300
+                        text-xs font-medium
+                        hover:bg-blue-100 dark:hover:bg-blue-800/30
+                        transition-colors duration-200
+                      "
+                    >
+                      {link.icon === 'link' ? (
+                        <FiLink className="w-3 h-3" />
+                      ) : link.icon === 'github' ? (
+                        <FiGithub className="w-3 h-3" />
+                      ) : (
+                        <FiExternalLink className="w-3 h-3" />
+                      )}
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {/* Technologies Section */}
+              {experience.technologies && experience.technologies.length > 0 && (
+                <motion.div
+                  className="pt-3 mt-1 border-t border-gray-200/50 dark:border-gray-700/50"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    Technologies & Tools
+                  </h4>
                   <div className="flex flex-wrap gap-2">
                     {experience.technologies.map((tech, index) => (
-                        <motion.span
+                      <motion.span
                         key={index}
-                          className="px-2.5 py-1 text-xs font-medium bg-blue-50/70 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full border border-blue-100/50 dark:border-blue-800/50"
-                          initial={{ scale: 0.8, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          transition={{ delay: 0.6 + index * 0.05 }}
+                        className="px-2.5 py-1 text-xs font-medium 
+                          bg-gradient-to-r from-blue-50 to-blue-100 
+                          dark:from-blue-900/30 dark:to-blue-800/30 
+                          text-blue-600 dark:text-blue-400 
+                          rounded-full
+                          shadow-sm
+                          hover:shadow-md
+                          hover:scale-105
+                          transition-all duration-200
+                          border border-blue-100/50 dark:border-blue-800/50"
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.6 + index * 0.05 }}
                       >
                         {tech}
-                        </motion.span>
+                      </motion.span>
                     ))}
                   </div>
-                  </motion.div>
-                )}
-
-                {/* Links Section - Balanced text size and spacing */}
-                {experience.links && experience.links.length > 0 && (
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    {experience.links.map((link, idx) => (
-                      <a
-                        key={idx}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={`Visit ${link.label}`}
-                        className="
-                          flex items-center gap-1.5
-                          px-3 py-1.5 rounded-lg
-                          bg-blue-50 dark:bg-blue-900/30
-                          text-blue-700 dark:text-blue-300
-                          text-xs font-medium
-                          hover:bg-blue-100 dark:hover:bg-blue-800/30
-                          transition-colors duration-200
-                          border border-blue-200/50 dark:border-blue-700/50
-                        "
-                      >
-                        {link.icon === 'link' ? (
-                          <FiLink className="w-3 h-3" />
-                        ) : link.icon === 'github' ? (
-                          <FiGithub className="w-3 h-3" />
-                        ) : (
-                          <FiExternalLink className="w-3 h-3" />
-                        )}
-                        {link.label}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </motion.div>
+                </motion.div>
+              )}
+            </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-    );
-  }
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+});
+
+ExperienceModal.displayName = 'ExperienceModal';
 
 // Hook for using the experience modal
 export function useExperienceModal() {
-const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
-const [isExperienceModalOpen, setIsExperienceModalOpen] = useState<boolean>(false);
+  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+  const [isExperienceModalOpen, setIsExperienceModalOpen] = useState<boolean>(false);
 
-const openExperienceModal = (exp: Experience) => {
-  setSelectedExperience(exp);
-  setIsExperienceModalOpen(true);
-};
+  const openExperienceModal = useCallback((exp: Experience) => {
+    setSelectedExperience(exp);
+    setIsExperienceModalOpen(true);
+  }, []);
 
-const closeExperienceModal = () => {
-  setIsExperienceModalOpen(false);
-    // We'll keep the experience data until the animation completes
+  const closeExperienceModal = useCallback(() => {
+    setIsExperienceModalOpen(false);
     setTimeout(() => setSelectedExperience(null), 300);
-  };
+  }, []);
 
   return {
     selectedExperience,
@@ -467,4 +547,6 @@ const closeExperienceModal = () => {
     openExperienceModal,
     closeExperienceModal
   };
-  }
+}
+
+export default ExperienceModal;

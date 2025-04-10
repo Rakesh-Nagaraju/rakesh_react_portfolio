@@ -1,32 +1,28 @@
-export const metadata = {
-  title: "Rakesh AI- portfolio",
-  description: "Showcase of an my skillset and projects",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
-  themeColor: "#01070e",
-  manifest: "/manifest.json",
-  icons: {
-    icon: "/images/ai-711.png",
-    apple: "/images/ai-711.png",
-  },
-};
+import type { Metadata, Viewport } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
 
-import "./globals.css"; // Your Tailwind CSS entry
-import type { ReactNode } from "react";
+const inter = Inter({ subsets: ['latin'] })
 
-interface RootLayoutProps {
-  children: ReactNode; 
+export const metadata: Metadata = {
+  title: 'Rakesh Nagaraju - AI Engineer',
+  description: 'Portfolio website of Rakesh Nagaraju, an AI Engineer specializing in Computer Vision and Large Language Models.',
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#000000',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/images/ai-711.png" />
-        <link rel="preload" href="/images/bg_removed_1_copy.png" as="image" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      </head>
-      <body>{children}</body>
+      <body className={inter.className}>{children}</body>
     </html>
-  );
+  )
 }
