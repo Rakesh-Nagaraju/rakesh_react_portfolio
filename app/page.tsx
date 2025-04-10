@@ -4,13 +4,20 @@ import { useState, useMemo, useEffect, useCallback, memo } from "react";
 import { motion } from "framer-motion";
 import SkillsSection from "@/app/components/SkillsSection";
 import ExperienceModal, { useExperienceModal, experiences } from "@/app/components/ExperienceModal";
+
 import Hero from "@/app/components/Hero";
 import About from "@/app/components/About";
-import { FaLinkedin } from 'react-icons/fa';
+
+import { FaLinkedin} from 'react-icons/fa';
 import { SiHuggingface } from "react-icons/si";
+
 import { FaGithub, FaBolt } from 'react-icons/fa';
 import { FiInstagram } from "react-icons/fi";
+import { AnimatePresence } from 'framer-motion';
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
+
+
+
 
 // types.ts (or at top of page.tsx, but a separate file is cleaner)
 
@@ -1161,77 +1168,129 @@ export default function Home() {
     }, 200);
   }, [activeTab]);
 
-  // Define projects array with actual data
-  const projects: Project[] = [
+  const projectTabs = [
     {
-      title: "AI Chatbot",
-      shortDescription: ["RAG-based chatbot for enterprise document retrieval"],
-      longDescription: [
-        "Developed an enterprise-grade RAG system for SOC document retrieval",
-        "Integrated MinIO, Milvus & LlamaIndex to enhance AI-driven search accuracy",
-        "Reduced response latency by 35%, improving knowledge access efficiency"
+      name: "CV",
+      color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
+      projects: [
+        {
+          title: "Object Detection Pipeline #9",
+          shortDescription: [
+            "YOLO-based real-time detection",
+            "Optimized for speed on edge devices"
+          ],
+          longDescription: [
+            "Used YOLOv5 to identify and classify objects in real time.",
+            "Integrated with OpenCV for real-time video processing.",
+            "Achieved 95% accuracy on custom dataset."
+          ],
+          demoLink: "#",
+          githubLink: "#",
+          image: "/images/ai-side-robot.jpg",
+          technologies: ["YOLOv5", "Python", "OpenCV"],
+          role: "Lead Developer",
+        },
       ],
-      technologies: ["Python", "LlamaIndex", "MinIO", "Milvus", "AI/ML"],
-      image: "/images/ai-chatbot.jpg",
-      demoLink: "https://demo.chatbot.com",
-      githubLink: "https://github.com/demo/chatbot"
     },
     {
-      title: "Face Recognition System",
-      shortDescription: ["Advanced face recognition & human classification models"],
-      longDescription: [
-        "Fine-tuned RetinaFace, DeepFace, and VGGFace, improving accuracy by 15%",
-        "Optimized model inference from 2 images/sec to 5 images/sec",
-        "Deployed on edge devices for real-time processing"
+      name: "NLP/LLM",
+      color: "bg-[linear-gradient(332deg,_#f0f0ff_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#23232f_0%,_#ffffff00_48%)]",
+      projects: [
+        {
+          title: "RAG System",
+          shortDescription: [
+            "Retrieval-augmented generation for enterprise knowledge."
+          ],
+          longDescription: [
+            "Implemented Elasticsearch for context retrieval.",
+            "Used Hugging Face Transformers for generative responses.",
+            "Improved response accuracy by 20% after fine-tuning."
+          ],
+          demoLink: "#",
+          githubLink: "#",
+          image: "/images/placeholder.jpg",
+          technologies: ["Python", "Transformers", "Elasticsearch"],
+          role: "AI Engineer",
+        },
+        {
+          title: "AI News Bot",
+          shortDescription: [
+            "NLP-driven aggregator for personalized headlines."
+          ],
+          longDescription: [
+            "Scraped multiple news APIs for real-time updates.",
+            "Used NLTK for text processing and classification.",
+            "Front-end built with React for subscription-based channels."
+          ],
+          demoLink: "#",
+          githubLink: "#",
+          image: "/images/placeholder.jpg",
+          technologies: ["Python", "NLTK", "React"],
+          role: "Full Stack Developer",
+        },
       ],
-      technologies: ["Python", "TensorFlow", "OpenCV", "AI/ML"],
-      image: "/images/face-recognition.jpg",
-      demoLink: "https://demo.face.com",
-      githubLink: "https://github.com/demo/face"
     },
     {
-      title: "Portfolio Website",
-      shortDescription: ["Modern portfolio built with Next.js and React"],
-      longDescription: [
-        "Designed and developed a responsive portfolio website",
-        "Implemented dark mode and smooth animations",
-        "Used modern React patterns and TypeScript"
+      name: "Multimodal",
+      color: "bg-[linear-gradient(332deg,_#fff0f0_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#49202d94_0%,_#ffffff00_48%)]",
+      projects: [
+        {
+          title: "Vision + Language Model",
+          shortDescription: [
+            "CLIP + GPT for image captioning & Q&A."
+          ],
+          longDescription: [
+            "Combined CLIP embeddings with GPT-3 for advanced image Q&A.",
+            "Deployed on AWS with GPU instances for real-time inference.",
+            "Conducted user tests yielding 85% success in open-ended Q&A."
+          ],
+          demoLink: "#",
+          githubLink: "#",
+          image: "/images/placeholder.jpg",
+          technologies: ["Python", "PyTorch", "GPT-3", "CLIP"],
+          role: "AI Researcher",
+        },
       ],
-      technologies: ["React", "Next.js", "TypeScript", "Web"],
-      image: "/images/portfolio.jpg",
-      demoLink: "https://rakesh-nagaraju.com",
-      githubLink: "https://github.com/Rakesh-Nagaraju/portfolio"
-    }
+    },
+    {
+      name: "ML",
+      color: "bg-[linear-gradient(332deg,_#f0fffb_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#12252094_0%,_#ffffff00_48%)]",
+      projects: [
+        {
+          title: "Recommendation Engine",
+          shortDescription: [
+            "Collaborative filtering for personalization."
+          ],
+          longDescription: [
+            "Implemented matrix factorization for product recommendations.",
+            "Optimized model with hyperparameter tuning, leading to 10% lift in CTR.",
+            "Integrated solution into client's microservice architecture."
+          ],
+          demoLink: "#",
+          githubLink: "#",
+          image: "/images/placeholder.jpg",
+          technologies: ["Scikit-learn", "Python", "Pandas"],
+          role: "Machine Learning Engineer",
+        },
+        {
+          title: "Time Series Forecasting",
+          shortDescription: [
+            "Predictive models using ARIMA, LSTM, Prophet."
+          ],
+          longDescription: [
+            "Benchmarked ARIMA vs. LSTM for stock price predictions.",
+            "Built an automated pipeline for daily training & inference.",
+            "Reduced MSE by 12% using Prophet's advanced seasonality."
+          ],
+          demoLink: "#",
+          githubLink: "#",
+          image: "/images/placeholder.jpg",
+          technologies: ["Python", "TensorFlow", "Prophet"],
+          role: "Data Scientist",
+        },
+      ],
+    },
   ];
-
-  // Define projectTabs inside the component with proper types
-  const projectTabs = useMemo<ProjectTab[]>(() => [
-    {
-      name: "All",
-      color: "from-blue-500 to-purple-500",
-      projects: projects,
-    },
-    {
-      name: "AI/ML",
-      color: "from-orange-500 to-red-500",
-      projects: projects.filter((p: Project) => 
-        p.technologies?.some((t: string) => 
-          t.toLowerCase().includes("ai") || t.toLowerCase().includes("ml")
-        )
-      ),
-    },
-    {
-      name: "Web",
-      color: "from-green-500 to-teal-500",
-      projects: projects.filter((p: Project) => 
-        p.technologies?.some((t: string) => 
-          t.toLowerCase().includes("react") || 
-          t.toLowerCase().includes("next") || 
-          t.toLowerCase().includes("web")
-        )
-      ),
-    },
-  ], [projects]); // Add projects to dependency array
 
   
 
@@ -1282,6 +1341,49 @@ export default function Home() {
       </button>
     );
   };
+
+  // Add state for managing collapsed sections on mobile
+  const [experienceCollapsed, setExperienceCollapsed] = useState(true);
+  const [projectsCollapsed, setProjectsCollapsed] = useState(true);
+  
+  // Reset collapse state when changing tabs
+  useEffect(() => {
+    setProjectsCollapsed(true);
+  }, [activeTab]);
+  
+  // Function to toggle collapsed state
+  const toggleExperienceCollapse = () => {
+    const section = document.getElementById('experience');
+  
+    if (!experienceCollapsed && section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  
+      // Optional: add a short delay before collapsing for smoother UX
+      setTimeout(() => {
+        setExperienceCollapsed(true);
+      }, 300); // You can tweak this delay
+      return;
+    }
+  
+    setExperienceCollapsed(false);
+  };
+  
+  
+  const toggleProjectsCollapse = () => {
+    const section = document.getElementById('projects');
+  
+    // If collapsing, scroll the user to the top of the Projects section smoothly
+    if (!projectsCollapsed && section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  
+    // Now toggle the collapse state
+    setProjectsCollapsed(!projectsCollapsed);
+  };
+
+  
+  
+  
 
   return (
     <main
