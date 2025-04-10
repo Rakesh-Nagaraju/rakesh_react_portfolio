@@ -496,9 +496,14 @@ export default function Home() {
       projects: [
         {
           id: 1,
-          title: "Object Detection Pipeline #9",
-          shortDescription: ["Used YOLOv5 to identify and classify objects in real time."],
-          longDescription: ["Built a chatbot using RAG architecture with custom knowledge base.", "Integrated vector search for efficient information retrieval.", "Fine-tuned language model for domain-specific responses.", "Achieved 85% accuracy on domain-specific queries."],
+          title: "Real-time Object Detection System",
+          shortDescription: ["Developed a real-time object detection system using YOLOv5 for industrial applications."],
+          longDescription: [
+            "Implemented YOLOv5 architecture for high-speed object detection",
+            "Optimized model for edge deployment with TensorRT",
+            "Achieved 95% mAP on custom industrial dataset",
+            "Integrated with industrial cameras for real-time processing"
+          ],
           imageUrl: "/images/projects/object-detection.jpg",
           technologies: ["Python", "PyTorch", "YOLOv5", "OpenCV", "TensorRT"],
           githubUrl: "https://github.com/raken-ai/object-detection-pipeline",
@@ -507,9 +512,14 @@ export default function Home() {
         },
         {
           id: 2,
-          title: "Image Classification System",
-          shortDescription: ["Developed a custom CNN architecture for image classification."],
-          longDescription: ["Developed an abstractive text summarization system.", "Supported multi-document summarization with cross-document attention.", "Achieved ROUGE-1 score of 0.45 on CNN/Daily Mail dataset.", "Optimized for real-time processing of news articles."],
+          title: "Multi-class Image Classification",
+          shortDescription: ["Built a custom CNN architecture for industrial defect detection."],
+          longDescription: [
+            "Designed and trained custom CNN architecture",
+            "Implemented data augmentation pipeline",
+            "Achieved 98% accuracy on test dataset",
+            "Deployed model for real-time inference"
+          ],
           imageUrl: "/images/projects/image-classification.jpg",
           technologies: ["Python", "TensorFlow", "Keras", "OpenCV"],
           githubUrl: "https://github.com/raken-ai/image-classification",
@@ -524,9 +534,14 @@ export default function Home() {
       projects: [
         {
           id: 1,
-          title: "Chatbot with RAG",
-          shortDescription: ["Retrieval-Augmented Generation", "Custom knowledge base integration"],
-          longDescription: ["Built a chatbot using RAG architecture with custom knowledge base.", "Integrated vector search for efficient information retrieval.", "Fine-tuned language model for domain-specific responses.", "Achieved 85% accuracy on domain-specific queries."],
+          title: "RAG-based Enterprise Chatbot",
+          shortDescription: ["Built a Retrieval-Augmented Generation chatbot for enterprise knowledge base."],
+          longDescription: [
+            "Implemented RAG architecture with custom knowledge base",
+            "Used FAISS for efficient vector search",
+            "Fine-tuned language model for domain-specific responses",
+            "Achieved 85% accuracy on domain-specific queries"
+          ],
           liveUrl: "https://github.com/raken-ai/rag-chatbot",
           githubUrl: "https://github.com/raken-ai/rag-chatbot",
           imageUrl: "/images/projects/rag-chatbot.jpg",
@@ -535,9 +550,14 @@ export default function Home() {
         },
         {
           id: 2,
-          title: "Text Summarization",
-          shortDescription: ["Abstractive summarization", "Multi-document support"],
-          longDescription: ["Developed an abstractive text summarization system.", "Supported multi-document summarization with cross-document attention.", "Achieved ROUGE-1 score of 0.45 on CNN/Daily Mail dataset.", "Optimized for real-time processing of news articles."],
+          title: "Document Summarization System",
+          shortDescription: ["Developed an abstractive text summarization system for legal documents."],
+          longDescription: [
+            "Implemented transformer-based summarization model",
+            "Supported multi-document summarization",
+            "Achieved ROUGE-1 score of 0.45",
+            "Optimized for real-time processing"
+          ],
           liveUrl: "https://github.com/raken-ai/text-summarization",
           githubUrl: "https://github.com/raken-ai/text-summarization",
           imageUrl: "/images/projects/text-summarization.jpg",
@@ -552,9 +572,14 @@ export default function Home() {
       projects: [
         {
           id: 1,
-          title: "Machine Learning Pipeline",
-          shortDescription: ["End-to-end ML pipeline", "Automated model training"],
-          longDescription: ["Developed an automated machine learning pipeline for model training and deployment.", "Implemented feature engineering and selection processes.", "Created automated model evaluation and comparison framework.", "Integrated with CI/CD pipeline for continuous deployment."],
+          title: "Automated ML Pipeline",
+          shortDescription: ["End-to-end ML pipeline for automated model training and deployment."],
+          longDescription: [
+            "Developed automated feature engineering pipeline",
+            "Implemented model selection and hyperparameter optimization",
+            "Created automated model evaluation framework",
+            "Integrated with CI/CD pipeline"
+          ],
           liveUrl: "https://github.com/raken-ai/ml-pipeline",
           githubUrl: "https://github.com/raken-ai/ml-pipeline",
           imageUrl: "/images/projects/ml-pipeline.jpg",
@@ -564,18 +589,39 @@ export default function Home() {
       ]
     },
     {
-      name: "Multimodal",
+      name: "AI Agents",
       color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
       projects: [
         {
           id: 1,
-          title: "Multimodal Search Engine",
-          shortDescription: ["Text-to-image search", "Cross-modal retrieval"],
-          longDescription: ["Developed a multimodal search engine supporting text-to-image and image-to-text search.", "Implemented cross-modal embedding learning.", "Built efficient indexing and retrieval system.", "Achieved 90% retrieval accuracy on benchmark datasets."],
-          liveUrl: "https://github.com/raken-ai/multimodal-search",
-          githubUrl: "https://github.com/raken-ai/multimodal-search",
-          imageUrl: "/images/projects/multimodal-search.jpg",
-          technologies: ["Python", "CLIP", "FAISS", "PyTorch"],
+          title: "Autonomous Research Agent",
+          shortDescription: ["Built an AI agent for automated research and analysis."],
+          longDescription: [
+            "Implemented autonomous research capabilities",
+            "Integrated with multiple data sources",
+            "Developed reasoning and analysis framework",
+            "Created automated report generation"
+          ],
+          liveUrl: "https://github.com/raken-ai/research-agent",
+          githubUrl: "https://github.com/raken-ai/research-agent",
+          imageUrl: "/images/projects/research-agent.jpg",
+          technologies: ["Python", "LangChain", "OpenAI", "Pinecone"],
+          role: "ML Engineer"
+        },
+        {
+          id: 2,
+          title: "Task Automation Agent",
+          shortDescription: ["Developed an AI agent for automating repetitive tasks."],
+          longDescription: [
+            "Created task planning and execution framework",
+            "Implemented error handling and recovery",
+            "Integrated with various APIs and services",
+            "Developed monitoring and logging system"
+          ],
+          liveUrl: "https://github.com/raken-ai/task-automation",
+          githubUrl: "https://github.com/raken-ai/task-automation",
+          imageUrl: "/images/projects/task-automation.jpg",
+          technologies: ["Python", "LangChain", "OpenAI", "FastAPI"],
           role: "ML Engineer"
         }
       ]
@@ -587,8 +633,13 @@ export default function Home() {
         {
           id: 1,
           title: "Portfolio Website",
-          shortDescription: ["Modern design", "Responsive layout"],
-          longDescription: ["Designed and developed a modern portfolio website.", "Implemented responsive design for all device sizes.", "Added animations and interactive elements for better UX.", "Optimized for performance and SEO."],
+          shortDescription: ["Modern portfolio website with interactive features."],
+          longDescription: [
+            "Built with Next.js and Tailwind CSS",
+            "Implemented responsive design",
+            "Added animations and interactive elements",
+            "Optimized for performance and SEO"
+          ],
           liveUrl: "https://github.com/raken-ai/portfolio",
           githubUrl: "https://github.com/raken-ai/portfolio",
           imageUrl: "/images/projects/portfolio.jpg",
