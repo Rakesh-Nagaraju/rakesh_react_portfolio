@@ -502,35 +502,20 @@ export default function Home() {
       projects: [
         {
           id: 1,
-          title: "Real-time Object Detection System",
-          shortDescription: ["Developed a real-time object detection system using YOLOv5 for industrial applications."],
+          title: "Visual AI Playground",
+          shortDescription: ["A powerful computer vision application offering multiple image processing and analysis capabilities through an intuitive interface."],
           longDescription: [
-            "Implemented YOLOv5 architecture for high-speed object detection",
-            "Optimized model for edge deployment with TensorRT",
-            "Achieved 95% mAP on custom industrial dataset",
-            "Integrated with industrial cameras for real-time processing"
+            "Implemented ResNet-50 based image classification system",
+            "Developed real-time object detection with YOLOS",
+            "Created advanced segmentation using Mask2Former with Swin Transformer",
+            "Built face detection system using Haar Cascade Classifier",
+            "Integrated image enhancement tools for brightness, contrast, and sharpness adjustment"
           ],
-          imageUrl: "/images/projects/object-detection.jpg",
-          technologies: ["Python", "PyTorch", "YOLOv5", "OpenCV", "TensorRT"],
-          githubUrl: "https://github.com/raken-ai/object-detection-pipeline",
-          liveUrl: "https://github.com/raken-ai/object-detection-pipeline",
-          role: "ML Engineer"
-        },
-        {
-          id: 2,
-          title: "Multi-class Image Classification",
-          shortDescription: ["Built a custom CNN architecture for industrial defect detection."],
-          longDescription: [
-            "Designed and trained custom CNN architecture",
-            "Implemented data augmentation pipeline",
-            "Achieved 98% accuracy on test dataset",
-            "Deployed model for real-time inference"
-          ],
-          imageUrl: "/images/projects/image-classification.jpg",
-          technologies: ["Python", "TensorFlow", "Keras", "OpenCV"],
-          githubUrl: "https://github.com/raken-ai/image-classification",
-          liveUrl: "https://github.com/raken-ai/image-classification",
-          role: "ML Engineer"
+          imageUrl: "/images/CV.jpg",
+          technologies: ["OpenCV", "Transformers", "ResNet-50", "YOLOS", "Mask2Former", "PIL", "Gradio"],
+          githubUrl: "https://huggingface.co/spaces/Rakesh2205/CV_project_1/tree/main",
+          liveUrl: "https://huggingface.co/spaces/Rakesh2205/CV_project_2",
+          role: "Computer Vision Engineer"
         }
       ]
     },
@@ -540,57 +525,20 @@ export default function Home() {
       projects: [
         {
           id: 1,
-          title: "RAG-based Enterprise Chatbot",
-          shortDescription: ["Built a Retrieval-Augmented Generation chatbot for enterprise knowledge base."],
+          title: "Language AI Lab",
+          shortDescription: ["A comprehensive NLP application showcasing various natural language processing capabilities using state-of-the-art models."],
           longDescription: [
-            "Implemented RAG architecture with custom knowledge base",
-            "Used FAISS for efficient vector search",
-            "Fine-tuned language model for domain-specific responses",
-            "Achieved 85% accuracy on domain-specific queries"
+            "Implemented text generation using TinyLlama (1.1B parameters)",
+            "Developed BART-based text summarization system",
+            "Created DistilBERT-based sentiment analysis pipeline",
+            "Built multi-language translation support for Romance languages",
+            "Integrated question answering system with high accuracy"
           ],
-          liveUrl: "https://github.com/raken-ai/rag-chatbot",
-          githubUrl: "https://github.com/raken-ai/rag-chatbot",
-          imageUrl: "/images/projects/rag-chatbot.jpg",
-          technologies: ["Python", "LangChain", "FAISS", "HuggingFace"],
-          role: "ML Engineer"
-        },
-        {
-          id: 2,
-          title: "Document Summarization System",
-          shortDescription: ["Developed an abstractive text summarization system for legal documents."],
-          longDescription: [
-            "Implemented transformer-based summarization model",
-            "Supported multi-document summarization",
-            "Achieved ROUGE-1 score of 0.45",
-            "Optimized for real-time processing"
-          ],
-          liveUrl: "https://github.com/raken-ai/text-summarization",
-          githubUrl: "https://github.com/raken-ai/text-summarization",
-          imageUrl: "/images/projects/text-summarization.jpg",
-          technologies: ["Python", "Transformers", "PyTorch", "HuggingFace"],
-          role: "ML Engineer"
-        }
-      ]
-    },
-    {
-      name: "ML",
-      color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
-      projects: [
-        {
-          id: 1,
-          title: "Automated ML Pipeline",
-          shortDescription: ["End-to-end ML pipeline for automated model training and deployment."],
-          longDescription: [
-            "Developed automated feature engineering pipeline",
-            "Implemented model selection and hyperparameter optimization",
-            "Created automated model evaluation framework",
-            "Integrated with CI/CD pipeline"
-          ],
-          liveUrl: "https://github.com/raken-ai/ml-pipeline",
-          githubUrl: "https://github.com/raken-ai/ml-pipeline",
-          imageUrl: "/images/projects/ml-pipeline.jpg",
-          technologies: ["Python", "Scikit-learn", "Pandas", "MLflow"],
-          role: "ML Engineer"
+          imageUrl: "/images/LLM_task.jpg",
+          technologies: ["TinyLlama", "BART", "DistilBERT", "Helsinki-NLP", "Gradio"],
+          githubUrl: "https://huggingface.co/spaces/Rakesh2205/LLM_Project_1/tree/main",
+          liveUrl: "https://huggingface.co/spaces/Rakesh2205/LLM_Project_1",
+          role: "NLP Engineer"
         }
       ]
     },
@@ -600,34 +548,42 @@ export default function Home() {
       projects: [
         {
           id: 1,
-          title: "Autonomous Research Agent",
-          shortDescription: ["Built an AI agent for automated research and analysis."],
+          title: "Interactive Multi-AI Chat Assistant",
+          shortDescription: ["A versatile chat interface enabling interaction with multiple AI models through a modern web interface."],
           longDescription: [
-            "Implemented autonomous research capabilities",
-            "Integrated with multiple data sources",
-            "Developed reasoning and analysis framework",
-            "Created automated report generation"
+            "Implemented support for multiple AI models including GPT-2, DialoGPT, BLOOM, OPT, and T5",
+            "Developed a responsive chat UI with real-time model switching capabilities",
+            "Integrated performance metrics tracking for response time and token usage",
+            "Created a system for quick action prompts and common interactions",
+            "Built seamless model switching functionality with state preservation"
           ],
-          liveUrl: "https://github.com/raken-ai/research-agent",
-          githubUrl: "https://github.com/raken-ai/research-agent",
-          imageUrl: "/images/projects/research-agent.jpg",
-          technologies: ["Python", "LangChain", "OpenAI", "Pinecone"],
-          role: "ML Engineer"
-        },
+          imageUrl: "/images/chatbot.jpg",
+          technologies: ["Gradio", "Transformers", "PyTorch", "Custom CSS"],
+          githubUrl: "https://huggingface.co/spaces/Rakesh2205/Chatbot_Multi_LLM/tree/main",
+          liveUrl: "https://huggingface.co/spaces/Rakesh2205/Chatbot_Multi_LLM",
+          role: "AI Engineer"
+        }
+      ]
+    },
+    {
+      name: "ML",
+      color: "bg-[linear-gradient(332deg,_#60a5fa2b_0%,_#ffffff00_48%)] dark:bg-[linear-gradient(332deg,_#1d242d94_0%,_#ffffff00_48%)]",
+      projects: [
         {
-          id: 2,
-          title: "Task Automation Agent",
-          shortDescription: ["Developed an AI agent for automating repetitive tasks."],
+          id: 1,
+          title: "Machine Learning Projects",
+          shortDescription: ["Exciting ML projects coming soon! Stay tuned for innovative solutions in machine learning."],
           longDescription: [
-            "Created task planning and execution framework",
-            "Implemented error handling and recovery",
-            "Integrated with various APIs and services",
-            "Developed monitoring and logging system"
+            "Projects under development",
+            "Focusing on cutting-edge ML algorithms",
+            "Implementing real-world applications",
+            "Exploring innovative solutions",
+            "Coming Soon!"
           ],
-          liveUrl: "https://github.com/raken-ai/task-automation",
-          githubUrl: "https://github.com/raken-ai/task-automation",
-          imageUrl: "/images/projects/task-automation.jpg",
-          technologies: ["Python", "LangChain", "OpenAI", "FastAPI"],
+          imageUrl: "/images/placeholder.jpg",
+          technologies: ["Coming Soon"],
+          githubUrl: "#",
+          liveUrl: "#",
           role: "ML Engineer"
         }
       ]
@@ -638,19 +594,20 @@ export default function Home() {
       projects: [
         {
           id: 1,
-          title: "Portfolio Website",
-          shortDescription: ["Modern portfolio website with interactive features."],
+          title: "More Projects Coming Soon",
+          shortDescription: ["Additional exciting projects are in development. Check back for updates!"],
           longDescription: [
-            "Built with Next.js and Tailwind CSS",
-            "Implemented responsive design",
-            "Added animations and interactive elements",
-            "Optimized for performance and SEO"
+            "New projects under development",
+            "Exploring various technologies",
+            "Innovative solutions coming soon",
+            "Stay tuned for updates",
+            "Coming Soon!"
           ],
-          liveUrl: "https://github.com/raken-ai/portfolio",
-          githubUrl: "https://github.com/raken-ai/portfolio",
-          imageUrl: "/images/projects/portfolio.jpg",
-          technologies: ["Next.js", "Tailwind CSS", "Framer Motion"],
-          role: "Frontend Developer"
+          imageUrl: "/images/placeholder.jpg",
+          technologies: ["Coming Soon"],
+          githubUrl: "#",
+          liveUrl: "#",
+          role: "Software Engineer"
         }
       ]
     }
@@ -1313,35 +1270,20 @@ export default function Home() {
     setCurrentProjects([
         {
           id: 1,
-          title: "Real-time Object Detection System",
-          shortDescription: ["Developed a real-time object detection system using YOLOv5 for industrial applications."],
+          title: "Visual AI Playground",
+          shortDescription: ["A powerful computer vision application offering multiple image processing and analysis capabilities through an intuitive interface."],
           longDescription: [
-            "Implemented YOLOv5 architecture for high-speed object detection",
-            "Optimized model for edge deployment with TensorRT",
-            "Achieved 95% mAP on custom industrial dataset",
-            "Integrated with industrial cameras for real-time processing"
+            "Implemented ResNet-50 based image classification system",
+            "Developed real-time object detection with YOLOS",
+            "Created advanced segmentation using Mask2Former with Swin Transformer",
+            "Built face detection system using Haar Cascade Classifier",
+            "Integrated image enhancement tools for brightness, contrast, and sharpness adjustment"
           ],
-          imageUrl: "/images/projects/object-detection.jpg",
-          technologies: ["Python", "PyTorch", "YOLOv5", "OpenCV", "TensorRT"],
-          githubUrl: "https://github.com/raken-ai/object-detection-pipeline",
-          liveUrl: "https://github.com/raken-ai/object-detection-pipeline",
-          role: "ML Engineer"
-        },
-        {
-          id: 2,
-          title: "Multi-class Image Classification",
-          shortDescription: ["Built a custom CNN architecture for industrial defect detection."],
-          longDescription: [
-            "Designed and trained custom CNN architecture",
-            "Implemented data augmentation pipeline",
-            "Achieved 98% accuracy on test dataset",
-            "Deployed model for real-time inference"
-          ],
-          imageUrl: "/images/projects/image-classification.jpg",
-          technologies: ["Python", "TensorFlow", "Keras", "OpenCV"],
-          githubUrl: "https://github.com/raken-ai/image-classification",
-          liveUrl: "https://github.com/raken-ai/image-classification",
-          role: "ML Engineer"
+          imageUrl: "/images/CV.jpg",
+          technologies: ["OpenCV", "Transformers", "ResNet-50", "YOLOS", "Mask2Former", "PIL", "Gradio"],
+          githubUrl: "https://huggingface.co/spaces/Rakesh2205/CV_project_1/tree/main",
+          liveUrl: "https://huggingface.co/spaces/Rakesh2205/CV_project_2",
+          role: "Computer Vision Engineer"
         }
       ]);
   }, []);
