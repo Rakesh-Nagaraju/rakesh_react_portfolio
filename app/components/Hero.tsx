@@ -91,7 +91,7 @@ const ActionButtons = memo(({ isMobile = false }: ActionButtonsProps) => (
     </motion.a>
     
     <motion.a
-      href="/files/Rakesh_Resume_May_2025.pdf"
+      href="/files/Rakesh_Resume_May_new_2025.pdf"
       download
       title="Download my CV"
       className={`
